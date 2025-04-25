@@ -1,0 +1,39 @@
+@import './base.css';
+
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  background: var(--vt-c-black-mute);
+  padding: 8px 12px;
+  border-radius: 12px;
+
+  :first-child {
+    margin-inline-end: auto;
+  }
+
+  a {
+    padding: 8px;
+    background: var(--vt-c-black-soft);
+    border-radius: 4px;
+  }
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px;
+  font-weight: normal;
+}
+
+a {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+main {
+  padding: 16px;
+}
