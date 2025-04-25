@@ -10,26 +10,14 @@ type Bin = {
 }
 
 const bins = ref<Bin[]>([])
-const router = useRouter()
 
 async function getBins() {
   const { data } = await supabase.from('bin').select().order('date')
   bins.value = data as Bin[]
 }
 
-async function checkAuth() {
-  const { data: { session } } = await supabase.auth.getSession()
-
-  if (!session) {
-    router.push('/login')
-  } else {
-    await getBins()
-  }
-}
-
-
 onMounted(() => {
-  checkAuth()
+  getBins()
 })
 </script>
 
