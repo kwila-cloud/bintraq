@@ -1,12 +1,18 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { supabase } from './lib/supabaseClient'
 
-const bins = ref([])
+type Bin = {
+  uuid: string
+  id: string
+  picker: string
+}
+
+const bins = ref<Bin[]>([])
 
 async function getBins() {
   const { data } = await supabase.from('bin').select().order('date')
-  bins.value = data
+  bins.value = data as Bin[]
 }
 
 onMounted(() => {
