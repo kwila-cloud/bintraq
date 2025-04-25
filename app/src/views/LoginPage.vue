@@ -54,7 +54,6 @@ async function signIn() {
   padding: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #f9f9f9;
 }
 
 h1 {
