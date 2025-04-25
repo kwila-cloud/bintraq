@@ -5,7 +5,7 @@ import { supabase } from './lib/supabaseClient'
 const bins = ref([])
 
 async function getBins() {
-  const { data } = await supabase.from('bin').select()
+  const { data } = await supabase.from('bin').select().order('date')
   bins.value = data
 }
 
