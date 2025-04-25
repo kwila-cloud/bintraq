@@ -6,7 +6,9 @@ import { ref, onMounted } from 'vue'
 const isLoggedIn = ref(false)
 
 async function checkAuth() {
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   isLoggedIn.value = !!session
 }
 
@@ -26,7 +28,7 @@ async function signOut() {
 <template>
   <nav>
     <h1>BinTraq</h1>
-    <RouterLink to="/bins">Bins</RouterLink>
+    <RouterLink v-if="isLoggedIn" to="/bins">Bins</RouterLink>
     <RouterLink to="/about">About</RouterLink>
 
     <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>
