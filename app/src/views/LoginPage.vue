@@ -52,17 +52,19 @@ async function signIn() {
   width: 300px;
   margin: 96px auto;
   padding: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 5px;
+  background-color: var(--color-background-soft);
 }
 
 h1 {
   text-align: center;
   margin-bottom: 16px;
+  color: var(--color-heading);
 }
 
 .error-message {
-  color: red;
+  color: red; /* This color is not in base.css, consider adding it or using an alternative */
   margin-bottom: 8px;
   text-align: center;
 }
@@ -80,19 +82,22 @@ label {
   display: block;
   margin-bottom: 4px;
   font-weight: bold;
+  color: var(--color-text);
 }
 
 .form-control {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   box-sizing: border-box;
+  color: var(--color-text);
+  background-color: var(--color-background);
 }
 
 .btn-primary {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--vt-c-indigo); /* Using indigo as a primary color */
+  color: var(--vt-c-white);
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
@@ -101,11 +106,12 @@ label {
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* This color is not in base.css, consider adding it or using an alternative */
 }
 
 .register-link {
   text-align: center;
   margin-top: 16px;
+  color: var(--color-text);
 }
 </style>
