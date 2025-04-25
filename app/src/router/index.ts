@@ -26,8 +26,8 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      redirect: async () => {
-        const { data: { session } } = await supabase.auth.getSession()
+      redirect: () => {
+        const session = supabase.auth.getSession()
         if (session) {
           return '/bins'
         } else {
