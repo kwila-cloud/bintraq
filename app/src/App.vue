@@ -27,7 +27,7 @@ async function signOut() {
 
 <template>
   <nav>
-    <h1>BinTraq</h1>
+    <RouterLink to="/">BinTraq</RouterLink>
     <RouterLink v-if="isLoggedIn" to="/bins">Bins</RouterLink>
     <RouterLink to="/about">About</RouterLink>
 

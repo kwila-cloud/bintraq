@@ -8,6 +8,17 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      name: 'root',
+      beforeEnter: async () => {
+        const session = await supabase.auth.getSession()
+        if (session) {
+          return '/bins'
+        }
+      },
+      redirect: '/about'
+    },
+    {
       path: '/bins',
       name: 'bins',
       component: BinsView,
@@ -23,18 +34,6 @@ const router = createRouter({
       name: 'login',
       component: LoginPage
     },
-    {
-      path: '/',
-      name: 'root',
-      redirect: () => {
-        const session = supabase.auth.getSession()
-        if (session) {
-          return '/bins'
-        } else {
-          return '/about'
-        }
-      }
-    }
   ]
 })
 

@@ -11,9 +11,12 @@ nav {
 
   :first-child {
     margin-inline-end: auto;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: var(--vt-c-white-soft);
   }
 
-  a {
+  :not(:first-child) {
     padding: 8px;
     background: var(--vt-c-black-soft);
     border-radius: 4px;
