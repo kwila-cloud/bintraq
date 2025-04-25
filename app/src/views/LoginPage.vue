@@ -64,7 +64,7 @@ h1 {
 }
 
 .error-message {
-  color: red; /* This color is not in base.css, consider adding it or using an alternative */
+  color: var(--color-error);
   margin-bottom: 8px;
   text-align: center;
 }
@@ -96,8 +96,8 @@ label {
 }
 
 .btn-primary {
-  background-color: var(--vt-c-indigo); /* Using indigo as a primary color */
-  color: var(--vt-c-white);
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
@@ -106,7 +106,7 @@ label {
 }
 
 .btn-primary:hover {
-  background-color: #0056b3; /* This color is not in base.css, consider adding it or using an alternative */
+  background-color: var(--color-primary-emphasis);
 }
 
 .register-link {
