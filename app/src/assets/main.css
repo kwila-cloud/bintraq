@@ -17,6 +17,8 @@ nav {
   }
 
   :not(:first-child) {
+    font-size: 1rem;
+    line-height: 2;
     padding: 8px;
     background: var(--vt-c-black-soft);
     border-radius: 4px;
@@ -30,11 +32,13 @@ nav {
   font-weight: normal;
 }
 
-a {
+a, .button-as-a {
+  border: none;
   text-decoration: none;
   color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
-  padding: 3px;
+  padding: 4px;
+  cursor: pointer;
 }
 
 main {

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabaseClient'
 import { ref, onMounted } from 'vue'
 
 const isLoggedIn = ref(false)
+const router = useRouter()
 
 async function checkAuth() {
   const {
@@ -22,6 +23,7 @@ onMounted(() => {
 
 async function signOut() {
   await supabase.auth.signOut()
+  router.push('/login')
 }
 </script>
 
@@ -32,7 +34,7 @@ async function signOut() {
     <RouterLink to="/about">About</RouterLink>
 
     <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>
-    <button v-if="isLoggedIn" @click="signOut">Logout</button>
+    <button v-if="isLoggedIn" @click="signOut" class="button-as-a">Logout</button>
   </nav>
   <main>
     <RouterView />
