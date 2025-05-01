@@ -1,5 +1,5 @@
 <template>
-  <h1>About BinTraq</h1>
+  <h1>BinTraq</h1>
   <p><i>A simple bin record keeping system for orchards.</i></p>
   <p>
     Developed by <a href="https://kwila.cloud">Kwila Cloud</a> for
