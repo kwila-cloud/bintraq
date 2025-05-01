@@ -10,12 +10,6 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      beforeEnter: async () => {
-        const session = await supabase.auth.getSession()
-        if (session) {
-          return '/bins'
-        }
-      },
       redirect: '/about'
     },
     {
