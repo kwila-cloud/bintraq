@@ -1,4 +1,13 @@
 @import './base.css';
+@import 'tailwindcss';
+
+h1 {
+  font-size: 2rem;
+}
+
+button {
+  cursor: pointer;
+}
 
 nav {
   display: flex;
