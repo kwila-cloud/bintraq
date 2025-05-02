@@ -14,9 +14,12 @@ import {
 
 <template>
   <DialogRoot>
-    <DialogTrigger class="bg-blue-500 text-white flex px-2 py-1 rounded-md"
-      >Add</DialogTrigger
+    <DialogTrigger
+      class="bg-blue-500 text-white flex px-2 py-1 rounded-md items-center gap-1"
     >
+      <Icon icon="hugeicons:add-01" />
+      <span>Add</span>
+    </DialogTrigger>
     <DialogPortal>
       <DialogOverlay
         class="bg-blackA9 data-[state=open]:animate-overlayShow fixed inset-0 z-30"
