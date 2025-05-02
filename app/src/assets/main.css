@@ -1,15 +1,6 @@
 @import 'tailwindcss';
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
-}
-
 body {
-  
   color: var(--color-white);
   background: var(--color-slate-900);
 }
