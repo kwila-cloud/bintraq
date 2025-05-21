@@ -33,6 +33,7 @@ async function signOut() {
     <RouterLink v-else to="/about">BinTraq</RouterLink>
 
     <RouterLink v-if="isLoggedIn" to="/bins">Bins</RouterLink>
+    <RouterLink v-if="isLoggedIn" to="/bins/add">Add Bin</RouterLink>
     <RouterLink to="/about">About</RouterLink>
 
     <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>

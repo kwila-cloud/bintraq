@@ -45,7 +45,8 @@ nav {
   font-weight: normal;
 }
 
-a, .button-as-a {
+a,
+.button-as-a {
   border: none;
   text-decoration: none;
   color: var(--color-blue-400);

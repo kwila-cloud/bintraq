@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import BinsView from '../views/BinsView.vue'
+import AddBinView from '../views/AddBinView.vue';
 import AboutView from '../views/AboutView.vue'
 import LoginPage from '../views/LoginPage.vue'
 import { supabase } from '@/lib/supabaseClient'
@@ -16,6 +17,12 @@ const router = createRouter({
       path: '/bins',
       name: 'bins',
       component: BinsView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/bins/add',
+      name: 'add-bin',
+      component: AddBinView,
       meta: { requiresAuth: true }
     },
     {
