@@ -2,6 +2,7 @@
 import type { Bin } from '@/models/bin'
 import { blockOptions, sizeOptions } from '@/models/bin'
 import { ref, onMounted } from 'vue'
+import BinSetting from '@/components/BinSetting.vue'
 
 const pendingBin = ref<Bin>({
   uuid: '',
