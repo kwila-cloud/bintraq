@@ -47,6 +47,7 @@ const saveValue = () => {
     <div
       v-if="dialogOpen"
       class="fixed top-0 left-0 w-full h-full bg-gray-900/50 flex items-center justify-center"
+      @mousedown.self="closeDialog"
     >
       <div class="p-4 rounded-md bg-gray-800">
         <h2 class="text-lg font-bold mb-2">{{ setting.name }}</h2>
