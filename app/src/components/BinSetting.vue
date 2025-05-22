@@ -36,7 +36,7 @@ const saveValue = () => {
   <div>
     <button
       @click="openDialog"
-      class="bg-gray-800 p-2 rounded-md w-full flex flex-col items-center"
+      class="bg-gray-800 p-2 rounded-lg w-full flex flex-col items-center"
     >
       <h1 class="!text-xl">{{ setting.name }}</h1>
       <div class="value text-lg leading-normal">
@@ -47,9 +47,9 @@ const saveValue = () => {
     <div
       v-if="dialogOpen"
       class="fixed top-0 left-0 w-full h-full bg-gray-900/50 flex items-center justify-center"
-      @mousedown.self="closeDialog"
+      @click.self="closeDialog"
     >
-      <div class="p-4 rounded-md bg-gray-800">
+      <div class="min-w-[300px] p-4 rounded-md bg-gray-800">
         <h2 class="text-lg font-bold mb-2">{{ setting.name }}</h2>
 
         <div v-if="setting.type === 'select'">
@@ -81,7 +81,8 @@ const saveValue = () => {
           </button>
           <button
             @click="saveValue"
-            class="bg-blue-700 text-white p-2 rounded-md"
+            :disabled="newValue === ''"
+            class="bg-blue-700 disabled:opacity-50 text-white p-2 rounded-md"
           >
             Save
           </button>
