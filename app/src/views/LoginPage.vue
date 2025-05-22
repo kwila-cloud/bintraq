@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { supabase } from '@/lib/supabaseClient'
-import { useRouter } from 'vue-router'
+import { ref } from "vue";
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "vue-router";
 
-const email = ref('')
-const password = ref('')
-const error = ref('')
-const isLogin = ref(true) // Toggle between login and signup
-const router = useRouter()
+const email = ref("");
+const password = ref("");
+const error = ref("");
+const isLogin = ref(true); // Toggle between login and signup
+const router = useRouter();
 
 async function signIn() {
   try {
     const { error: authError } = await supabase.auth.signInWithPassword({
       email: email.value,
       password: password.value,
-    })
+    });
     if (authError) {
-      error.value = authError.message
+      error.value = authError.message;
     } else {
-      router.push('/')
+      router.push("/");
     }
   } catch (e: any) {
-    error.value = e.message
+    error.value = e.message;
   }
 }
 
@@ -30,21 +30,21 @@ async function signUp() {
     const { error: authError } = await supabase.auth.signUp({
       email: email.value,
       password: password.value,
-    })
+    });
     if (authError) {
-      error.value = authError.message
+      error.value = authError.message;
     } else {
       // Optionally, redirect or show a success message
-      router.push('/')
+      router.push("/");
     }
   } catch (e: any) {
-    error.value = e.message
+    error.value = e.message;
   }
 }
 
 function toggleForm() {
-  isLogin.value = !isLogin.value
-  error.value = '' // Clear any previous errors
+  isLogin.value = !isLogin.value;
+  error.value = ""; // Clear any previous errors
 }
 </script>
 
@@ -53,8 +53,10 @@ function toggleForm() {
     <div
       class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"
     >
-      <h1 class="text-xl font-medium text-gray-900 dark:text-white text-center mb-4">
-        {{ isLogin ? 'Login' : 'Sign Up' }}
+      <h1
+        class="text-xl font-medium text-gray-900 dark:text-white text-center mb-4"
+      >
+        {{ isLogin ? "Login" : "Sign Up" }}
       </h1>
       <div
         v-if="error"
@@ -64,9 +66,14 @@ function toggleForm() {
         <strong class="font-bold">Error!</strong>
         <span class="block sm:inline">{{ error }}</span>
       </div>
-      <form @submit.prevent="isLogin ? signIn() : signUp()" class="space-y-4 flex flex-col gap-4">
+      <form
+        @submit.prevent="isLogin ? signIn() : signUp()"
+        class="space-y-4 flex flex-col gap-4"
+      >
         <div>
-          <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          <label
+            for="email"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >Email</label
           >
           <input
@@ -78,7 +85,9 @@ function toggleForm() {
           />
         </div>
         <div>
-          <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          <label
+            for="password"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >Password</label
           >
           <input
@@ -93,15 +102,17 @@ function toggleForm() {
           type="submit"
           class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          {{ isLogin ? 'Login' : 'Sign Up' }}
+          {{ isLogin ? "Login" : "Sign Up" }}
         </button>
-        <div class="text-sm font-light text-gray-500 dark:text-gray-400 text-center">
-          {{ isLogin ? "Don't have an account?" : 'Already have an account?' }}
+        <div
+          class="text-sm font-light text-gray-500 dark:text-gray-400 text-center"
+        >
+          {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
           <a
             href="#"
             @click.prevent="toggleForm"
             class="font-medium text-blue-600 hover:underline dark:text-blue-500"
-            >{{ isLogin ? 'Sign Up' : 'Login' }}</a
+            >{{ isLogin ? "Sign Up" : "Login" }}</a
           >
         </div>
       </form>
