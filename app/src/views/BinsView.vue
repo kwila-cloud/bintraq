@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { supabase } from "@/lib/supabaseClient";
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
 
 type Bin = {
   uuid: string;
