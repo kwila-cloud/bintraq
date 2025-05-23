@@ -30,9 +30,8 @@ async function signOut() {
 
 <template>
   <nav id="top-nav">
-    <RouterLink v-if="isLoggedIn" to="/bins">BinTraq</RouterLink>
+    <RouterLink v-if="isLoggedIn" to="/add-bin">BinTraq</RouterLink>
     <RouterLink v-else to="/about">BinTraq</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
     <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>
     <button v-else @click="signOut" class="button-as-a">Logout</button>
   </nav>
@@ -41,11 +40,11 @@ async function signOut() {
   </main>
 
   <nav v-if="isLoggedIn" id="bottom-nav">
-    <RouterLink to="/bins/add" active-class="active-link">
+    <RouterLink to="/add-bin" active-class="active-link">
       <Icon icon="system-uicons:box-add" height="32" />
       <span>Add Bin</span>
     </RouterLink>
-    <RouterLink to="/bins" active-class="active-link">
+    <RouterLink to="/pending" active-class="active-link">
       <Icon icon="system-uicons:boxes" height="32" />
       <span>Pending</span>
     </RouterLink>

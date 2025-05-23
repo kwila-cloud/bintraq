@@ -10,13 +10,17 @@ type Bin = {
 
 const bins = ref<Bin[]>([]);
 
-async function getBins() {
-  const { data } = await supabase.from("bin").select().order("date");
+async function loadPendingBins() {
+  const { data } = await supabase
+    .from("bin")
+    .select()
+    .eq("isPending", true)
+    .order("date");
   bins.value = data as Bin[];
 }
 
 onMounted(() => {
-  getBins();
+  loadPendingBins();
 });
 </script>
 
