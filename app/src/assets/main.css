@@ -13,31 +13,6 @@ button {
   cursor: pointer;
 }
 
-nav {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  background: var(--color-slate-800);
-  padding: 8px 12px;
-  border-radius: 12px;
-
-  :first-child {
-    margin-inline-end: auto;
-    font-weight: bold;
-    font-size: 1.5rem;
-    color: var(--color-white);
-  }
-
-  :not(:first-child) {
-    font-size: 1rem;
-    line-height: 2;
-    padding: 8px;
-    background: var(--color-slate-700);
-    border-radius: 4px;
-  }
-}
-
 #app {
   max-width: 1280px;
   margin: 0 auto;
