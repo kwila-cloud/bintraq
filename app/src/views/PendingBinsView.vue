@@ -10,18 +10,21 @@ type Bin = {
 
 const bins = ref<Bin[]>([]);
 
-async function getBins() {
-  const { data } = await supabase.from("bin").select().order("date");
+async function loadPendingBins() {
+  const { data } = await supabase
+    .from("bin")
+    .select()
+    .eq("isPending", true)
+    .order("date");
   bins.value = data as Bin[];
 }
 
 onMounted(() => {
-  getBins();
+  loadPendingBins();
 });
 </script>
 
 <template>
-  <h1>Bins</h1>
   <ul>
     <li v-for="bin in bins" :key="bin.uuid">
       {{ bin.id }} (picked by {{ bin.picker }})
