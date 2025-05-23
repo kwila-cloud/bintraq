@@ -2,6 +2,7 @@
 import { RouterLink, RouterView, useRouter } from "vue-router";
 import { supabase } from "@/lib/supabaseClient";
 import { ref, onMounted } from "vue";
+import { Icon } from "@iconify/vue";
 
 const isLoggedIn = ref(false);
 const router = useRouter();
@@ -40,8 +41,18 @@ async function signOut() {
   </main>
 
   <nav v-if="isLoggedIn" id="bottom-nav">
-    <RouterLink to="/bins/add" active-class="active-link">Add Bin</RouterLink>
-    <RouterLink to="/bins" active-class="active-link">Bins</RouterLink>
+    <RouterLink to="/bins/add" active-class="active-link">
+      <Icon icon="system-uicons:box-add" height="32" />
+      <span>Add Bin</span>
+    </RouterLink>
+    <RouterLink to="/bins" active-class="active-link">
+      <Icon icon="system-uicons:boxes" height="32" />
+      <span>Pending</span>
+    </RouterLink>
+    <RouterLink to="/history" active-class="active-link">
+      <Icon icon="system-uicons:graph-increase" height="32" />
+      <span>History</span>
+    </RouterLink>
   </nav>
 </template>
 
@@ -79,9 +90,23 @@ async function signOut() {
   display: flex;
   justify-content: space-around;
   background: var(--color-slate-800);
-}
 
-.active-link {
-  background-color: blue;
+  a {
+    height: 84px;
+    width: 84px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-weight: bold;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    &.active-link {
+      background: var(--color-slate-700);
+    }
+  }
 }
 </style>

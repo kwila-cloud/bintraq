@@ -78,7 +78,6 @@ const validateBinId = (binId: string) => {
 </script>
 
 <template>
-  <h1>Add Bin</h1>
   <div class="flex flex-col gap-2">
     <div v-for="setting in settings" :key="setting.id">
       <BinSetting :setting="setting" v-model="pendingBin[setting.id]" />

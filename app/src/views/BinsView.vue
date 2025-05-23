@@ -21,7 +21,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>Bins</h1>
   <ul>
     <li v-for="bin in bins" :key="bin.uuid">
       {{ bin.id }} (picked by {{ bin.picker }})
