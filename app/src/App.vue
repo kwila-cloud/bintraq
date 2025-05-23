@@ -42,4 +42,22 @@ async function signOut() {
   <main>
     <RouterView />
   </main>
+
+  <nav v-if="isLoggedIn" class="bottom-nav">
+    <RouterLink to="/bins">Bins</RouterLink>
+    <RouterLink to="/bins/add">Add Bin</RouterLink>
+  </nav>
 </template>
+
+<style scoped>
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+</style>
