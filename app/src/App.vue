@@ -40,8 +40,8 @@ async function signOut() {
   </main>
 
   <nav v-if="isLoggedIn" id="bottom-nav">
-    <RouterLink to="/bins/add">Add Bin</RouterLink>
-    <RouterLink to="/bins">Bins</RouterLink>
+    <RouterLink to="/bins/add" active-class="active-link">Add Bin</RouterLink>
+    <RouterLink to="/bins" active-class="active-link">Bins</RouterLink>
   </nav>
 </template>
 
@@ -79,5 +79,9 @@ async function signOut() {
   display: flex;
   justify-content: space-around;
   background: var(--color-slate-800);
+}
+
+.active-link {
+  background-color: blue;
 }
 </style>
