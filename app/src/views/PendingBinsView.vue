@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { supabase } from "@/lib/supabaseClient";
 import { ref, onMounted } from "vue";
-
-type Bin = {
-  uuid: string;
-  id: string;
-  picker: string;
-};
+import { settings } from "@/models/settings";
+import type { Bin } from "@/models/bin";
+import BinSetting from "@/components/BinSetting.vue";
 
 const bins = ref<Bin[]>([]);
 
@@ -25,9 +22,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <ul>
-    <li v-for="bin in bins" :key="bin.uuid">
-      {{ bin.id }} (picked by {{ bin.picker }})
+  <ul class="flex flex-col gap-1">
+    <li
+      v-for="bin in bins"
+      :key="bin.uuid"
+      class="flex flex-row gap-1 justify-stretch"
+    >
+      <div v-for="setting in settings" :key="setting.id" class="flex-1">
+        <BinSetting :setting="setting" v-model="bin[setting.id]" />
+      </div>
     </li>
   </ul>
 </template>

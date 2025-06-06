@@ -1,14 +1,5 @@
 @import 'tailwindcss';
 
-body {
-  color: var(--color-white);
-  background: var(--color-slate-900);
-}
-
-h1 {
-  font-size: 2rem;
-}
-
 button {
   cursor: pointer;
 }
@@ -28,8 +19,4 @@ a,
   transition: 0.4s;
   padding: 4px;
   cursor: pointer;
-}
-
-main {
-  padding: 16px;
 }
