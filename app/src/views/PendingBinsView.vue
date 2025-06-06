@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { supabase } from "@/lib/supabaseClient";
 import { ref, onMounted } from "vue";
-
-type Bin = {
-  uuid: string;
-  id: string;
-  picker: string;
-};
+import { settings } from "@/models/settings";
+import type { Bin } from "@/models/bin";
+import BinSetting from "@/components/BinSetting.vue";
+import { Icon } from "@iconify/vue";
 
 const bins = ref<Bin[]>([]);
+
+onMounted(() => {
+  loadPendingBins();
+});
 
 async function loadPendingBins() {
   const { data } = await supabase
@@ -19,15 +21,49 @@ async function loadPendingBins() {
   bins.value = data as Bin[];
 }
 
-onMounted(() => {
-  loadPendingBins();
-});
+async function updateBin(bin: Bin) {
+  await supabase.from("bin").update(bin).eq("uuid", bin.uuid).select();
+}
+
+async function deleteBin(bin: Bin) {
+  await supabase.from("bin").delete().eq("uuid", bin.uuid).select();
+  await loadPendingBins();
+}
+
+async function sendBins() {
+  await supabase
+    .from("bin")
+    .update({ isPending: false })
+    .eq("isPending", true)
+    .select();
+  bins.value = [];
+}
 </script>
 
 <template>
-  <ul>
-    <li v-for="bin in bins" :key="bin.uuid">
-      {{ bin.id }} (picked by {{ bin.picker }})
+  <ul v-if="bins.length > 0" class="flex flex-col gap-1">
+    <li
+      v-for="bin in bins"
+      :key="bin.uuid"
+      class="bin-row flex flex-row gap-1 justify-stretch"
+    >
+      <div v-for="setting in settings" :key="setting.id" class="flex-1">
+        <BinSetting
+          :setting="setting"
+          v-model="bin[setting.id]"
+          @update:modelValue="updateBin(bin)"
+        />
+      </div>
+      <button
+        @click="deleteBin(bin)"
+        class="bg-red-700 w-16 md:w-20 flex items-center justify-center rounded-md"
+      >
+        <Icon icon="system-uicons:trash" height="32" />
+      </button>
     </li>
+    <button @click="sendBins" class="bg-blue-800 rounded-md p-2">Send</button>
   </ul>
+  <div v-else class="size-full flex items-center justify-center text-2xl">
+    No pending bins
+  </div>
 </template>
