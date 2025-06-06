@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { Bin } from "@/models/bin";
-import { blockOptions, sizeOptions } from "@/models/bin";
 import { onMounted, ref } from "vue";
 import BinSetting from "@/components/BinSetting.vue";
 import { supabase } from "@/lib/supabaseClient";
+import { settings } from "@/models/settings";
 
 const pendingBin = ref<Partial<Bin>>({
   picker: "",
@@ -13,16 +13,6 @@ const pendingBin = ref<Partial<Bin>>({
   isPending: true,
   messageUuid: null,
 });
-// TODO: load pickers from supabase
-const pickers = ref(["Addison", "Milo"]);
-const blocks = ref(blockOptions);
-const sizes = ref(sizeOptions);
-const settings = ref([
-  { id: "picker", name: "Picker", options: pickers, type: "select" },
-  { id: "block", name: "Block", options: blocks, type: "select" },
-  { id: "size", name: "Bin Size", options: sizes, type: "select" },
-  { id: "id", name: "Bin ID", type: "text" },
-]);
 const bins = ref<Bin[]>([]);
 
 async function getBins() {
