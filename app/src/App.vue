@@ -35,7 +35,8 @@ async function signOut() {
     <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>
     <button v-else @click="signOut" class="button-as-a">Logout</button>
   </nav>
-  <main class="p-1 md:p-4">
+  <!-- The bottom margin gives space for the bottom nav bar -->
+  <main class="p-1 md:p-4 grow mb-24">
     <RouterView />
   </main>
 

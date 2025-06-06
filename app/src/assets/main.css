@@ -4,13 +4,6 @@ button {
   cursor: pointer;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 16px;
-  font-weight: normal;
-}
-
 a,
 .button-as-a {
   border: none;

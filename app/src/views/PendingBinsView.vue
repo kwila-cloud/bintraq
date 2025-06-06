@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { supabase } from "@/lib/supabaseClient";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { settings } from "@/models/settings";
 import type { Bin } from "@/models/bin";
 import BinSetting from "@/components/BinSetting.vue";
@@ -20,13 +20,22 @@ async function loadPendingBins() {
   bins.value = data as Bin[];
 }
 
+async function sendBins() {
+  await supabase
+    .from("bin")
+    .update({ isPending: false })
+    .eq("isPending", true)
+    .select();
+  bins.value = [];
+}
+
 onMounted(() => {
   loadPendingBins();
 });
 </script>
 
 <template>
-  <ul class="flex flex-col gap-1">
+  <ul v-if="bins.length > 0" class="flex flex-col gap-1">
     <li
       v-for="bin in bins"
       :key="bin.uuid"
@@ -40,5 +49,9 @@ onMounted(() => {
         />
       </div>
     </li>
+    <button @click="sendBins" class="bg-blue-800 rounded-md p-2">Send</button>
   </ul>
+  <div v-else class="size-full flex items-center justify-center text-2xl">
+    No pending bins
+  </div>
 </template>
