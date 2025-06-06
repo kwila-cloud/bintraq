@@ -88,8 +88,13 @@ async function signOut() {
   width: 100%;
   padding: 10px;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 32px;
   background: var(--color-slate-800);
+
+  @media (width >= 32rem) {
+    gap: 64px;
+  }
 
   a {
     height: 84px;
