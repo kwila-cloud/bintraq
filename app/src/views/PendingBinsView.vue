@@ -4,12 +4,13 @@ import { ref, onMounted } from "vue";
 import { settings } from "@/models/settings";
 import type { Bin } from "@/models/bin";
 import BinSetting from "@/components/BinSetting.vue";
+import { Icon } from "@iconify/vue";
 
 const bins = ref<Bin[]>([]);
 
-async function updateBin(bin: Bin) {
-  await supabase.from("bin").update(bin).eq("uuid", bin.uuid).select();
-}
+onMounted(() => {
+  loadPendingBins();
+});
 
 async function loadPendingBins() {
   const { data } = await supabase
@@ -20,6 +21,15 @@ async function loadPendingBins() {
   bins.value = data as Bin[];
 }
 
+async function updateBin(bin: Bin) {
+  await supabase.from("bin").update(bin).eq("uuid", bin.uuid).select();
+}
+
+async function deleteBin(bin: Bin) {
+  await supabase.from("bin").delete().eq("uuid", bin.uuid).select();
+  await loadPendingBins();
+}
+
 async function sendBins() {
   await supabase
     .from("bin")
@@ -28,10 +38,6 @@ async function sendBins() {
     .select();
   bins.value = [];
 }
-
-onMounted(() => {
-  loadPendingBins();
-});
 </script>
 
 <template>
@@ -39,7 +45,7 @@ onMounted(() => {
     <li
       v-for="bin in bins"
       :key="bin.uuid"
-      class="flex flex-row gap-1 justify-stretch"
+      class="bin-row flex flex-row gap-1 justify-stretch"
     >
       <div v-for="setting in settings" :key="setting.id" class="flex-1">
         <BinSetting
@@ -48,6 +54,12 @@ onMounted(() => {
           @update:modelValue="updateBin(bin)"
         />
       </div>
+      <button
+        @click="deleteBin(bin)"
+        class="bg-red-700 w-16 md:w-20 flex items-center justify-center rounded-md"
+      >
+        <Icon icon="system-uicons:trash" height="32" />
+      </button>
     </li>
     <button @click="sendBins" class="bg-blue-800 rounded-md p-2">Send</button>
   </ul>

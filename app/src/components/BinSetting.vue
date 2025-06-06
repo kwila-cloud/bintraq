@@ -33,10 +33,10 @@ const saveValue = () => {
 </script>
 
 <template>
-  <div>
+  <div class="h-full">
     <button
       @click="openDialog"
-      class="bg-gray-800 p-1 md:p-2 rounded-lg w-full flex flex-col items-center"
+      class="h-full bg-gray-800 p-1 md:p-2 rounded-lg w-full flex flex-col items-center justify-center"
     >
       <h1 class="text-md md:text-lg">{{ setting.name }}</h1>
       <div class="value text-lg md:text-xl leading-normal">
