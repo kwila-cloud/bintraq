@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Bin } from "@/models/bin";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import BinSetting from "@/components/BinSetting.vue";
 import { supabase } from "@/lib/supabaseClient";
 import { settings } from "@/models/settings";
@@ -14,6 +14,9 @@ const pendingBin = ref<Partial<Bin>>({
   messageUuid: null,
 });
 const bins = ref<Bin[]>([]);
+const pendingBins = computed(() =>
+  bins.value.filter(({ isPending }) => isPending),
+);
 
 async function getBins() {
   const { data } = await supabase
@@ -69,6 +72,12 @@ const validateBinId = (binId: string) => {
 
 <template>
   <div class="flex flex-col gap-2 justify-end h-full">
+    <RouterLink
+      to="/pending"
+      class="bg-blue-500 !text-white rounded-xl w-fit !px-4 font-bold"
+    >
+      Pending Bins: {{ pendingBins.length }}
+    </RouterLink>
     <div v-for="setting in settings" :key="setting.id">
       <BinSetting :setting="setting" v-model="pendingBin[setting.id]" />
     </div>
