@@ -18,8 +18,6 @@ export type Bin = {
 console.info('server started');
 Deno.serve(async (req) => {
   const message = await req.json();
-  console.log('MESSAGE');
-  console.log(JSON.stringify(message, null, 2));
   const record = message.record;
   const oldRecord = message.old_record;
 
@@ -41,16 +39,26 @@ const sendMessage = async (bin: Bin) => {
   const accountSid = Deno.env.get("TWILIO_ACCOUNT_SID") ?? "NO_SID";
   const authToken = Deno.env.get("TWILIO_AUTH_TOKEN") ?? "NO_TOKEN";
   const from = Deno.env.get("TWILIO_PHONE_NUMBER") ?? "";
-  console.log(accountSid, authToken, from);
   const client = Twilio(accountSid, authToken);
-  // TODO: generate body from bin
-  const body = "HELLO WORLD!";
+  // TODO: calculate from supabase
+  const dayCount = 0;
+  // TODO: calculate from supabase
+  const weekCount = 0;
+  const body = `
+ID del Caja: ${bin.id}
+Fecha: ${bin.date.toDateString()}
+Recogedor: ${bin.picker}
+Bloque: ${bin.block}
+Tamaño del Caja: ${bin.size} bushel
+Cantidad Diaria de Cajas: ${dayCount}
+Cantidad Semanal de Cajas: ${weekCount}
+  `;
   // TODO: get phone number by picker name
   const to = Deno.env.get("TWILIO_TEMP_TO") ?? "";
 
   try {
     const message = await client.messages.create({ body, from, to });
-    console.log("sent twilio ID:", message.sid);
+    console.log("sent successfully:", message.sid);
     return true;
   } catch (e) {
     console.error(e);
