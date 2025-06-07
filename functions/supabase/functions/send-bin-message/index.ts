@@ -39,6 +39,9 @@ const sendMessage = async (bin: Bin) => {
   const accountSid = Deno.env.get("TWILIO_ACCOUNT_SID") ?? "NO_SID";
   const authToken = Deno.env.get("TWILIO_AUTH_TOKEN") ?? "NO_TOKEN";
   const from = Deno.env.get("TWILIO_PHONE_NUMBER") ?? "";
+  // TODO: insert record in messages table
+  // TODO: insert record in sentAttempt table
+  // TODO: check monthly limit
   const client = Twilio(accountSid, authToken);
   // TODO: calculate from supabase
   const dayCount = 0;
