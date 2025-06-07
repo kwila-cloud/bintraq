@@ -44,9 +44,10 @@ const sendMessage = async (bin: Bin) => {
   const dayCount = 0;
   // TODO: calculate from supabase
   const weekCount = 0;
+  // TODO: fix date format
   const body = `
 ID del Caja: ${bin.id}
-Fecha: ${bin.date.toDateString()}
+Fecha: ${new Date(bin.date).toDateString()}
 Recogedor: ${bin.picker}
 Bloque: ${bin.block}
 Tamaño del Caja: ${bin.size} bushel
