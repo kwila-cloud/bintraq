@@ -1,6 +1,5 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import Twilio from "npm:twilio";
 
 export type Bin = {
   uuid: string
@@ -36,19 +35,12 @@ Deno.serve(async (req) => {
 });
 
 const sendMessage = async (bin: Bin) => {
-  const accountSid = Deno.env.get("TWILIO_ACCOUNT_SID") ?? "NO_SID";
-  const authToken = Deno.env.get("TWILIO_AUTH_TOKEN") ?? "NO_TOKEN";
-  const from = Deno.env.get("TWILIO_PHONE_NUMBER") ?? "";
-  // TODO: insert record in messages table
-  // TODO: insert record in sentAttempt table
-  // TODO: check monthly limit
-  const client = Twilio(accountSid, authToken);
   // TODO: calculate from supabase
   const dayCount = 0;
   // TODO: calculate from supabase
   const weekCount = 0;
   // TODO: fix date format
-  const body = `
+  const content = `
 ID del Caja: ${bin.id}
 Fecha: ${new Date(bin.date).toDateString()}
 Recogedor: ${bin.picker}
@@ -61,8 +53,15 @@ Cantidad Semanal de Cajas: ${weekCount}
   const to = Deno.env.get("TWILIO_TEMP_TO") ?? "";
 
   try {
-    const message = await client.messages.create({ body, from, to });
-    console.log("sent successfully:", message.sid);
+    const res = await fetch("https://smoketree.kwila.cloud/api/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": Deno.env.get("SMOKETREE_API_KEY") ?? "",
+      },
+      body: JSON.stringify({messages: [{to, content}]}),
+    });
+    console.log(await res.json());
     return true;
   } catch (e) {
     console.error(e);
