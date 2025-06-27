@@ -1,5 +1,6 @@
 export type Bin = {
   uuid: string
+  organizationUuid: string
   date: Date
   picker: string
   block: string

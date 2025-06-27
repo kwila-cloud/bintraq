@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { settings } from "@/models/settings";
 
 const pendingBin = ref<Partial<Bin>>({
+  organizationUuid: "",
   picker: "",
   block: "",
   size: "",
@@ -17,6 +18,12 @@ const bins = ref<Bin[]>([]);
 const pendingBins = computed(() =>
   bins.value.filter(({ isPending }) => isPending),
 );
+
+async function getOrganizationUuid() {
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: [userProfile]} = await supabase.from("userProfile").select().eq("id", user.id);
+  pendingBin.value.organizationUuid = userProfile.organizationUuid;
+}
 
 async function getBins() {
   const { data } = await supabase
@@ -33,6 +40,7 @@ async function getBins() {
 }
 
 onMounted(() => {
+  getOrganizationUuid();
   getBins();
 });
 
