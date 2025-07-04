@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { supabase } from '@/lib/supabaseClient'
-import { getMessages } from '@/lib/smoketreeClient'
+import { getMessages, getMessage, resendMessage } from '@/lib/smoketreeClient'
 import type { Bin } from '@/models/bin'
 import { ref, onMounted } from 'vue'
 
@@ -23,9 +23,15 @@ async function loadMessageStatuses() {
   messageStatuses.value = Object.fromEntries(messages.map((m) => [m.uuid, m.currentStatus]))
 }
 
+async function refresh(messageUuid: string) {
+  messageStatuses.value = { ...messageStatuses.value, [messageUuid]: 'refreshing' }
+  const message = await getMessage(messageUuid)
+  messageStatuses.value = { ...messageStatuses.value, [messageUuid]: message.currentStatus }
+}
+
 async function resend(messageUuid: string) {
-  messageStatuses.value = { ...messageStatuses.value, messageUuid: 'pending' }
-  // TODO: resend message with smoketree
+  messageStatuses.value = { ...messageStatuses.value, [messageUuid]: 'pending' }
+  await resendMessage(messageUuid)
 }
 
 onMounted(() => {
@@ -43,13 +49,19 @@ onMounted(() => {
       <span v-if="bin.messageUuid == null || messageStatuses[bin.messageUuid] == undefined"
         >Bin UUID - {{ bin.uuid }}</span
       >
-      <template v-if="bin.messageUuid != null">
+      <template v-else>
         <span>Send Status - {{ messageStatuses[bin.messageUuid] ?? 'unknown' }}</span>
         <button
           v-if="messageStatuses[bin.messageUuid] == 'failed'"
           @click="resend(bin.messageUuid)"
         >
           Resend
+        </button>
+        <button
+          v-else-if="messageStatuses[bin.messageUuid] != 'sent'"
+          @click="refresh(bin.messageUuid)"
+        >
+          Refresh
         </button>
       </template>
     </li>

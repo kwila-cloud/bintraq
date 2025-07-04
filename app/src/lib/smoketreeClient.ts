@@ -20,3 +20,23 @@ export const getMessages = async () => {
   const { data } = await messagesApi.getMessageList()
   return data.messages
 }
+
+export const getMessage = async (messageUuid:string) => {
+  const organization = await getOrganization()
+  const configuration = new Configuration({
+    apiKey: organization.smoketreeAdminApiKey,
+  })
+  const messagesApi = new MessagesApi(configuration)
+  const { data } = await messagesApi.getMessageFetch(messageUuid)
+  return data
+}
+
+export const resendMessage = async (messageUuid:string) => {
+  const organization = await getOrganization()
+  const configuration = new Configuration({
+    apiKey: organization.smoketreeAdminApiKey,
+  })
+  const messagesApi = new MessagesApi(configuration)
+  const { data } = await messagesApi.postMessageRetry(messageUuid)
+  return data
+}
