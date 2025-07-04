@@ -1,33 +1,94 @@
 <script setup lang="ts">
-import { supabase } from "@/lib/supabaseClient";
-import { ref, onMounted } from "vue";
+import { supabase } from '@/lib/supabaseClient'
+import { getMessages, getMessage, resendMessage } from '@/lib/smoketreeClient'
+import type { Bin } from '@/models/bin'
+import { ref, onMounted } from 'vue'
 
-type Bin = {
-  uuid: string;
-  id: string;
-  picker: string;
-};
-
-const bins = ref<Bin[]>([]);
+const bins = ref<Bin[]>([])
+const messageStatuses = ref<Record<string, string>>({})
 
 async function loadCompletedBins() {
   const { data } = await supabase
-    .from("bin")
+    .from('bin')
     .select()
-    .eq("isPending", false)
-    .order("date");
-  bins.value = data as Bin[];
+    .eq('isPending', false)
+    .order('date', { ascending: false })
+  bins.value = data as Bin[]
+}
+
+async function loadMessageStatuses() {
+  const messages = await getMessages()
+  messageStatuses.value = Object.fromEntries(messages.map((m) => [m.uuid, m.currentStatus]))
+}
+
+async function refresh(messageUuid: string) {
+  messageStatuses.value = { ...messageStatuses.value, [messageUuid]: 'refreshing' }
+  const message = await getMessage(messageUuid)
+  messageStatuses.value = { ...messageStatuses.value, [messageUuid]: message.currentStatus }
+}
+
+async function resend(messageUuid: string) {
+  messageStatuses.value = { ...messageStatuses.value, [messageUuid]: 'pending' }
+  await resendMessage(messageUuid)
 }
 
 onMounted(() => {
-  loadCompletedBins();
-});
+  loadCompletedBins()
+  loadMessageStatuses()
+})
 </script>
 
 <template>
   <ul>
     <li v-for="bin in bins" :key="bin.uuid">
-      {{ bin.id }} (picked by {{ bin.picker }})
+      <h1>{{ bin.id }}</h1>
+      <span>{{ bin.picker }}</span>
+      <span>{{ new Date(bin.date).toLocaleString() }}</span>
+      <template v-if="bin.messageUuid == null">
+        <span>Send Status - lost</span>
+      </template>
+      <template v-else>
+        <span>Send Status - {{ messageStatuses[bin.messageUuid] ?? 'unknown' }}</span>
+        <button
+          v-if="['failed', 'rate_limited'].includes(messageStatuses[bin.messageUuid])"
+          @click="resend(bin.messageUuid)"
+        >
+          Resend
+        </button>
+        <button
+          v-else-if="messageStatuses[bin.messageUuid] != 'sent'"
+          @click="refresh(bin.messageUuid)"
+        >
+          Refresh
+        </button>
+      </template>
     </li>
   </ul>
 </template>
+
+<style scoped>
+ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+li {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: var(--color-slate-800);
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  button {
+    background-color: var(--color-blue-900);
+    border-radius: 8px;
+  }
+}
+</style>

@@ -1,7 +1,8 @@
 export type Bin = {
   uuid: string
   organizationUuid: string
-  date: Date
+  // Supabase returns these as strings
+  date: string
   picker: string
   block: string
   size: string
