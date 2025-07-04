@@ -18,5 +18,8 @@
         "Vue.volar"
       ]
     }
-  }
+  },
+  "forwardPorts": [
+    5173
+  ]
 }
