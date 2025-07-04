@@ -17,9 +17,7 @@ async function loadCompletedBins() {
 }
 
 async function loadMessageStatuses() {
-  // TODO: handle loading messages in chunks, this only loads the first 50
   const messages = await getMessages()
-  console.log(messages)
   messageStatuses.value = Object.fromEntries(messages.map((m) => [m.uuid, m.currentStatus]))
 }
 
