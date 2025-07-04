@@ -50,7 +50,7 @@ onMounted(() => {
       <template v-else>
         <span>Send Status - {{ messageStatuses[bin.messageUuid] ?? 'unknown' }}</span>
         <button
-          v-if="messageStatuses[bin.messageUuid] == 'failed'"
+          v-if="['failed', 'rate_limited'].includes(messageStatuses[bin.messageUuid])"
           @click="resend(bin.messageUuid)"
         >
           Resend
