@@ -46,9 +46,9 @@ onMounted(() => {
       <h1>{{ bin.id }}</h1>
       <span>{{ bin.picker }}</span>
       <span>{{ new Date(bin.date).toLocaleString() }}</span>
-      <span v-if="bin.messageUuid == null || messageStatuses[bin.messageUuid] == undefined"
-        >Bin UUID - {{ bin.uuid }}</span
-      >
+      <template v-if="bin.messageUuid == null">
+        <span>Send Status - lost</span>
+      </template>
       <template v-else>
         <span>Send Status - {{ messageStatuses[bin.messageUuid] ?? 'unknown' }}</span>
         <button
