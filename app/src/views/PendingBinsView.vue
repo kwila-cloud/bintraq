@@ -4,7 +4,13 @@ import { ref, onMounted } from "vue";
 import { settings } from "@/models/settings";
 import type { Bin } from "@/models/bin";
 import BinSetting from "@/components/BinSetting.vue";
+import { getOrganization, getPickers } from "@/lib/utils";
 import { Icon } from "@iconify/vue";
+import {
+  MessagesApi,
+  Configuration,
+  type PostMessageCreateRequest,
+} from "smoketree-ts";
 
 const bins = ref<Bin[]>([]);
 
@@ -31,11 +37,44 @@ async function deleteBin(bin: Bin) {
 }
 
 async function sendBins() {
-  await supabase
-    .from("bin")
-    .update({ isPending: false })
-    .eq("isPending", true)
-    .select();
+  const organization = await getOrganization();
+  const pickers = await getPickers();
+  const pickerNumbers = Object.fromEntries(
+    pickers.map((picker) => [picker.name, picker.phoneNumber]),
+  );
+  const configuration = new Configuration({
+    apiKey: organization.smoketreeAdminApiKey,
+  });
+  const smokeTree = new MessagesApi(configuration);
+
+  const messages = [];
+  for (const bin of bins.value) {
+    // TODO: calculate day count
+    const dayCount = 0;
+    // TODO: calculate week count
+    const weekCount = 0;
+    messages.push({
+      to: pickerNumbers[bin.picker],
+      content: `ID del Caja: ${bin.id}
+Fecha: ${new Date(bin.date).toDateString()}
+Recogedor: ${bin.picker}
+Bloque: ${bin.block}
+Tamaño del Caja: ${bin.size} bushel
+Cantidad Diaria de Cajas: ${dayCount}
+Cantidad Semanal de Cajas: ${weekCount}
+`,
+    });
+  }
+  const { status, data } = await smokeTree.postMessageCreate({ messages });
+  let i = 0;
+  for (const result of data.results) {
+    await supabase
+      .from("bin")
+      .update({ isPending: false, messageUuid: result.uuid })
+      .eq("uuid", bins.value[i].uuid)
+      .select();
+    i += 1;
+  }
   bins.value = [];
 }
 </script>

@@ -4,8 +4,10 @@ import { computed, onMounted, ref } from "vue";
 import BinSetting from "@/components/BinSetting.vue";
 import { supabase } from "@/lib/supabaseClient";
 import { settings } from "@/models/settings";
+import { getOrganization } from "@/lib/utils";
 
 const pendingBin = ref<Partial<Bin>>({
+  organizationUuid: "",
   picker: "",
   block: "",
   size: "",
@@ -17,6 +19,11 @@ const bins = ref<Bin[]>([]);
 const pendingBins = computed(() =>
   bins.value.filter(({ isPending }) => isPending),
 );
+
+async function getOrganizationUuid() {
+  const organization = await getOrganization();
+  pendingBin.value.organizationUuid = organization.uuid;
+}
 
 async function getBins() {
   const { data } = await supabase
@@ -33,6 +40,7 @@ async function getBins() {
 }
 
 onMounted(() => {
+  getOrganizationUuid();
   getBins();
 });
 
