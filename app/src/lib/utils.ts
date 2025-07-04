@@ -1,31 +1,38 @@
 import { supabase } from "@/lib/supabaseClient";
+import type { Picker } from "@/models/picker";
 
 export const getUserProfile = async () => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const {
-    data: [userProfile],
-  } = await supabase.from("userProfile").select().eq("id", user.id);
-  return userProfile;
+  const {    data: { user }  } = await supabase.auth.getUser();
+  if (user == null) {
+    console.error("No user is signed in!");
+    return;
+  }
+  const {    data  } = await supabase.from("userProfile").select().eq("id", user.id);
+  if (data) {
+    return data[0];
+  }
+  console.error("No user profile found!");
+  return;
 };
 
 export const getOrganization = async () => {
   const userProfile = await getUserProfile();
-  const {
-    data: [organization],
-  } = await supabase
+  const {    data  } = await supabase
     .from("organization")
     .select()
     .eq("uuid", userProfile.organizationUuid);
-  return organization;
+  if (data) {
+    return data[0];
+  }
+  console.error("No organization found!");
+  return;
 };
 
-export const getPickers = async () => {
+export const getPickers = async (): Promise<Picker[]> => {
   const {
     data: pickers
   } = await supabase
     .from("picker")
     .select();
-  return pickers;
+  return pickers ?? [];
 };

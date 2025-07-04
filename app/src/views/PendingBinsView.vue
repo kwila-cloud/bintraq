@@ -9,7 +9,7 @@ import { Icon } from "@iconify/vue";
 import {
   MessagesApi,
   Configuration,
-  PostMessageCreateRequest,
+  type PostMessageCreateRequest,
 } from "smoketree-ts";
 
 const bins = ref<Bin[]>([]);

@@ -1,8 +1,9 @@
 import { ref } from "vue";
 import { blockOptions, sizeOptions } from "@/models/bin";
+import type { Picker } from "@/models/picker";
 import { getPickers } from "@/lib/utils";
 
-const pickers = ref([]);
+const pickers = ref<string[]>([]);
 const blocks = ref(blockOptions);
 const sizes = ref(sizeOptions);
 export const settings = ref([
@@ -13,6 +14,6 @@ export const settings = ref([
 ]);
 
 // Load the pickers. There is probably a better way to do this.
-getPickers().then((p) => {
+getPickers().then((p: Picker[]) => {
   pickers.value = p.map((p) => p.name);
 });
