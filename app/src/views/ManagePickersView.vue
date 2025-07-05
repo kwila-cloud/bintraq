@@ -4,6 +4,8 @@ import ComingSoon from '@/components/ComingSoon.vue'
 
 <template>
   <ComingSoon />
+  // AI!: use the getPickers function from @/lib/utils to display the list of pickers and their
+  phone numbers
 </template>
 
 <style scoped>
