@@ -4,8 +4,8 @@ import { Icon } from '@iconify/vue'
 const props = defineProps({
   title: {
     type: String,
-    default: 'Menu'
-  }
+    default: 'Menu',
+  },
 })
 
 const emit = defineEmits(['close'])
@@ -18,6 +18,7 @@ function closeModal() {
 <template>
   <div class="modal-backdrop" @click.self="closeModal">
     <div class="modal-content">
+      // AI!: center the title
       <h1 class="text-xl font-bold mb-4">{{ props.title }}</h1>
       <div class="flex flex-col gap-4">
         <slot name="menu-items"></slot>
