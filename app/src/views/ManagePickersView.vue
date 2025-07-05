@@ -61,6 +61,22 @@ async function handleSavePickers() {
   }
 }
 
+function handleMovePicker(picker: Picker, delta: -1 | 1) {
+  const oldOrder = picker.order
+  const newOrder = picker.order + delta
+  pickers.value = pickers.value.map((p) => {
+    if (p.order == newOrder) {
+      // Move the picker being switched with
+      return { ...p, order: oldOrder }
+    } else if (p.uuid == picker.uuid) {
+      // Move the actual picker
+      return { ...p, order: newOrder }
+    } else {
+      return p
+    }
+  })
+}
+
 async function handleDeletePicker(pickerUuid: string) {
   if (confirm('Are you sure you want to delete this picker?')) {
     pickers.value = pickers.value.map((p) =>
@@ -84,12 +100,6 @@ async function handleDeletePicker(pickerUuid: string) {
           @click="handleAddPicker"
         />
         <ActionButton
-          text="Reorder"
-          icon="system-uicons:list-numbered"
-          color="blue"
-          @click="handleReorderPickers"
-        />
-        <ActionButton
           text="Save"
           icon="system-uicons:check"
           color="green"
@@ -99,7 +109,7 @@ async function handleDeletePicker(pickerUuid: string) {
     </div>
     <ul>
       <li
-        v-for="picker in displayPickers"
+        v-for="(picker, index) in displayPickers"
         :key="picker.uuid"
         class="bg-slate-800 p-4 rounded-lg mb-2 flex flex-col gap-2"
       >
@@ -121,13 +131,29 @@ async function handleDeletePicker(pickerUuid: string) {
             class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <ActionButton
-          text="Delete"
-          icon="system-uicons:trash"
-          color="red"
-          class="max-w-32"
-          @click="handleDeletePicker(picker.uuid)"
-        />
+        <div class="flex flex-row gap-1">
+          <span>{{ picker.order }}, {{ displayPickers.length }}</span>
+          <ActionButton
+            text="Down"
+            icon="system-uicons:chevron-down"
+            color="blue"
+            :disabled="index == displayPickers.length - 1"
+            @click="handleMovePicker(picker, 1)"
+          />
+          <ActionButton
+            text="Up"
+            icon="system-uicons:chevron-up"
+            color="blue"
+            :disabled="index == 0"
+            @click="handleMovePicker(picker, -1)"
+          />
+          <ActionButton
+            text="Delete"
+            icon="system-uicons:trash"
+            color="red"
+            @click="handleDeletePicker(picker.uuid)"
+          />
+        </div>
       </li>
     </ul>
   </div>

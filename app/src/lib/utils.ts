@@ -51,7 +51,7 @@ export const savePickers = async (pickers: Picker[]) => {
   pickers.sort((a, b) => a.order - b.order)
   const pickersWithOrder = pickers.map((picker, index) => ({
     ...picker,
-    order: index + 1,
+    order: index,
   }))
   const { error } = await supabase.from('picker').upsert(pickersWithOrder)
   if (error) {
