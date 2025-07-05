@@ -37,7 +37,7 @@ const router = createRouter({
       path: '/pickers',
       name: 'pickers',
       component: ManagePickersView,
-      meta: { requiredAuth: true },
+      meta: { requiresAuth: true },
     },
     {
       path: '/about',
