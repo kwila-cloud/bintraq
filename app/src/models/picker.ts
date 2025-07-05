@@ -5,4 +5,5 @@ export type Picker = {
   name: string
   phoneNumber: string
   createdAt: string
+  isDeleted: boolean
 }

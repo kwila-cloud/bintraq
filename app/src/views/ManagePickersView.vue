@@ -3,8 +3,9 @@ import { ref, onMounted, computed } from 'vue'
 import ActionButton from '@/components/ActionButton.vue'
 import { getOrganization, getPickers, savePickers } from '@/lib/utils'
 import { Icon } from '@iconify/vue'
+import { type Picker } from '@/models/picker'
 
-const pickers = ref([])
+const pickers = ref<Picker[]>([])
 const isLoading = ref(true)
 const error = ref(null)
 
