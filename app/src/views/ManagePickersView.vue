@@ -46,6 +46,10 @@ async function handleAddPicker() {
   ]
 }
 
+async function handleReorderPickers() {
+  // AI!: open a MenuModal and allow the user to drag-and-drop reorder the pickers. Only show the picker names in the dialog
+}
+
 async function handleSavePickers() {
   try {
     await savePickers(pickers.value)
@@ -80,6 +84,12 @@ async function handleDeletePicker(pickerUuid: string) {
           @click="handleAddPicker"
         />
         <ActionButton
+          text="Reorder"
+          icon="system-uicons:list-numbered"
+          color="blue"
+          @click="handleReorderPickers"
+        />
+        <ActionButton
           text="Save"
           icon="system-uicons:check"
           color="green"
@@ -108,15 +118,6 @@ async function handleDeletePicker(pickerUuid: string) {
             :id="`phone-${picker.uuid}`"
             type="text"
             v-model="picker.phoneNumber"
-            class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label :for="`order-${picker.uuid}`" class="text-sm text-slate-300">Order</label>
-          <input
-            :id="`order-${picker.uuid}`"
-            type="number"
-            v-model="picker.order"
             class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
