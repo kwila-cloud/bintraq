@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import ComingSoon from '@/components/ComingSoon.vue'
-import { getPickers } from '@/lib/utils'
+import { getPickers, deletePicker } from '@/lib/utils'
+import { Icon } from '@iconify/vue'
 
 const pickers = ref([])
 const isLoading = ref(true)
@@ -20,11 +21,25 @@ onMounted(async () => {
     isLoading.value = false
   }
 })
+
+async function handleDeletePicker(pickerId: string) {
+  if (confirm('Are you sure you want to delete this picker?')) {
+    try {
+      await deletePicker(pickerId)
+      pickers.value = pickers.value.filter(p => p.uuid !== pickerId)
+    } catch (err: any) {
+      error.value = `Failed to delete picker: ${err.message}`
+    }
+  }
+}
 </script>
 
 <template>
   <div v-if="isLoading">Loading...</div>
   <div v-else-if="error">Error loading pickers: {{ error }}</div>
+  <div v-else-if="pickers.length === 0">
+    <ComingSoon />
+  </div>
   <div v-else class="flex flex-col gap-4">
     <h2 class="text-2xl font-bold mb-4">Pickers</h2>
     <ul>
@@ -60,7 +75,12 @@ onMounted(async () => {
             class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        //AI!: add a delete button
+        <button
+          @click="handleDeletePicker(picker.uuid)"
+          class="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 flex items-center justify-center"
+        >
+          <Icon icon="system-uicons:trash" height="20" />
+        </button>
       </li>
     </ul>
   </div>
