@@ -39,8 +39,7 @@ async function handleDeletePicker(pickerUuid: string) {
   <div v-else class="flex flex-col gap-4">
     <div class="flex justify-between items-center">
       <h2 class="text-2xl font-bold mb-4">Pickers</h2>
-      // AI!: make this a blue button with similar styling to the delete button
-      <button>Save</button>
+      <button class="bg-blue-700 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Save</button>
     </div>
     <ul>
       <li
