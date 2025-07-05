@@ -15,14 +15,15 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['click'])
 
+const colorMap = {
+  blue: 'bg-blue-800 text-white hover:bg-blue-600 focus:ring-blue-500',
+  red: 'bg-red-800 text-white hover:bg-red-700 focus:ring-red-500',
+}
+
 const buttonClasses = computed(() => {
   const baseClasses =
     'p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 flex items-center justify-center gap-2'
-  // AI!: use mapping instead of ternary
-  const colorClasses =
-    props.color === 'blue'
-      ? 'bg-blue-800 text-white hover:bg-blue-600 focus:ring-blue-500'
-      : 'bg-red-800 text-white hover:bg-red-700 focus:ring-red-500'
+  const colorClasses = colorMap[props.color]
   return `${baseClasses} ${colorClasses}`
 })
 </script>
