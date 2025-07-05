@@ -16,9 +16,9 @@ function closeModal() {
 </script>
 
 <template>
-  <div class="modal-backdrop" @click.self="closeModal">
-    <div class="modal-content">
-      <h1 class="text-xl font-bold mb-4">{{ props.title }}</h1>
+  <div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 flex justify-center items-center z-1000" @click.self="closeModal">
+    <div class="bg-slate-800 p-5 rounded-lg relative min-w-[250px] shadow-lg">
+      <h1 class="text-xl font-bold mb-4 text-center">{{ props.title }}</h1>
       <div class="flex flex-col gap-4">
         <slot name="menu-items"></slot>
       </div>
@@ -26,27 +26,6 @@ function closeModal() {
   </div>
 </template>
 
-// AI!: replace styles with tailwind in the template
 <style scoped>
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: var(--color-slate-800);
-  padding: 20px;
-  border-radius: 8px;
-  position: relative;
-  min-width: 250px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+/* All styles have been moved to the template using Tailwind CSS */
 </style>
