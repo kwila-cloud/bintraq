@@ -59,7 +59,9 @@ async function handleSavePickers() {
 
 async function handleDeletePicker(pickerUuid: string) {
   if (confirm('Are you sure you want to delete this picker?')) {
-    pickers.value = pickers.value.map((p) => (p.uuid == pickerUuid ? { ...p, isDeleted: true } : p))
+    pickers.value = pickers.value.map((p) =>
+      p.uuid === pickerUuid ? { ...p, isDeleted: true } : p,
+    )
   }
 }
 </script>
