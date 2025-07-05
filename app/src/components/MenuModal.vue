@@ -11,9 +11,7 @@ function closeModal() {
 <template>
   <div class="modal-backdrop" @click.self="closeModal">
     <div class="modal-content">
-      <button class="close-button" @click="closeModal">
-        <Icon icon="system-uicons:close" height="24" />
-      </button>
+      <h1>Menu</h1>
       <div class="menu-items-container">
         <slot name="menu-items"></slot>
       </div>
@@ -44,6 +42,7 @@ function closeModal() {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+// AI!: replace with tailwind in the HTML
 .menu-items-container {
   display: flex;
   flex-direction: column;
