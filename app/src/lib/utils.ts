@@ -36,8 +36,11 @@ export const getPickers = async (): Promise<Picker[]> => {
 }
 
 export const savePickers = async (pickers: Picker[]) => {
-  // AI!: set picker.order to index + 1 for each picker, before upserting
-  const { error } = await supabase.from('picker').upsert(pickers)
+  const pickersWithOrder = pickers.map((picker, index) => ({
+    ...picker,
+    order: index + 1,
+  }))
+  const { error } = await supabase.from('picker').upsert(pickersWithOrder)
   if (error) {
     throw error
   }
