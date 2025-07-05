@@ -62,11 +62,6 @@ async function signOut() {
       <span>History</span>
     </RouterLink>
   </nav>
-
-  <div v-if="menuOpen" class="popUpMenu">
-    <RouterLink to="/about" @click="menuOpen = false">About</RouterLink>
-    <button @click="signOut">Logout</button>
-  </div>
 </template>
 
 <style scoped>
@@ -85,16 +80,15 @@ async function signOut() {
     font-size: 1.5rem;
     color: var(--color-white);
   }
-}
 
-#top-nav button {
-  background: var(--color-slate-700);
-  border: none;
-  border-radius: 4px;
-  padding: 8px;
-  color: white;
+  :not(:first-child) {
+    font-size: 1rem;
+    line-height: 2;
+    padding: 8px;
+    background: var(--color-slate-700);
+    border-radius: 4px;
+  }
 }
-
 #bottom-nav {
   position: fixed;
   bottom: 0;
@@ -125,49 +119,6 @@ async function signOut() {
     &.active-link {
       background: var(--color-slate-700);
     }
-  }
-}
-
-.popUpMenu {
-  position: fixed;
-  top: 80px;
-  left: 0;
-  right: 0;
-  background: var(--color-slate-800);
-  z-index: 100;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.popUpMenu a {
-  color: inherit;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.popUpMenu button {
-  background: transparent;
-  border: 1px solid var(--color-white);
-  color: var(--color-white);
-  border-radius: 4px;
-  padding: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.popUpMenu button:hover {
-  background: var(--color-slate-700);
-}
-
-@media (width >= 32rem) {
-  #top-nav button {
-    display: none;
   }
 }
 </style>
