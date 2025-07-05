@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabaseClient'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { Icon } from '@iconify/vue'
 
 const isLoggedIn = ref(false)
@@ -17,9 +17,13 @@ async function checkAuth() {
 onMounted(() => {
   checkAuth()
 
-  supabase.auth.onAuthStateChange(() => {
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange(() => {
     checkAuth()
   })
+
+  onBeforeUnmount(() => subscription.unsubscribe())
 })
 
 async function signOut() {
