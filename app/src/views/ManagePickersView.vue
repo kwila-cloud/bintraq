@@ -30,12 +30,34 @@ onMounted(async () => {
       <li
         v-for="picker in pickers"
         :key="picker.id"
-        class="bg-slate-800 p-4 rounded-lg mb-2 flex justify-between items-center"
+        class="bg-slate-800 p-4 rounded-lg mb-2 flex flex-col gap-2"
       >
-        // AI!: show the picker's name, phone number and order as inputs
-        <div>
-          <span class="font-semibold">{{ picker.name }}</span>
-          <p class="text-sm text-slate-300">{{ picker.phoneNumber }}</p>
+        <div class="flex flex-col gap-1">
+          <label :for="`name-${picker.id}`" class="text-sm text-slate-300">Name</label>
+          <input
+            :id="`name-${picker.id}`"
+            type="text"
+            v-model="picker.name"
+            class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label :for="`phone-${picker.id}`" class="text-sm text-slate-300">Phone Number</label>
+          <input
+            :id="`phone-${picker.id}`"
+            type="text"
+            v-model="picker.phoneNumber"
+            class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label :for="`order-${picker.id}`" class="text-sm text-slate-300">Order</label>
+          <input
+            :id="`order-${picker.id}`"
+            type="number"
+            v-model="picker.order"
+            class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
       </li>
     </ul>
