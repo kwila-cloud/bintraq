@@ -62,15 +62,22 @@ async function handleSavePickers() {
 }
 
 function handleMovePicker(picker: Picker, delta: -1 | 1) {
-  const oldOrder = picker.order
-  const newOrder = picker.order + delta
+  const currentIndex = displayPickers.value.findIndex(p => p.uuid === picker.uuid)
+  const targetIndex = currentIndex + delta
+
+  if (targetIndex < 0 || targetIndex >= displayPickers.value.length) {
+    return // Invalid move
+  }
+
+  const targetPicker = displayPickers.value[targetIndex]
+  const currentOrder = picker.order
+  const targetOrder = targetPicker.order
+
   pickers.value = pickers.value.map((p) => {
-    if (p.order == newOrder) {
-      // Move the picker being switched with
-      return { ...p, order: oldOrder }
-    } else if (p.uuid == picker.uuid) {
-      // Move the actual picker
-      return { ...p, order: newOrder }
+    if (p.uuid === picker.uuid) {
+      return { ...p, order: targetOrder }
+    } else if (p.uuid === targetPicker.uuid) {
+      return { ...p, order: currentOrder }
     } else {
       return p
     }
