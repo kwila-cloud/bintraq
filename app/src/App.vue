@@ -46,7 +46,7 @@ function toggleMenu() {
       <Icon icon="system-uicons:menu-hamburger" height="32" />
     </button>
   </nav>
-  <main class="p-1 md:p-4 grow mb-24">
+  <main class="px-1 py-4 md:px-4 grow mb-24">
     <RouterView />
   </main>
 

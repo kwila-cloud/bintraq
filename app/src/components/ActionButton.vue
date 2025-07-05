@@ -3,8 +3,8 @@ import { computed } from 'vue'
 import { Icon } from '@iconify/vue'
 
 interface Props {
-  icon?: string
   text: string
+  icon?: string
   color?: 'blue' | 'red'
 }
 

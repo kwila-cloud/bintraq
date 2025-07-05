@@ -48,12 +48,12 @@ async function handleDeletePicker(pickerUuid: string) {
 <template>
   <div v-if="isLoading">Loading...</div>
   <div v-else-if="error">Error loading pickers: {{ error }}</div>
-  <div v-else class="flex flex-col gap-4">
+  <div v-else class="flex flex-col md:gap-4 gap-2">
     <div class="flex justify-between items-center">
       <h2 class="text-2xl font-bold">Pickers</h2>
       <ActionButton
-        icon="system-uicons:check"
         text="Save"
+        icon="system-uicons:check"
         color="blue"
         @click="handleSavePickers"
       />
@@ -92,8 +92,8 @@ async function handleDeletePicker(pickerUuid: string) {
           />
         </div>
         <ActionButton
-          icon="system-uicons:trash"
           text="Delete"
+          icon="system-uicons:trash"
           color="red"
           @click="handleDeletePicker(picker.uuid)"
         />
