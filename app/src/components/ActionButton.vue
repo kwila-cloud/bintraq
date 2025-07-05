@@ -5,7 +5,7 @@ import { Icon } from '@iconify/vue'
 interface Props {
   text: string
   icon?: string
-  color?: 'blue' | 'red'
+  color?: 'blue' | 'green' | 'red'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -17,6 +17,7 @@ const emit = defineEmits(['click'])
 
 const colorMap = {
   blue: 'bg-blue-800 text-white hover:bg-blue-600 focus:ring-blue-500',
+  green: 'bg-green-800 text-white hover:bg-green-600 focus:ring-green-500',
   red: 'bg-red-800 text-white hover:bg-red-700 focus:ring-red-500',
 }
 

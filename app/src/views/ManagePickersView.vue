@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import ActionButton from '@/components/ActionButton.vue'
-import { getPickers, savePickers } from '@/lib/utils'
+import { getOrganization, getPickers, savePickers } from '@/lib/utils'
 import { Icon } from '@iconify/vue'
 
 const pickers = ref([])
@@ -21,6 +21,20 @@ onMounted(async () => {
     isLoading.value = false
   }
 })
+
+async function handleAddPicker() {
+  const organization = await getOrganization()
+  pickers.value = [
+    ...pickers.value,
+    {
+      uuid: crypto.randomUUID(),
+      organizationUuid: organization.uuid,
+      order: pickers.value.length + 1,
+      name: 'New Picker',
+      phoneNumber: '',
+    },
+  ]
+}
 
 async function handleSavePickers() {
   try {
@@ -51,12 +65,20 @@ async function handleDeletePicker(pickerUuid: string) {
   <div v-else class="flex flex-col md:gap-4 gap-2">
     <div class="flex justify-between items-center">
       <h2 class="text-2xl font-bold">Pickers</h2>
-      <ActionButton
-        text="Save"
-        icon="system-uicons:check"
-        color="blue"
-        @click="handleSavePickers"
-      />
+      <div class="flex gap-2">
+        <ActionButton
+          text="New Picker"
+          icon="system-uicons:plus"
+          color="blue"
+          @click="handleAddPicker"
+        />
+        <ActionButton
+          text="Save"
+          icon="system-uicons:check"
+          color="green"
+          @click="handleSavePickers"
+        />
+      </div>
     </div>
     <ul>
       <li
