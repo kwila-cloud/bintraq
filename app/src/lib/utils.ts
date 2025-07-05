@@ -36,5 +36,8 @@ export const getPickers = async (): Promise<Picker[]> => {
 }
 
 export const savePickers = async (pickers: Picker[]) => {
-  // AI!: save pickers to supabase
+  const { error } = await supabase.from('picker').upsert(pickers)
+  if (error) {
+    throw error
+  }
 }
