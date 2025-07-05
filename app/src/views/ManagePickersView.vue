@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import ComingSoon from '@/components/ComingSoon.vue'
 import { getPickers } from '@/lib/utils'
 
 const pickers = ref([])
 const isLoading = ref(true)
 const error = ref(null)
+
+const sortedPickers = computed(() => {
+  return [...pickers.value].sort((a, b) => a.order - b.order)
+})
 
 onMounted(async () => {
   try {
@@ -27,9 +31,8 @@ onMounted(async () => {
   <div v-else class="flex flex-col gap-4">
     <h2 class="text-2xl font-bold mb-4">Pickers</h2>
     <ul>
-      // AI!: order the pickers by their order value, from least to greatest
       <li
-        v-for="picker in pickers"
+        v-for="picker in sortedPickers"
         :key="picker.id"
         class="bg-slate-800 p-4 rounded-lg mb-2 flex flex-col gap-2"
       >
