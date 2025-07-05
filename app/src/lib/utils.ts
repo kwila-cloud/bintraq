@@ -30,12 +30,18 @@ export const getOrganization = async () => {
   return
 }
 
-export const getPickers = async (): Promise<Picker[]> => {
-  const { data: pickers } = await supabase.from('picker').select()
-  return pickers ?? []
+export const getPickers = async (includeDeleted = false): Promise<Picker[]> => {
+  if (includeDeleted) {
+    const { data: pickers } = await supabase.from('picker').select()
+    return pickers ?? []
+  } else {
+    const { data: pickers } = await supabase.from('picker').select().eq('isDeleted', false)
+    return pickers ?? []
+  }
 }
 
 export const savePickers = async (pickers: Picker[]) => {
+  // AI!: throw an error if any pickers have the same name
   // normalize the order values
   const pickersWithOrder = pickers.map((picker, index) => ({
     ...picker,
