@@ -1,30 +1,40 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRouter } from "vue-router";
-import { supabase } from "@/lib/supabaseClient";
-import { ref, onMounted } from "vue";
-import { Icon } from "@iconify/vue";
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { supabase } from '@/lib/supabaseClient'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { Icon } from '@iconify/vue'
+import MenuModal from '@/components/MenuModal.vue'
 
-const isLoggedIn = ref(false);
-const router = useRouter();
+const isLoggedIn = ref(false)
+const showMenuModal = ref(false)
+const router = useRouter()
 
 async function checkAuth() {
   const {
     data: { session },
-  } = await supabase.auth.getSession();
-  isLoggedIn.value = !!session;
+  } = await supabase.auth.getSession()
+  isLoggedIn.value = !!session
 }
 
 onMounted(() => {
-  checkAuth();
+  checkAuth()
 
-  supabase.auth.onAuthStateChange(() => {
-    checkAuth();
-  });
-});
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange(() => {
+    checkAuth()
+  })
+
+  onBeforeUnmount(() => subscription.unsubscribe())
+})
 
 async function signOut() {
-  await supabase.auth.signOut();
-  router.push("/login");
+  await supabase.auth.signOut()
+  router.push('/login')
+}
+
+function toggleMenu() {
+  showMenuModal.value = !showMenuModal.value
 }
 </script>
 
@@ -32,10 +42,10 @@ async function signOut() {
   <nav id="top-nav">
     <RouterLink v-if="isLoggedIn" to="/add-bin">BinTraq</RouterLink>
     <RouterLink v-else to="/about">BinTraq</RouterLink>
-    <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>
-    <button v-else @click="signOut" class="button-as-a">Logout</button>
+    <button class="button-as-a" @click="toggleMenu">
+      <Icon icon="system-uicons:menu-hamburger" height="32" />
+    </button>
   </nav>
-  <!-- The bottom margin gives space for the bottom nav bar -->
   <main class="p-1 md:p-4 grow mb-24">
     <RouterView />
   </main>
@@ -54,16 +64,33 @@ async function signOut() {
       <span>History</span>
     </RouterLink>
   </nav>
+
+  <MenuModal v-if="showMenuModal" @close="toggleMenu" id="menu">
+    <template v-if="isLoggedIn">
+      <RouterLink to="/pickers">Pickers</RouterLink>
+      <button class="button-as-a" @click="signOut">Logout</button>
+    </template>
+    <RouterLink v-else to="/login">Login</RouterLink>
+  </MenuModal>
 </template>
 
 <style scoped>
+a,
+button {
+  font-size: 1rem;
+  line-height: 2;
+  padding: 8px;
+  border-radius: 8px;
+  text-align: center;
+}
+
 #top-nav {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
   background: var(--color-slate-800);
-  padding: 8px 12px;
+  padding: 8px 16px;
   border-radius: 12px;
 
   :first-child {
@@ -71,16 +98,18 @@ async function signOut() {
     font-weight: bold;
     font-size: 1.5rem;
     color: var(--color-white);
-  }
-
-  :not(:first-child) {
-    font-size: 1rem;
-    line-height: 2;
-    padding: 8px;
-    background: var(--color-slate-700);
-    border-radius: 4px;
+    background: transparent;
   }
 }
+
+#top-nav,
+#menu {
+  a,
+  button {
+    background: var(--color-slate-700);
+  }
+}
+
 #bottom-nav {
   position: fixed;
   bottom: 0;
@@ -99,7 +128,6 @@ async function signOut() {
   a {
     height: 84px;
     width: 84px;
-    padding: 8px 12px;
     border-radius: 12px;
     font-weight: bold;
 

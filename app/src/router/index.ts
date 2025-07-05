@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AddBinView from '../views/AddBinView.vue';
-import PendingBinsView from '../views/PendingBinsView.vue'
-import HistoryView from '../views/HistoryView.vue'
-import AboutView from '../views/AboutView.vue'
-import LoginPage from '../views/LoginPage.vue'
+import AddBinView from '@/views/AddBinView.vue'
+import PendingBinsView from '@/views/PendingBinsView.vue'
+import HistoryView from '@/views/HistoryView.vue'
+import ManagePickersView from '@/views/ManagePickersView.vue'
+import AboutView from '@/views/AboutView.vue'
+import LoginPage from '@/views/LoginPage.vue'
 import { supabase } from '@/lib/supabaseClient'
 
 const router = createRouter({
@@ -12,41 +13,49 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      redirect: '/about'
+      redirect: '/about',
     },
     {
       path: '/add-bin',
       name: 'add-bin',
       component: AddBinView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/pending',
       name: 'pending',
       component: PendingBinsView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/history',
       name: 'history',
       component: HistoryView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/pickers',
+      name: 'pickers',
+      component: ManagePickersView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/about',
       name: 'about',
-      component: AboutView
+      component: AboutView,
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginPage
+      component: LoginPage,
     },
-  ]
+  ],
 })
 
 router.beforeEach(async (to) => {
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
   if (to.meta.requiresAuth && !session) {
     return '/login'
