@@ -20,7 +20,7 @@ onMounted(async () => {
 async function loadPickers() {
   try {
     isLoading.value = true
-    pickers.value = await getPickers()
+    pickers.value = await getPickers(true)
     isLoading.value = false
   } catch (err: any) {
     error.value = err.message
@@ -40,6 +40,7 @@ async function handleAddPicker() {
       name: 'New Picker',
       phoneNumber: '',
       createdAt: new Date().toISOString(),
+      isDeleted: false,
     },
   ]
 }
