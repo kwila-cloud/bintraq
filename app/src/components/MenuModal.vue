@@ -44,17 +44,6 @@ function closeModal() {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-// AI!: remove the close button
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-white);
-}
-
 .menu-items-container {
   display: flex;
   flex-direction: column;
