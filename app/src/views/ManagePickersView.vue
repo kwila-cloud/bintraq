@@ -4,10 +4,13 @@ import ActionButton from '@/components/ActionButton.vue'
 import { getOrganization, getPickers, savePickers } from '@/lib/utils'
 import { Icon } from '@iconify/vue'
 import { type Picker } from '@/models/picker'
+import MenuModal from '@/components/MenuModal.vue'
 
 const pickers = ref<Picker[]>([])
 const isLoading = ref(true)
 const error = ref(null)
+const showReorderModal = ref(false)
+let draggedItemIndex = -1
 
 // Sort by order and only include non-deleted
 const displayPickers = computed(() => {
@@ -47,7 +50,20 @@ async function handleAddPicker() {
 }
 
 async function handleReorderPickers() {
-  // AI!: open a MenuModal and allow the user to drag-and-drop reorder the pickers. Only show the picker names in the dialog
+  showReorderModal.value = true
+}
+
+function closeReorderModal() {
+  showReorderModal.value = false
+}
+
+async function saveReorder(orderedPickers: Picker[]) {
+  pickers.value = orderedPickers.map((p, index) => ({
+    ...p,
+    order: index + 1,
+  }))
+  await handleSavePickers()
+  closeReorderModal()
 }
 
 async function handleSavePickers() {
@@ -68,6 +84,31 @@ async function handleDeletePicker(pickerUuid: string) {
     )
   }
 }
+
+function onDragStart(event: DragEvent, index: number) {
+  draggedItemIndex = index
+  event.dataTransfer?.effectAllowed = 'move'
+}
+
+function onDragOver(event: DragEvent, index: number) {
+  event.preventDefault()
+  event.dataTransfer!.dropEffect = 'move'
+  if (index !== draggedItemIndex) {
+    const newPickers = [...displayPickers.value]
+    const draggedItem = newPickers.splice(draggedItemIndex, 1)[0]
+    newPickers.splice(index, 0, draggedItem)
+    pickers.value = newPickers.map((p, i) => ({ ...p, order: i + 1 }))
+    draggedItemIndex = index
+  }
+}
+
+function onDrop(event: DragEvent) {
+  event.preventDefault()
+  // The actual reordering is handled in onDragOver for immediate visual feedback
+  // We just need to reset the draggedItemIndex here
+  draggedItemIndex = -1
+}
+
 </script>
 
 <template>
@@ -99,9 +140,13 @@ async function handleDeletePicker(pickerUuid: string) {
     </div>
     <ul>
       <li
-        v-for="picker in displayPickers"
+        v-for="(picker, index) in displayPickers"
         :key="picker.uuid"
         class="bg-slate-800 p-4 rounded-lg mb-2 flex flex-col gap-2"
+        draggable="true"
+        @dragstart="onDragStart($event, index)"
+        @dragover.prevent="onDragOver($event, index)"
+        @drop.prevent="onDrop($event)"
       >
         <div class="flex flex-col gap-1">
           <label :for="`name-${picker.uuid}`" class="text-sm text-slate-300">Name</label>
@@ -131,6 +176,31 @@ async function handleDeletePicker(pickerUuid: string) {
       </li>
     </ul>
   </div>
+
+  <MenuModal
+    v-if="showReorderModal"
+    title="Reorder Pickers"
+    @close="closeReorderModal"
+    :draggable="true"
+  >
+    <template v-slot="{ dragStart, dragOver, drop }">
+      <div
+        v-for="(picker, index) in displayPickers"
+        :key="picker.uuid"
+        class="p-3 bg-slate-700 rounded-md cursor-grab flex justify-between items-center"
+        draggable="true"
+        @dragstart="dragStart($event, index)"
+        @dragover.prevent="dragOver($event, index)"
+        @drop.prevent="drop($event, index)"
+      >
+        <span>{{ picker.name }}</span>
+        <Icon icon="system-uicons:drag" class="text-slate-300" />
+      </div>
+    </template>
+    <template v-slot:footer>
+      <ActionButton text="Save Order" color="green" @click="saveReorder(displayPickers)" />
+    </template>
+  </MenuModal>
 </template>
 
 <style scoped>
