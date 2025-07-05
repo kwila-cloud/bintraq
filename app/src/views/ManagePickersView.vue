@@ -71,6 +71,7 @@ async function handleDeletePicker(pickerUuid: string) {
             class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+        // AI!: make this fixed with
         <button
           @click="handleDeletePicker(picker.uuid)"
           class="bg-red-800 text-white p-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 flex items-center justify-center"
