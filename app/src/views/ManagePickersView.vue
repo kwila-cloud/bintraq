@@ -23,7 +23,7 @@ async function loadPickers() {
     isLoading.value = true
     pickers.value = await getPickers(true)
     isLoading.value = false
-  } catch (err) {
+  } catch (err: any) {
     error.value = err.message
   } finally {
     isLoading.value = false
