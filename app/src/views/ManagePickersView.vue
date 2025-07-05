@@ -46,6 +46,10 @@ async function handleAddPicker() {
   ]
 }
 
+async function handleReorderPickers() {
+  // AI!: open a MenuModal and allow the user to drag-and-drop reorder the pickers. Only show the picker names in the dialog
+}
+
 async function handleSavePickers() {
   try {
     await savePickers(pickers.value)
@@ -55,6 +59,29 @@ async function handleSavePickers() {
     console.error(`Failed to save pickers: ${err.message}`)
     alert(`Failed to save pickers: ${err.message}`)
   }
+}
+
+function handleMovePicker(picker: Picker, delta: -1 | 1) {
+  const currentIndex = displayPickers.value.findIndex(p => p.uuid === picker.uuid)
+  const targetIndex = currentIndex + delta
+
+  if (targetIndex < 0 || targetIndex >= displayPickers.value.length) {
+    return // Invalid move
+  }
+
+  const targetPicker = displayPickers.value[targetIndex]
+  const currentOrder = picker.order
+  const targetOrder = targetPicker.order
+
+  pickers.value = pickers.value.map((p) => {
+    if (p.uuid === picker.uuid) {
+      return { ...p, order: targetOrder }
+    } else if (p.uuid === targetPicker.uuid) {
+      return { ...p, order: currentOrder }
+    } else {
+      return p
+    }
+  })
 }
 
 async function handleDeletePicker(pickerUuid: string) {
@@ -89,7 +116,7 @@ async function handleDeletePicker(pickerUuid: string) {
     </div>
     <ul>
       <li
-        v-for="picker in displayPickers"
+        v-for="(picker, index) in displayPickers"
         :key="picker.uuid"
         class="bg-slate-800 p-4 rounded-lg mb-2 flex flex-col gap-2"
       >
@@ -111,27 +138,29 @@ async function handleDeletePicker(pickerUuid: string) {
             class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div class="flex flex-col gap-1">
-          <label :for="`order-${picker.uuid}`" class="text-sm text-slate-300">Order</label>
-          <input
-            :id="`order-${picker.uuid}`"
-            type="number"
-            v-model="picker.order"
-            class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        <div class="flex flex-row gap-1">
+          <ActionButton
+            text="Down"
+            icon="system-uicons:chevron-down"
+            color="blue"
+            :disabled="index == displayPickers.length - 1"
+            @click="handleMovePicker(picker, 1)"
+          />
+          <ActionButton
+            text="Up"
+            icon="system-uicons:chevron-up"
+            color="blue"
+            :disabled="index == 0"
+            @click="handleMovePicker(picker, -1)"
+          />
+          <ActionButton
+            text="Delete"
+            icon="system-uicons:trash"
+            color="red"
+            @click="handleDeletePicker(picker.uuid)"
           />
         </div>
-        <ActionButton
-          text="Delete"
-          icon="system-uicons:trash"
-          color="red"
-          class="max-w-32"
-          @click="handleDeletePicker(picker.uuid)"
-        />
       </li>
     </ul>
   </div>
 </template>
-
-<style scoped>
-/* Add any specific styles here if needed */
-</style>
