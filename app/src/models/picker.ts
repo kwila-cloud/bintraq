@@ -4,4 +4,5 @@ export type Picker = {
   order: number
   name: string
   phoneNumber: string
+  createdAt: string
 }

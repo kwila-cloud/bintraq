@@ -8,19 +8,26 @@ const pickers = ref([])
 const isLoading = ref(true)
 const error = ref(null)
 
-const sortedPickers = computed(() => {
-  return [...pickers.value].sort((a, b) => a.order - b.order)
+// Sort by order and only include non-deleted
+const displayPickers = computed(() => {
+  return [...pickers.value].sort((a, b) => a.order - b.order).filter((p) => !p.isDeleted)
 })
 
 onMounted(async () => {
+  await loadPickers()
+})
+
+async function loadPickers() {
   try {
+    isLoading.value = true
     pickers.value = await getPickers()
+    isLoading.value = false
   } catch (err: any) {
     error.value = err.message
   } finally {
     isLoading.value = false
   }
-})
+}
 
 async function handleAddPicker() {
   const organization = await getOrganization()
@@ -32,16 +39,16 @@ async function handleAddPicker() {
       order: pickers.value.length + 1,
       name: 'New Picker',
       phoneNumber: '',
+      createdAt: new Date().toISOString(),
     },
   ]
 }
 
 async function handleSavePickers() {
   try {
-    await savePickers(sortedPickers.value)
+    await savePickers(pickers.value)
     alert('Pickers saved successfully!')
-    isLoading.value = true
-    pickers.value = await getPickers()
+    await loadPickers()
   } catch (err: any) {
     console.error(`Failed to save pickers: ${err.message}`)
     alert(`Failed to save pickers: ${err.message}`)
@@ -51,7 +58,9 @@ async function handleSavePickers() {
 async function handleDeletePicker(pickerUuid: string) {
   if (confirm('Are you sure you want to delete this picker?')) {
     try {
-      pickers.value = pickers.value.filter((p) => p.uuid !== pickerUuid)
+      pickers.value = pickers.value.map((p) =>
+        p.uuid == pickerUuid ? { ...p, isDeleted: true } : p,
+      )
     } catch (err: any) {
       console.error(`Failed to delete picker: ${err.message}`)
     }
@@ -82,7 +91,7 @@ async function handleDeletePicker(pickerUuid: string) {
     </div>
     <ul>
       <li
-        v-for="picker in sortedPickers"
+        v-for="picker in displayPickers"
         :key="picker.uuid"
         class="bg-slate-800 p-4 rounded-lg mb-2 flex flex-col gap-2"
       >
