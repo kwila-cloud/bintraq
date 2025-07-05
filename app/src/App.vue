@@ -3,7 +3,7 @@ import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabaseClient'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { Icon } from '@iconify/vue'
-import MenuModal from '@/components/MenuModal.vue' // Assuming MenuModal.vue will be created
+import MenuModal from '@/components/MenuModal.vue'
 
 const isLoggedIn = ref(false)
 const showMenuModal = ref(false)
@@ -65,22 +65,32 @@ function toggleMenu() {
     </RouterLink>
   </nav>
 
-  <MenuModal v-if="showMenuModal" @close="toggleMenu">
-    <template #menu-items>
-      <RouterLink v-if="!isLoggedIn" to="/login" @click="toggleMenu">Login</RouterLink>
-      <button v-else @click="signOut" class="button-as-a">Logout</button>
+  <MenuModal v-if="showMenuModal" @close="toggleMenu" id="menu">
+    <template v-if="isLoggedIn">
+      <RouterLink to="/pickers">Pickers</RouterLink>
+      <button class="button-as-a">Logout</button>
     </template>
+    <RouterLink v-else to="/login">Login</RouterLink>
   </MenuModal>
 </template>
 
 <style scoped>
+a,
+button {
+  font-size: 1rem;
+  line-height: 2;
+  padding: 8px;
+  border-radius: 8px;
+  text-align: center;
+}
+
 #top-nav {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
   background: var(--color-slate-800);
-  padding: 8px 12px;
+  padding: 8px 16px;
   border-radius: 12px;
 
   :first-child {
@@ -88,16 +98,18 @@ function toggleMenu() {
     font-weight: bold;
     font-size: 1.5rem;
     color: var(--color-white);
-  }
-
-  :not(:first-child) {
-    font-size: 1rem;
-    line-height: 2;
-    padding: 8px;
-    background: var(--color-slate-700);
-    border-radius: 4px;
+    background: transparent;
   }
 }
+
+#top-nav,
+#menu {
+  a,
+  button {
+    background: var(--color-slate-700);
+  }
+}
+
 #bottom-nav {
   position: fixed;
   bottom: 0;
