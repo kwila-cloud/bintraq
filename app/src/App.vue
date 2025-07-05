@@ -32,7 +32,7 @@ async function signOut() {
 }
 
 function showMenu() {
-  // AI!: show a popup dialog with menu items for logging and logging out
+  // AI!: show a full screen dialog with menu items for logging and logging out
 }
 </script>
 
@@ -43,6 +43,7 @@ function showMenu() {
     <button class="button-as-a" @click="showMenu">
       <Icon icon="system-uicons:menu-hamburger" height="32" />
     </button>
+    // AI: move these to the menu dialog
     <!-- <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink> -->
     <!-- <button v-else @click="signOut" class="button-as-a">Logout</button> -->
   </nav>
