@@ -50,7 +50,7 @@ async function handleDeletePicker(pickerUuid: string) {
   <div v-else-if="error">Error loading pickers: {{ error }}</div>
   <div v-else class="flex flex-col gap-4">
     <div class="flex justify-between items-center">
-      <h2 class="text-2xl font-bold mb-4">Pickers</h2>
+      <h2 class="text-2xl font-bold">Pickers</h2>
       <button
         class="w-32 bg-blue-800 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center gap-2"
         @click="handleSavePickers"
