@@ -30,14 +30,21 @@ async function signOut() {
   await supabase.auth.signOut()
   router.push('/login')
 }
+
+function showMenu() {
+  // AI!: show a popup dialog with menu items for logging and logging out
+}
 </script>
 
 <template>
   <nav id="top-nav">
     <RouterLink v-if="isLoggedIn" to="/add-bin">BinTraq</RouterLink>
     <RouterLink v-else to="/about">BinTraq</RouterLink>
-    <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>
-    <button v-else @click="signOut" class="button-as-a">Logout</button>
+    <button class="button-as-a" @click="showMenu">
+      <Icon icon="system-uicons:menu-hamburger" height="32" />
+    </button>
+    <!-- <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink> -->
+    <!-- <button v-else @click="signOut" class="button-as-a">Logout</button> -->
   </nav>
   <!-- The bottom margin gives space for the bottom nav bar -->
   <main class="p-1 md:p-4 grow mb-24">
