@@ -132,7 +132,6 @@ async function handleDeletePicker(pickerUuid: string) {
           />
         </div>
         <div class="flex flex-row gap-1">
-          <span>{{ picker.order }}, {{ displayPickers.length }}</span>
           <ActionButton
             text="Down"
             icon="system-uicons:chevron-down"
@@ -158,7 +157,3 @@ async function handleDeletePicker(pickerUuid: string) {
     </ul>
   </div>
 </template>
-
-<style scoped>
-/* Add any specific styles here if needed */
-</style>
