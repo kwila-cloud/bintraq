@@ -73,9 +73,10 @@ async function handleDeletePicker(pickerUuid: string) {
         </div>
         <button
           @click="handleDeletePicker(picker.uuid)"
-          class="w-10 bg-red-800 text-white p-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 flex items-center justify-center"
+          class="w-32 bg-red-800 text-white p-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 flex items-center justify-center gap-2"
         >
-          <Icon icon="system-uicons:trash" height="20" />
+          <Icon icon="system-uicons:trash" height="24" />
+          Delete
         </button>
       </li>
     </ul>
