@@ -11,8 +11,8 @@ function closeModal() {
 <template>
   <div class="modal-backdrop" @click.self="closeModal">
     <div class="modal-content">
-      <h1>Menu</h1>
-      <div class="menu-items-container">
+      <h1 class="text-xl font-bold mb-4">Menu</h1>
+      <div class="flex flex-col gap-4">
         <slot name="menu-items"></slot>
       </div>
     </div>
@@ -42,7 +42,8 @@ function closeModal() {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-// AI!: replace with tailwind in the HTML
+/* The following styles are now handled by Tailwind classes in the template */
+/*
 .menu-items-container {
   display: flex;
   flex-direction: column;
@@ -66,4 +67,5 @@ function closeModal() {
 .menu-items-container button {
   background: var(--color-red-600);
 }
+*/
 </style>
