@@ -27,6 +27,7 @@ onMounted(async () => {
   <div v-else class="flex flex-col gap-4">
     <h2 class="text-2xl font-bold mb-4">Pickers</h2>
     <ul>
+      // AI!: order the pickers by their order value, from least to greatest
       <li
         v-for="picker in pickers"
         :key="picker.id"
