@@ -4,6 +4,7 @@ export type Picker = {
   order: number
   name: string
   phoneNumber: string
+  // Supabase returns these as strings
   createdAt: string
   isDeleted: boolean
 }
