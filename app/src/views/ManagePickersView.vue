@@ -95,6 +95,7 @@ async function handleDeletePicker(pickerUuid: string) {
           text="Delete"
           icon="system-uicons:trash"
           color="red"
+          class="max-w-32"
           @click="handleDeletePicker(picker.uuid)"
         />
       </li>
