@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 
+const props = defineProps({
+  title: {
+    type: String,
+    default: 'Menu'
+  }
+})
+
 const emit = defineEmits(['close'])
 
 function closeModal() {
@@ -11,8 +18,7 @@ function closeModal() {
 <template>
   <div class="modal-backdrop" @click.self="closeModal">
     <div class="modal-content">
-      // AI!: pass in the title by prop
-      <h1 class="text-xl font-bold mb-4">Menu</h1>
+      <h1 class="text-xl font-bold mb-4">{{ props.title }}</h1>
       <div class="flex flex-col gap-4">
         <slot name="menu-items"></slot>
       </div>
