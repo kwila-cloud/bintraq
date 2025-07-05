@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRouter } from "vue-router";
-import { supabase } from "@/lib/supabaseClient";
-import { ref, onMounted } from "vue";
-import { Icon } from "@iconify/vue";
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { supabase } from '@/lib/supabaseClient'
+import { ref, onMounted } from 'vue'
+import { Icon } from '@iconify/vue'
 
-const isLoggedIn = ref(false);
-const router = useRouter();
+const isLoggedIn = ref(false)
+const router = useRouter()
 
 async function checkAuth() {
   const {
     data: { session },
-  } = await supabase.auth.getSession();
-  isLoggedIn.value = !!session;
+  } = await supabase.auth.getSession()
+  isLoggedIn.value = !!session
 }
 
 onMounted(() => {
-  checkAuth();
+  checkAuth()
 
   supabase.auth.onAuthStateChange(() => {
-    checkAuth();
-  });
-});
+    checkAuth()
+  })
+})
 
 async function signOut() {
-  await supabase.auth.signOut();
-  router.push("/login");
+  await supabase.auth.signOut()
+  router.push('/login')
 }
 </script>
 
@@ -99,7 +99,6 @@ async function signOut() {
   a {
     height: 84px;
     width: 84px;
-    padding: 8px 12px;
     border-radius: 12px;
     font-weight: bold;
 
