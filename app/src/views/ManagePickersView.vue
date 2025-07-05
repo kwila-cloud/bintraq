@@ -32,6 +32,7 @@ onMounted(async () => {
         :key="picker.id"
         class="bg-slate-800 p-4 rounded-lg mb-2 flex justify-between items-center"
       >
+        // AI!: show the picker's name, phone number and order as inputs
         <div>
           <span class="font-semibold">{{ picker.name }}</span>
           <p class="text-sm text-slate-300">{{ picker.phoneNumber }}</p>
