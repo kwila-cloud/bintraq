@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import ComingSoon from '@/components/ComingSoon.vue'
+import ActionButton from '@/components/ActionButton.vue'
 import { getPickers, savePickers } from '@/lib/utils'
 import { Icon } from '@iconify/vue'
 
@@ -51,13 +51,12 @@ async function handleDeletePicker(pickerUuid: string) {
   <div v-else class="flex flex-col gap-4">
     <div class="flex justify-between items-center">
       <h2 class="text-2xl font-bold">Pickers</h2>
-      <button
-        class="w-32 bg-blue-800 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center gap-2"
+      <ActionButton
+        icon="system-uicons:check"
+        text="Save"
+        color="blue"
         @click="handleSavePickers"
-      >
-        <Icon icon="system-uicons:check" height="24" />
-        Save
-      </button>
+      />
     </div>
     <ul>
       <li
@@ -92,13 +91,12 @@ async function handleDeletePicker(pickerUuid: string) {
             class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <button
+        <ActionButton
+          icon="system-uicons:trash"
+          text="Delete"
+          color="red"
           @click="handleDeletePicker(picker.uuid)"
-          class="w-32 bg-red-800 text-white p-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 flex items-center justify-center gap-2"
-        >
-          <Icon icon="system-uicons:trash" height="24" />
-          Delete
-        </button>
+        />
       </li>
     </ul>
   </div>

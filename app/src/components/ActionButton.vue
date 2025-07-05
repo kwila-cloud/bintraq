@@ -1,0 +1,31 @@
+<script setup lang="ts">
+import { Icon } from '@iconify/vue'
+
+interface Props {
+  icon?: string
+  text: string
+  color?: 'blue' | 'red'
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  icon: '',
+  color: 'blue',
+})
+
+const emit = defineEmits(['click'])
+
+const buttonClasses = computed(() => {
+  const baseClasses = 'p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 flex items-center justify-center gap-2'
+  const colorClasses = props.color === 'blue'
+    ? 'bg-blue-800 text-white hover:bg-blue-600 focus:ring-blue-500'
+    : 'bg-red-800 text-white hover:bg-red-700 focus:ring-red-500'
+  return `${baseClasses} ${colorClasses}`
+})
+</script>
+
+<template>
+  <button :class="buttonClasses" @click="emit('click')">
+    <Icon v-if="icon" :icon="icon" height="24" />
+    {{ text }}
+  </button>
+</template>
