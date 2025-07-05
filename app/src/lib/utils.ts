@@ -34,3 +34,7 @@ export const getPickers = async (): Promise<Picker[]> => {
   const { data: pickers } = await supabase.from('picker').select()
   return pickers ?? []
 }
+
+export const savePickers = async (pickers: Picker[]) => {
+  // AI!: save pickers to supabase
+}
