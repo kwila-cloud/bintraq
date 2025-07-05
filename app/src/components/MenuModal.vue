@@ -18,7 +18,7 @@ function closeModal() {
 <template>
   <div class="modal-backdrop" @click.self="closeModal">
     <div class="modal-content">
-      <h1 class="text-xl font-bold mb-4 text-center">{{ props.title }}</h1>
+      <h1 class="text-xl font-bold mb-4">{{ props.title }}</h1>
       <div class="flex flex-col gap-4">
         <slot name="menu-items"></slot>
       </div>
@@ -26,6 +26,7 @@ function closeModal() {
   </div>
 </template>
 
+// AI!: replace styles with tailwind in the template
 <style scoped>
 .modal-backdrop {
   position: fixed;
