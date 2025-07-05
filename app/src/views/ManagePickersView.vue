@@ -22,6 +22,10 @@ onMounted(async () => {
   }
 })
 
+async function handleSavePickers() {
+  // AI!: update the pickers in supabase
+}
+
 async function handleDeletePicker(pickerUuid: string) {
   if (confirm('Are you sure you want to delete this picker?')) {
     try {
@@ -39,7 +43,13 @@ async function handleDeletePicker(pickerUuid: string) {
   <div v-else class="flex flex-col gap-4">
     <div class="flex justify-between items-center">
       <h2 class="text-2xl font-bold mb-4">Pickers</h2>
-      <button class="bg-blue-700 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Save</button>
+      <button
+        class="w-32 bg-blue-800 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center gap-2"
+        @click="handleSavePickers"
+      >
+        <Icon icon="system-uicons:check" height="24" />
+        Save
+      </button>
     </div>
     <ul>
       <li
