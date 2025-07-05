@@ -36,6 +36,7 @@ export const getPickers = async (): Promise<Picker[]> => {
 }
 
 export const savePickers = async (pickers: Picker[]) => {
+  // normalize the order values
   const pickersWithOrder = pickers.map((picker, index) => ({
     ...picker,
     order: index + 1,

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import ComingSoon from '@/components/ComingSoon.vue'
-import { getPickers, updatePickers } from '@/lib/utils'
+import { getPickers, savePickers } from '@/lib/utils'
 import { Icon } from '@iconify/vue'
 
 const pickers = ref([])
@@ -24,8 +24,10 @@ onMounted(async () => {
 
 async function handleSavePickers() {
   try {
-    await updatePickers(sortedPickers.value)
+    await savePickers(sortedPickers.value)
     alert('Pickers saved successfully!')
+    isLoading.value = true
+    pickers.value = await getPickers()
   } catch (err: any) {
     console.error(`Failed to save pickers: ${err.message}`)
     alert(`Failed to save pickers: ${err.message}`)
@@ -36,7 +38,6 @@ async function handleDeletePicker(pickerUuid: string) {
   if (confirm('Are you sure you want to delete this picker?')) {
     try {
       pickers.value = pickers.value.filter((p) => p.uuid !== pickerUuid)
-      // AI!: delete the picker from supabase
     } catch (err: any) {
       console.error(`Failed to delete picker: ${err.message}`)
     }
