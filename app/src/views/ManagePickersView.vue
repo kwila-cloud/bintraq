@@ -19,7 +19,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="isLoading">Loading pickers...</div>
+  <div v-if="isLoading">Loading...</div>
   <div v-else-if="error">Error loading pickers: {{ error }}</div>
   <div v-else-if="pickers.length === 0">
     <ComingSoon />
@@ -27,7 +27,11 @@ onMounted(async () => {
   <div v-else class="flex flex-col gap-4">
     <h2 class="text-2xl font-bold mb-4">Pickers</h2>
     <ul>
-      <li v-for="picker in pickers" :key="picker.id" class="bg-slate-700 p-4 rounded-lg mb-2 flex justify-between items-center">
+      <li
+        v-for="picker in pickers"
+        :key="picker.id"
+        class="bg-slate-800 p-4 rounded-lg mb-2 flex justify-between items-center"
+      >
         <div>
           <span class="font-semibold">{{ picker.name }}</span>
           <p class="text-sm text-slate-300">{{ picker.phoneNumber }}</p>
