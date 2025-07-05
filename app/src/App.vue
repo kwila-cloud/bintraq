@@ -3,8 +3,10 @@ import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabaseClient'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { Icon } from '@iconify/vue'
+import MenuModal from '@/components/MenuModal.vue' // Assuming MenuModal.vue will be created
 
 const isLoggedIn = ref(false)
+const showMenuModal = ref(false)
 const router = useRouter()
 
 async function checkAuth() {
@@ -31,8 +33,8 @@ async function signOut() {
   router.push('/login')
 }
 
-function showMenu() {
-  // AI!: show a full screen dialog with menu items for logging and logging out
+function toggleMenu() {
+  showMenuModal.value = !showMenuModal.value
 }
 </script>
 
@@ -40,14 +42,10 @@ function showMenu() {
   <nav id="top-nav">
     <RouterLink v-if="isLoggedIn" to="/add-bin">BinTraq</RouterLink>
     <RouterLink v-else to="/about">BinTraq</RouterLink>
-    <button class="button-as-a" @click="showMenu">
+    <button class="button-as-a" @click="toggleMenu">
       <Icon icon="system-uicons:menu-hamburger" height="32" />
     </button>
-    // AI: move these to the menu dialog
-    <!-- <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink> -->
-    <!-- <button v-else @click="signOut" class="button-as-a">Logout</button> -->
   </nav>
-  <!-- The bottom margin gives space for the bottom nav bar -->
   <main class="p-1 md:p-4 grow mb-24">
     <RouterView />
   </main>
@@ -66,6 +64,13 @@ function showMenu() {
       <span>History</span>
     </RouterLink>
   </nav>
+
+  <MenuModal v-if="showMenuModal" @close="toggleMenu">
+    <template #menu-items>
+      <RouterLink v-if="!isLoggedIn" to="/login" @click="toggleMenu">Login</RouterLink>
+      <button v-else @click="signOut" class="button-as-a">Logout</button>
+    </template>
+  </MenuModal>
 </template>
 
 <style scoped>
