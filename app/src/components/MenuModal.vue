@@ -11,6 +11,7 @@ function closeModal() {
 <template>
   <div class="modal-backdrop" @click.self="closeModal">
     <div class="modal-content">
+      // AI!: pass in the title by prop
       <h1 class="text-xl font-bold mb-4">Menu</h1>
       <div class="flex flex-col gap-4">
         <slot name="menu-items"></slot>
@@ -41,31 +42,4 @@ function closeModal() {
   min-width: 250px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-/* The following styles are now handled by Tailwind classes in the template */
-/*
-.menu-items-container {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.menu-items-container a,
-.menu-items-container button {
-  color: var(--color-white);
-  text-decoration: none;
-  font-size: 1.1rem;
-  padding: 10px;
-  border-radius: 4px;
-  background: var(--color-slate-700);
-  text-align: center;
-  cursor: pointer;
-  border: none;
-}
-
-.menu-items-container button {
-  background: var(--color-red-600);
-}
-*/
 </style>
