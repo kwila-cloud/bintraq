@@ -48,6 +48,7 @@ export const savePickers = async (pickers: Picker[]) => {
   }
 
   // normalize the order values
+  pickers.sort((a, b) => a.order - b.order)
   const pickersWithOrder = pickers.map((picker, index) => ({
     ...picker,
     order: index + 1,

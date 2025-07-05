@@ -23,7 +23,7 @@ async function loadPickers() {
     isLoading.value = true
     pickers.value = await getPickers(true)
     isLoading.value = false
-  } catch (err: any) {
+  } catch (err) {
     error.value = err.message
   } finally {
     isLoading.value = false
@@ -59,13 +59,7 @@ async function handleSavePickers() {
 
 async function handleDeletePicker(pickerUuid: string) {
   if (confirm('Are you sure you want to delete this picker?')) {
-    try {
-      pickers.value = pickers.value.map((p) =>
-        p.uuid == pickerUuid ? { ...p, isDeleted: true } : p,
-      )
-    } catch (err: any) {
-      console.error(`Failed to delete picker: ${err.message}`)
-    }
+    pickers.value = pickers.value.map((p) => (p.uuid == pickerUuid ? { ...p, isDeleted: true } : p))
   }
 }
 </script>
