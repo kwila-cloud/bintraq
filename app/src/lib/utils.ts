@@ -41,7 +41,12 @@ export const getPickers = async (includeDeleted = false): Promise<Picker[]> => {
 }
 
 export const savePickers = async (pickers: Picker[]) => {
-  // AI!: throw an error if any pickers have the same name
+  const pickerNames = pickers.map((picker) => picker.name)
+  const uniquePickerNames = new Set(pickerNames)
+  if (pickerNames.length !== uniquePickerNames.size) {
+    throw new Error('Picker names must be unique.')
+  }
+
   // normalize the order values
   const pickersWithOrder = pickers.map((picker, index) => ({
     ...picker,
