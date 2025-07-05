@@ -60,6 +60,7 @@ onMounted(async () => {
             class="bg-slate-700 p-2 rounded-md border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+        //AI!: add a delete button
       </li>
     </ul>
   </div>
