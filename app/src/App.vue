@@ -122,6 +122,10 @@ button {
 .main-content {
   padding: 0 1rem 120px 1rem; /* Bottom padding to account for bottom nav */
   min-height: calc(100vh - 120px);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 
   @media (width >= 768px) {
     padding: 0 2rem 120px 2rem;
