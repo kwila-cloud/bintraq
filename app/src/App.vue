@@ -85,13 +85,18 @@ button {
 }
 
 #top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
   background: var(--color-slate-800);
   padding: 8px 16px;
-  border-radius: 12px;
+  border-radius: 0 0 12px 12px;
+  z-index: 10; /* Ensure it's above other content */
 
   :first-child {
     margin-inline-end: auto;
@@ -110,6 +115,10 @@ button {
   }
 }
 
+main {
+  padding-bottom: 6rem; /* Add padding to the bottom to prevent overlap */
+}
+
 #bottom-nav {
   position: fixed;
   bottom: 0;
@@ -120,6 +129,7 @@ button {
   justify-content: center;
   gap: 32px;
   background: var(--color-slate-800);
+  z-index: 10; /* Ensure it's above other content */
 
   @media (width >= 32rem) {
     gap: 64px;
