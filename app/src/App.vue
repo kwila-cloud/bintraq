@@ -115,10 +115,6 @@ button {
   }
 }
 
-main {
-  /* padding-bottom: 6rem;  Remove the padding */
-  min-height: calc(100vh - 6rem); /* Calculate the minimum height */
-}
 
 #bottom-nav {
   position: fixed;
