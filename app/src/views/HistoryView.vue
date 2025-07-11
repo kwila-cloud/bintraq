@@ -2,17 +2,23 @@
 import { supabase } from '@/lib/supabaseClient'
 import { getMessages, getMessage, resendMessage } from '@/lib/smoketreeClient'
 import type { Bin } from '@/models/bin'
+import type { Picker } from '@/models/picker'
+import { getPickers } from '@/lib/utils'
 import { ref, onMounted } from 'vue'
 
 const bins = ref<Bin[]>([])
 const messageStatuses = ref<Record<string, string>>({})
+const pickers = ref<Picker[]>([])
+const selectedPicker = ref<string | null>(null)
 
 async function loadCompletedBins() {
-  const { data } = await supabase
-    .from('bin')
-    .select()
-    .eq('isPending', false)
-    .order('date', { ascending: false })
+  let query = supabase.from('bin').select().eq('isPending', false).order('date', { ascending: false })
+
+  if (selectedPicker.value) {
+    query = query.eq('picker', selectedPicker.value)
+  }
+
+  const { data } = await query
   bins.value = data as Bin[]
 }
 
@@ -32,13 +38,26 @@ async function resend(messageUuid: string) {
   await resendMessage(messageUuid)
 }
 
+async function loadPickers() {
+  pickers.value = await getPickers()
+}
+
 onMounted(() => {
+  loadPickers()
   loadCompletedBins()
   loadMessageStatuses()
 })
 </script>
 
 <template>
+  <div>
+    <select v-model="selectedPicker" @change="loadCompletedBins">
+      <option :value="null">All</option>
+      <option v-for="picker in pickers" :key="picker.uuid" :value="picker.name">
+        {{ picker.name }}
+      </option>
+    </select>
+  </div>
   <ul>
     <li v-for="bin in bins" :key="bin.uuid">
       <h1>{{ bin.id }}</h1>
