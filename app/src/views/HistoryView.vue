@@ -12,7 +12,11 @@ const pickers = ref<Picker[]>([])
 const selectedPicker = ref<string | null>(null)
 
 async function loadCompletedBins() {
-  let query = supabase.from('bin').select().eq('isPending', false).order('date', { ascending: false })
+  let query = supabase
+    .from('bin')
+    .select()
+    .eq('isPending', false)
+    .order('date', { ascending: false })
 
   if (selectedPicker.value) {
     query = query.eq('picker', selectedPicker.value)
@@ -50,39 +54,46 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <select v-model="selectedPicker" @change="loadCompletedBins" class="bg-slate-900">
-      <option :value="null">All</option>
-      <option v-for="picker in pickers" :key="picker.uuid" :value="picker.name">
-        {{ picker.name }}
-      </option>
-    </select>
+  <div class="flex flex-col gap-4 items-center">
+    <div class="flex gap-4 items-center">
+      <label>Picker</label>
+      <select
+        v-model="selectedPicker"
+        @change="loadCompletedBins"
+        class="p-2 border rounded-md bg-gray-800"
+      >
+        <option :value="null">All</option>
+        <option v-for="picker in pickers" :key="picker.uuid" :value="picker.name">
+          {{ picker.name }}
+        </option>
+      </select>
+    </div>
+    <ul>
+      <li v-for="bin in bins" :key="bin.uuid">
+        <h1>{{ bin.id }}</h1>
+        <span>{{ bin.picker }}</span>
+        <span>{{ new Date(bin.date).toLocaleString() }}</span>
+        <template v-if="bin.messageUuid == null">
+          <span>Send Status - lost</span>
+        </template>
+        <template v-else>
+          <span>Send Status - {{ messageStatuses[bin.messageUuid] ?? 'unknown' }}</span>
+          <button
+            v-if="['failed', 'rate_limited'].includes(messageStatuses[bin.messageUuid])"
+            @click="resend(bin.messageUuid)"
+          >
+            Resend
+          </button>
+          <button
+            v-else-if="messageStatuses[bin.messageUuid] != 'sent'"
+            @click="refresh(bin.messageUuid)"
+          >
+            Refresh
+          </button>
+        </template>
+      </li>
+    </ul>
   </div>
-  <ul>
-    <li v-for="bin in bins" :key="bin.uuid">
-      <h1>{{ bin.id }}</h1>
-      <span>{{ bin.picker }}</span>
-      <span>{{ new Date(bin.date).toLocaleString() }}</span>
-      <template v-if="bin.messageUuid == null">
-        <span>Send Status - lost</span>
-      </template>
-      <template v-else>
-        <span>Send Status - {{ messageStatuses[bin.messageUuid] ?? 'unknown' }}</span>
-        <button
-          v-if="['failed', 'rate_limited'].includes(messageStatuses[bin.messageUuid])"
-          @click="resend(bin.messageUuid)"
-        >
-          Resend
-        </button>
-        <button
-          v-else-if="messageStatuses[bin.messageUuid] != 'sent'"
-          @click="refresh(bin.messageUuid)"
-        >
-          Refresh
-        </button>
-      </template>
-    </li>
-  </ul>
 </template>
 
 <style scoped>
