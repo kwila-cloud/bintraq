@@ -49,8 +49,11 @@ function toggleMenu() {
       <Icon icon="system-uicons:menu-hamburger" height="32" />
     </button>
   </nav>
+
   <main class="main-content">
-    <RouterView />
+    <div class="max-w-6xl mx-auto h-full">
+      <RouterView />
+    </div>
   </main>
 
   <nav v-if="isLoggedIn" id="bottom-nav">
@@ -88,18 +91,12 @@ button {
 }
 
 #top-nav {
-  position: sticky;
-  top: 16px;
-  left: 0;
-  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
   background: var(--color-slate-800);
   padding: 8px 16px;
-  margin-bottom: 16px;
-  border-radius: 12px;
   z-index: 10;
 
   :first-child {
@@ -120,22 +117,12 @@ button {
 }
 
 .main-content {
-  padding: 0 1rem 120px 1rem; /* Bottom padding to account for bottom nav */
-  min-height: calc(100vh - 120px);
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-
-  @media (width >= 768px) {
-    padding: 0 2rem 120px 2rem;
-  }
+  min-height: calc(100vh - 184px);
+  max-height: calc(100vh - 184px);
+  overflow: auto;
 }
 
 #bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
   padding: 10px;
   display: flex;

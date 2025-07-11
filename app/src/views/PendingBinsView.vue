@@ -67,7 +67,7 @@ Cantidad Semanal de Cajas: ${weekCount}
 </script>
 
 <template>
-  <ul v-if="bins.length > 0" class="flex flex-col gap-1">
+  <ul v-if="bins.length > 0" class="flex flex-col gap-1 p-2">
     <li v-for="bin in bins" :key="bin.uuid" class="bin-row flex flex-row gap-1 justify-stretch">
       <div v-for="setting in settings" :key="setting.id" class="flex-1">
         <BinSetting
