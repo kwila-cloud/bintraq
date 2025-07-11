@@ -54,7 +54,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 items-center">
+  <div class="flex flex-col gap-4 items-center py-4">
     <div class="flex gap-4 items-center">
       <label>Picker</label>
       <select

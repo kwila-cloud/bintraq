@@ -18,6 +18,7 @@ async function checkAuth() {
 
 onMounted(() => {
   checkAuth()
+ 
 
   const {
     data: { subscription },
@@ -25,7 +26,9 @@ onMounted(() => {
     checkAuth()
   })
 
-  onBeforeUnmount(() => subscription.unsubscribe())
+  onBeforeUnmount(() => {
+    subscription.unsubscribe()
+  })
 })
 
 async function signOut() {
@@ -46,8 +49,11 @@ function toggleMenu() {
       <Icon icon="system-uicons:menu-hamburger" height="32" />
     </button>
   </nav>
-  <main class="px-1 py-4 md:px-4 grow mb-24">
-    <RouterView />
+
+  <main class="main-content">
+    <div class="max-w-6xl mx-auto h-full">
+      <RouterView />
+    </div>
   </main>
 
   <nav v-if="isLoggedIn" id="bottom-nav">
@@ -91,7 +97,7 @@ button {
   gap: 8px;
   background: var(--color-slate-800);
   padding: 8px 16px;
-  border-radius: 12px;
+  z-index: 10;
 
   :first-child {
     margin-inline-end: auto;
@@ -110,16 +116,21 @@ button {
   }
 }
 
+.main-content {
+  min-height: calc(100vh - 184px);
+  max-height: calc(100vh - 184px);
+  overflow: auto;
+}
+
 #bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
   padding: 10px;
   display: flex;
   justify-content: center;
   gap: 32px;
   background: var(--color-slate-800);
+  z-index: 10;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 
   @media (width >= 32rem) {
     gap: 64px;
@@ -136,6 +147,8 @@ button {
     align-items: center;
     justify-content: center;
     gap: 4px;
+
+    white-space: nowrap;
 
     &.active-link {
       background: var(--color-slate-700);

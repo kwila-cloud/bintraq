@@ -79,7 +79,7 @@ const validateBinId = (binId: string) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 justify-end h-full">
+  <div class="flex flex-col gap-2 justify-end h-full p-4">
     <RouterLink
       to="/pending"
       class="bg-blue-500 !text-white rounded-xl w-fit !px-4 font-bold"
