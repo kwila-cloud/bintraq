@@ -7,9 +7,7 @@ import MenuModal from '@/components/MenuModal.vue'
 
 const isLoggedIn = ref(false)
 const showMenuModal = ref(false)
-const isTopNavVisible = ref(true)
 const router = useRouter()
-let lastScrollY = 0
 
 async function checkAuth() {
   const {
@@ -18,24 +16,9 @@ async function checkAuth() {
   isLoggedIn.value = !!session
 }
 
-function handleScroll() {
-  const currentScrollY = window.scrollY
-  
-  if (currentScrollY < lastScrollY || currentScrollY < 10) {
-    // Scrolling up or near top
-    isTopNavVisible.value = true
-  } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-    // Scrolling down and past threshold
-    isTopNavVisible.value = false
-  }
-  
-  lastScrollY = currentScrollY
-}
-
 onMounted(() => {
   checkAuth()
-  
-  window.addEventListener('scroll', handleScroll, { passive: true })
+ 
 
   const {
     data: { subscription },
@@ -45,7 +28,6 @@ onMounted(() => {
 
   onBeforeUnmount(() => {
     subscription.unsubscribe()
-    window.removeEventListener('scroll', handleScroll)
   })
 })
 
@@ -60,7 +42,7 @@ function toggleMenu() {
 </script>
 
 <template>
-  <nav id="top-nav" :class="{ 'nav-hidden': !isTopNavVisible }">
+  <nav id="top-nav">
     <RouterLink v-if="isLoggedIn" to="/add-bin">BinTraq</RouterLink>
     <RouterLink v-else to="/about">BinTraq</RouterLink>
     <button class="button-as-a" @click="toggleMenu">
@@ -107,7 +89,7 @@ button {
 
 #top-nav {
   position: sticky;
-  top: 0;
+  top: 16px;
   left: 0;
   width: 100%;
   display: flex;
@@ -115,11 +97,10 @@ button {
   align-items: center;
   gap: 8px;
   background: var(--color-slate-800);
-  padding: 16px;
-  margin: 16px;
+  padding: 8px 16px;
+  margin-bottom: 16px;
   border-radius: 12px;
   z-index: 10;
-  transition: transform 0.3s ease-in-out;
 
   :first-child {
     margin-inline-end: auto;
@@ -127,10 +108,6 @@ button {
     font-size: 1.5rem;
     color: var(--color-white);
     background: transparent;
-  }
-
-  &.nav-hidden {
-    transform: translateY(-100%);
   }
 }
 
