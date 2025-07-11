@@ -7,7 +7,9 @@ import MenuModal from '@/components/MenuModal.vue'
 
 const isLoggedIn = ref(false)
 const showMenuModal = ref(false)
+const isTopNavVisible = ref(true)
 const router = useRouter()
+let lastScrollY = 0
 
 async function checkAuth() {
   const {
@@ -16,8 +18,24 @@ async function checkAuth() {
   isLoggedIn.value = !!session
 }
 
+function handleScroll() {
+  const currentScrollY = window.scrollY
+  
+  if (currentScrollY < lastScrollY || currentScrollY < 10) {
+    // Scrolling up or near top
+    isTopNavVisible.value = true
+  } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+    // Scrolling down and past threshold
+    isTopNavVisible.value = false
+  }
+  
+  lastScrollY = currentScrollY
+}
+
 onMounted(() => {
   checkAuth()
+  
+  window.addEventListener('scroll', handleScroll, { passive: true })
 
   const {
     data: { subscription },
@@ -25,7 +43,10 @@ onMounted(() => {
     checkAuth()
   })
 
-  onBeforeUnmount(() => subscription.unsubscribe())
+  onBeforeUnmount(() => {
+    subscription.unsubscribe()
+    window.removeEventListener('scroll', handleScroll)
+  })
 })
 
 async function signOut() {
@@ -39,14 +60,14 @@ function toggleMenu() {
 </script>
 
 <template>
-  <nav id="top-nav">
+  <nav id="top-nav" :class="{ 'nav-hidden': !isTopNavVisible }">
     <RouterLink v-if="isLoggedIn" to="/add-bin">BinTraq</RouterLink>
     <RouterLink v-else to="/about">BinTraq</RouterLink>
     <button class="button-as-a" @click="toggleMenu">
       <Icon icon="system-uicons:menu-hamburger" height="32" />
     </button>
   </nav>
-  <main class="px-1 py-4 md:px-4 grow">
+  <main class="main-content">
     <RouterView />
   </main>
 
@@ -85,7 +106,7 @@ button {
 }
 
 #top-nav {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
@@ -94,9 +115,11 @@ button {
   align-items: center;
   gap: 8px;
   background: var(--color-slate-800);
-  padding: 8px 16px;
-  border-radius: 0 0 12px 12px;
-  z-index: 10; /* Ensure it's above other content */
+  padding: 16px;
+  margin: 16px;
+  border-radius: 12px;
+  z-index: 10;
+  transition: transform 0.3s ease-in-out;
 
   :first-child {
     margin-inline-end: auto;
@@ -104,6 +127,10 @@ button {
     font-size: 1.5rem;
     color: var(--color-white);
     background: transparent;
+  }
+
+  &.nav-hidden {
+    transform: translateY(-100%);
   }
 }
 
@@ -115,6 +142,14 @@ button {
   }
 }
 
+.main-content {
+  padding: 0 1rem 120px 1rem; /* Bottom padding to account for bottom nav */
+  min-height: calc(100vh - 120px);
+
+  @media (width >= 768px) {
+    padding: 0 2rem 120px 2rem;
+  }
+}
 
 #bottom-nav {
   position: fixed;
@@ -126,7 +161,8 @@ button {
   justify-content: center;
   gap: 32px;
   background: var(--color-slate-800);
-  z-index: 10; /* Ensure it's above other content */
+  z-index: 10;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 
   @media (width >= 32rem) {
     gap: 64px;
