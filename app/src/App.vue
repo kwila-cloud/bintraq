@@ -137,6 +137,8 @@ button {
     justify-content: center;
     gap: 4px;
 
+    white-space: nowrap;
+
     &.active-link {
       background: var(--color-slate-700);
     }
