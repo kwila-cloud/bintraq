@@ -51,7 +51,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <select v-model="selectedPicker" @change="loadCompletedBins">
+    <select v-model="selectedPicker" @change="loadCompletedBins" class="bg-slate-900">
       <option :value="null">All</option>
       <option v-for="picker in pickers" :key="picker.uuid" :value="picker.name">
         {{ picker.name }}
