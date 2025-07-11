@@ -46,7 +46,7 @@ function toggleMenu() {
       <Icon icon="system-uicons:menu-hamburger" height="32" />
     </button>
   </nav>
-  <main class="px-1 py-4 md:px-4 grow mb-24">
+  <main class="px-1 py-4 md:px-4 grow">
     <RouterView />
   </main>
 
@@ -116,7 +116,8 @@ button {
 }
 
 main {
-  padding-bottom: 6rem; /* Add padding to the bottom to prevent overlap */
+  /* padding-bottom: 6rem;  Remove the padding */
+  min-height: calc(100vh - 6rem); /* Calculate the minimum height */
 }
 
 #bottom-nav {
