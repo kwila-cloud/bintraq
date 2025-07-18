@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-home, body {
+html, body {
   position: fixed;
   overflow: hidden;
   width: 100vw;
