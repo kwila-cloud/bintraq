@@ -18,7 +18,6 @@ async function checkAuth() {
 
 onMounted(() => {
   checkAuth()
- 
 
   const {
     data: { subscription },
@@ -38,6 +37,10 @@ async function signOut() {
 
 function toggleMenu() {
   showMenuModal.value = !showMenuModal.value
+}
+
+function refresh() {
+  window.location.reload()
 }
 </script>
 
@@ -78,6 +81,7 @@ function toggleMenu() {
       <button class="button-as-a" @click="signOut">Logout</button>
     </template>
     <RouterLink v-else to="/login">Login</RouterLink>
+    <button class="button-as-a" @click="refresh">Refresh</button>
   </MenuModal>
 </template>
 
