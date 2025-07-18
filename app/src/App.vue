@@ -76,12 +76,27 @@ function refresh() {
 
   <MenuModal v-if="showMenuModal" @close="toggleMenu" id="menu">
     <template v-if="isLoggedIn">
-      <RouterLink to="/pickers">Pickers</RouterLink>
-      <RouterLink to="/sms-usage">SMS Usage</RouterLink>
-      <button class="button-as-a" @click="signOut">Logout</button>
+      <RouterLink to="/pickers">
+        <Icon icon="system-uicons:users" height="24" />
+        Pickers
+      </RouterLink>
+      <RouterLink to="/sms-usage">
+        <Icon icon="system-uicons:files-history" height="24" />
+        SMS Usage
+      </RouterLink>
+      <button class="button-as-a" @click="signOut">
+        <Icon icon="system-uicons:exit-right" height="24" />
+        Logout
+      </button>
     </template>
-    <RouterLink v-else to="/login">Login</RouterLink>
-    <button class="button-as-a" @click="refresh">Refresh</button>
+    <RouterLink v-else to="/login">
+      <Icon icon="system-uicons:enter" height="24" />
+      Login
+    </RouterLink>
+    <button class="button-as-a" @click="refresh">
+      <Icon icon="system-uicons:refresh-alt" height="24" />
+      Refresh
+    </button>
   </MenuModal>
 </template>
 
@@ -118,6 +133,17 @@ button {
   a,
   button {
     background: var(--color-slate-700);
+  }
+}
+
+#menu {
+  a,
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--spacing) * 2);
+    font-weight: bold
   }
 }
 
