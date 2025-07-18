@@ -122,14 +122,15 @@ button {
 }
 
 .main-content {
-  min-height: calc(100vh - 184px);
-  max-height: calc(100vh - 184px);
+  min-height: calc(100vh - 188px);
+  max-height: calc(100vh - 188px);
   overflow: auto;
 }
 
 #bottom-nav {
   width: 100%;
-  padding: 10px;
+  padding: 16px;
+  padding-top: 8px;
   display: flex;
   justify-content: center;
   gap: 32px;
