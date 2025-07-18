@@ -74,6 +74,7 @@ function toggleMenu() {
   <MenuModal v-if="showMenuModal" @close="toggleMenu" id="menu">
     <template v-if="isLoggedIn">
       <RouterLink to="/pickers">Pickers</RouterLink>
+      <RouterLink to="/sms-usage">SMS Usage</RouterLink>
       <button class="button-as-a" @click="signOut">Logout</button>
     </template>
     <RouterLink v-else to="/login">Login</RouterLink>
