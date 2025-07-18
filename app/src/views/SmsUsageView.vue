@@ -8,7 +8,6 @@ const monthlyUsage = ref<MonthlyUsage[]>([])
 async function loadUsage() {
   const usage = await getUsage()
   monthlyUsage.value = usage
-  console.log(usage)
 }
 
 onMounted(() => {
@@ -18,7 +17,11 @@ onMounted(() => {
 
 <template>
   <ul class="p-4 flex flex-col gap-2">
-    <li v-for="month in monthlyUsage" :key="month.month" class="p-2 rounded-lg bg-slate-800 flex flex-col items-center gap-2">
+    <li
+      v-for="month in monthlyUsage"
+      :key="month.month"
+      class="p-2 rounded-lg bg-slate-800 flex flex-col items-center gap-2"
+    >
       <h2 class="text-2xl">{{ month.month }}</h2>
       <div class="flex gap-2 w-full">
         <div class="box">
@@ -43,9 +46,8 @@ onMounted(() => {
   align-items: center;
   border: 2px var(--color-slate-700) solid;
   border-radius: calc(var(--spacing) * 2);
-
-  :last-child {
-    font-size: var(--text-3xl);
-  }
+}
+.box :last-child {
+  font-size: var(--text-3xl);
 }
 </style>
