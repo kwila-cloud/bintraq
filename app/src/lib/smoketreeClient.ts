@@ -1,4 +1,4 @@
-import { MessagesApi, Configuration } from 'smoketree-ts'
+import { MessagesApi, Configuration, UsageApi } from 'smoketree-ts'
 import { getOrganization } from './utils'
 
 export const sendMessages = async (messages: { to: string; content: string }[]) => {
@@ -38,5 +38,15 @@ export const resendMessage = async (messageUuid:string) => {
   })
   const messagesApi = new MessagesApi(configuration)
   const { data } = await messagesApi.postMessageRetry(messageUuid)
+  return data
+}
+
+export const getUsage = async () => {
+  const organization = await getOrganization()
+  const configuration = new Configuration({
+    apiKey: organization.smoketreeAdminApiKey,
+  })
+  const usageApi = new UsageApi(configuration)
+  const { data } = await usageApi.getUsageStatsGetAll()
   return data
 }
