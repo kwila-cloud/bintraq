@@ -1,49 +1,51 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import ActionButton from '@/components/ActionButton.vue'
-import { getOrganization, getPickers, savePickers } from '@/lib/utils'
-import { Icon } from '@iconify/vue'
-import { type Picker } from '@/models/picker'
+import { ref, onMounted, computed } from "vue";
+import ActionButton from "@/components/ActionButton.vue";
+import { getOrganization, getPickers, savePickers } from "@/lib/utils";
+import { Icon } from "@iconify/vue";
+import { type Picker } from "@/models/picker";
 
-const pickers = ref<Picker[]>([])
-const isLoading = ref(true)
-const error = ref(null)
+const pickers = ref<Picker[]>([]);
+const isLoading = ref(true);
+const error = ref(null);
 
 // Sort by order and only include non-deleted
 const displayPickers = computed(() => {
-  return [...pickers.value].sort((a, b) => a.order - b.order).filter((p) => !p.isDeleted)
-})
+  return [...pickers.value]
+    .sort((a, b) => a.order - b.order)
+    .filter((p) => !p.isDeleted);
+});
 
 onMounted(async () => {
-  await loadPickers()
-})
+  await loadPickers();
+});
 
 async function loadPickers() {
   try {
-    isLoading.value = true
-    pickers.value = await getPickers(true)
-    isLoading.value = false
+    isLoading.value = true;
+    pickers.value = await getPickers(true);
+    isLoading.value = false;
   } catch (err: any) {
-    error.value = err.message
+    error.value = err.message;
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
 }
 
 async function handleAddPicker() {
-  const organization = await getOrganization()
+  const organization = await getOrganization();
   pickers.value = [
     ...pickers.value,
     {
       uuid: crypto.randomUUID(),
       organizationUuid: organization.uuid,
       order: pickers.value.length + 1,
-      name: 'New Picker',
-      phoneNumber: '',
+      name: "New Picker",
+      phoneNumber: "",
       createdAt: new Date().toISOString(),
       isDeleted: false,
     },
-  ]
+  ];
 }
 
 async function handleReorderPickers() {
@@ -52,51 +54,53 @@ async function handleReorderPickers() {
 
 async function handleSavePickers() {
   try {
-    await savePickers(pickers.value)
-    alert('Pickers saved successfully!')
-    await loadPickers()
+    await savePickers(pickers.value);
+    alert("Pickers saved successfully!");
+    await loadPickers();
   } catch (err: any) {
-    console.error(`Failed to save pickers: ${err.message}`)
-    alert(`Failed to save pickers: ${err.message}`)
+    console.error(`Failed to save pickers: ${err.message}`);
+    alert(`Failed to save pickers: ${err.message}`);
   }
 }
 
 function handleMovePicker(picker: Picker, delta: -1 | 1) {
-  const currentIndex = displayPickers.value.findIndex(p => p.uuid === picker.uuid)
-  const targetIndex = currentIndex + delta
+  const currentIndex = displayPickers.value.findIndex(
+    (p) => p.uuid === picker.uuid,
+  );
+  const targetIndex = currentIndex + delta;
 
   if (targetIndex < 0 || targetIndex >= displayPickers.value.length) {
-    return // Invalid move
+    return; // Invalid move
   }
 
-  const targetPicker = displayPickers.value[targetIndex]
-  const currentOrder = picker.order
-  const targetOrder = targetPicker.order
+  const targetPicker = displayPickers.value[targetIndex];
+  const currentOrder = picker.order;
+  const targetOrder = targetPicker.order;
 
   pickers.value = pickers.value.map((p) => {
     if (p.uuid === picker.uuid) {
-      return { ...p, order: targetOrder }
+      return { ...p, order: targetOrder };
     } else if (p.uuid === targetPicker.uuid) {
-      return { ...p, order: currentOrder }
+      return { ...p, order: currentOrder };
     } else {
-      return p
+      return p;
     }
-  })
+  });
 }
 
 async function handleDeletePicker(pickerUuid: string) {
-  if (confirm('Are you sure you want to delete this picker?')) {
+  if (confirm("Are you sure you want to delete this picker?")) {
     pickers.value = pickers.value.map((p) =>
       p.uuid === pickerUuid ? { ...p, isDeleted: true } : p,
-    )
+    );
   }
 }
 </script>
 
 <template>
-  <div v-if="isLoading">Loading...</div>
-  <div v-else-if="error">Error loading pickers: {{ error }}</div>
-  <div v-else class="flex flex-col md:gap-4 gap-2">
+  <div v-if="isLoading" class="p-4">Loading...</div>
+  <div v-else-if="error" class="p-4">Error loading pickers: {{ error }}</div>
+  <div v-else class="flex flex-col md:gap-4 gap-2 p-4">
     <div class="flex justify-between items-center">
       <h2 class="text-2xl font-bold">Pickers</h2>
       <div class="flex gap-2">
@@ -121,7 +125,9 @@ async function handleDeletePicker(pickerUuid: string) {
         class="bg-slate-800 p-4 rounded-lg mb-2 flex flex-col gap-2"
       >
         <div class="flex flex-col gap-1">
-          <label :for="`name-${picker.uuid}`" class="text-sm text-slate-300">Name</label>
+          <label :for="`name-${picker.uuid}`" class="text-sm text-slate-300"
+            >Name</label
+          >
           <input
             :id="`name-${picker.uuid}`"
             type="text"
@@ -130,7 +136,9 @@ async function handleDeletePicker(pickerUuid: string) {
           />
         </div>
         <div class="flex flex-col gap-1">
-          <label :for="`phone-${picker.uuid}`" class="text-sm text-slate-300">Phone Number</label>
+          <label :for="`phone-${picker.uuid}`" class="text-sm text-slate-300"
+            >Phone Number</label
+          >
           <input
             :id="`phone-${picker.uuid}`"
             type="text"
