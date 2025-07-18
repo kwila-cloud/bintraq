@@ -18,7 +18,6 @@ async function checkAuth() {
 
 onMounted(() => {
   checkAuth()
- 
 
   const {
     data: { subscription },
@@ -38,6 +37,10 @@ async function signOut() {
 
 function toggleMenu() {
   showMenuModal.value = !showMenuModal.value
+}
+
+function refresh() {
+  window.location.reload()
 }
 </script>
 
@@ -78,6 +81,7 @@ function toggleMenu() {
       <button class="button-as-a" @click="signOut">Logout</button>
     </template>
     <RouterLink v-else to="/login">Login</RouterLink>
+    <button class="button-as-a" @click="refresh">Refresh</button>
   </MenuModal>
 </template>
 
@@ -118,14 +122,15 @@ button {
 }
 
 .main-content {
-  min-height: calc(100vh - 184px);
-  max-height: calc(100vh - 184px);
+  min-height: calc(100vh - 188px);
+  max-height: calc(100vh - 188px);
   overflow: auto;
 }
 
 #bottom-nav {
   width: 100%;
-  padding: 10px;
+  padding: 16px;
+  padding-top: 8px;
   display: flex;
   justify-content: center;
   gap: 32px;
