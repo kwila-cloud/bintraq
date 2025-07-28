@@ -40,11 +40,14 @@ async function sendBins() {
 
   const messages = [];
   for (const bin of bins.value) {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
     const { data: dailyBins } = await supabase
       .from("bin")
       .select("*", { count: "exact" })
       .eq("picker", bin.picker)
-      .eq("date", bin.date)
+      .gte("date", startOfDay.toISOString())
       .eq("isPending", false);
 
     const dayCount = dailyBins?.length || 0;
