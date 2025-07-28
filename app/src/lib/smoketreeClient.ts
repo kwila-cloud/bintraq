@@ -60,3 +60,13 @@ export const getLimit = async (month: string) => {
   const { data } = await limitsApi.getLimitsGetByMonth(month);
   return data.segmentLimit;
 }
+
+export const setLimit = async (month: string, segmentLimit: number) => {
+  const organization = await getOrganization()
+  const configuration = new Configuration({
+    apiKey: organization.smoketreeAdminApiKey,
+  })
+  const limitsApi = new LimitsApi(configuration)
+  const { data } = await limitsApi.putLimitsPut(month, {segmentLimit});
+  return data;
+}

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import type { MonthlyUsage } from "@/models/monthlyUsage";
-import { getAllUsage, getLimit } from "@/lib/smoketreeClient";
+import { getAllUsage, getLimit, setLimit } from "@/lib/smoketreeClient";
 import ActionButton from "@/components/ActionButton.vue";
 
 const monthlyUsage = ref<MonthlyUsage[]>([]);
@@ -40,12 +40,11 @@ const closeDialog = () => {
 
 const saveNewMonthlyLimit = async () => {
   const currentUsage = selectedMonth.value.totalSegments;
-  console.log(currentUsage);
   if (newMonthlyLimit.value >= 0) {
     if (newMonthlyLimit.value < currentUsage) {
       alert(`Limit must be at least ${currentUsage}`);
     } else {
-      // TODO: set new limit
+      await setLimit(selectedMonth.value.month, newMonthlyLimit.value);
       await loadUsage();
     }
   } else {
