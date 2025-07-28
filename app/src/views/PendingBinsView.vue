@@ -43,8 +43,13 @@ async function sendBins() {
   // in the counts from the DB.
   const countAdjustments: Record<string, number> = {};
   for (const bin of bins.value) {
+    countAdjustments[bin.picker] ??= 0;
+    countAdjustments[bin.picker] += 1;
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
+    const startOfWeek = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
 
     const { data: dailyBins } = await supabase
       .from("bin")
@@ -52,13 +57,7 @@ async function sendBins() {
       .eq("picker", bin.picker)
       .gte("date", startOfDay.toISOString())
       .eq("isPending", false);
-
-    countAdjustments[bin.picker] ??= 0;
     const dayCount = (dailyBins?.length ?? 0) + countAdjustments[bin.picker];
-
-    const startOfWeek = new Date();
-    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
 
     const { data: weeklyBins } = await supabase
       .from("bin")
@@ -66,7 +65,6 @@ async function sendBins() {
       .eq("picker", bin.picker)
       .gte("date", startOfWeek.toISOString())
       .eq("isPending", false);
-
     const weekCount = weeklyBins?.length ?? 0 + countAdjustments[bin.picker];
 
     messages.push({
@@ -80,7 +78,6 @@ Cantidad Diaria de Cajas: ${dayCount}
 Cantidad Semanal de Cajas: ${weekCount}
 `,
     });
-    countAdjustments[bin.picker] += 1;
   }
   const results = await sendMessages(messages);
   let i = 0;
