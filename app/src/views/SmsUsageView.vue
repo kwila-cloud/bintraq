@@ -95,6 +95,7 @@ const saveNewMonthlyLimit = async () => {
       <div>
         <input
           type="number"
+          min="0"
           v-model="newMonthlyLimit"
           class="w-full p-2 border rounded-md"
         />
