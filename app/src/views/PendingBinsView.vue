@@ -40,10 +40,28 @@ async function sendBins() {
 
   const messages = [];
   for (const bin of bins.value) {
-    // AI: use supabase query to get the number of bins for this picker today. only include ones where isPending is false
-    const dayCount = 0;
-    // AI!: use supabase query to get the number of bins for this picker this week (starting Sunday). only include ones where isPending is false
-    const weekCount = 0;
+    const { data: dailyBins } = await supabase
+      .from("bin")
+      .select("*", { count: "exact" })
+      .eq("picker", bin.picker)
+      .eq("date", bin.date)
+      .eq("isPending", false);
+
+    const dayCount = dailyBins?.length || 0;
+
+    const startOfWeek = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const { data: weeklyBins } = await supabase
+      .from("bin")
+      .select("*", { count: "exact" })
+      .eq("picker", bin.picker)
+      .gte("date", startOfWeek.toISOString())
+      .eq("isPending", false);
+
+    const weekCount = weeklyBins?.length || 0;
+
     messages.push({
       to: pickerNumbers[bin.picker],
       content: `ID del Caja: ${bin.id}
