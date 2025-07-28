@@ -39,6 +39,9 @@ async function sendBins() {
   );
 
   const messages = [];
+  // Add the bins that are getting sent now, because they won't be included
+  // in the counts from the DB.
+  const countAdjustments: Record<string, number> = {};
   for (const bin of bins.value) {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
@@ -50,7 +53,8 @@ async function sendBins() {
       .gte("date", startOfDay.toISOString())
       .eq("isPending", false);
 
-    const dayCount = dailyBins?.length || 0;
+    countAdjustments[bin.picker] ??= 0;
+    const dayCount = (dailyBins?.length ?? 0) + countAdjustments[bin.picker];
 
     const startOfWeek = new Date();
     startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
@@ -63,7 +67,7 @@ async function sendBins() {
       .gte("date", startOfWeek.toISOString())
       .eq("isPending", false);
 
-    const weekCount = weeklyBins?.length || 0;
+    const weekCount = weeklyBins?.length ?? 0 + countAdjustments[bin.picker];
 
     messages.push({
       to: pickerNumbers[bin.picker],
@@ -76,6 +80,7 @@ Cantidad Diaria de Cajas: ${dayCount}
 Cantidad Semanal de Cajas: ${weekCount}
 `,
     });
+    countAdjustments[bin.picker] += 1;
   }
   const results = await sendMessages(messages);
   let i = 0;
