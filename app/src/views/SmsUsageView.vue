@@ -35,16 +35,19 @@ onMounted(() => {
 });
 
 const closeDialog = () => {
-  selectedMonth.value = "";
+  selectedMonth.value = null;
 };
 
 const saveNewMonthlyLimit = async () => {
-  const currentUsage = selectedMonth.value.totalSegments;
+  if (selectedMonth.value == null) {
+    return;
+  }
+  const currentUsage = selectedMonth.value!.totalSegments;
   if (newMonthlyLimit.value >= 0) {
     if (newMonthlyLimit.value < currentUsage) {
       alert(`Limit must be at least ${currentUsage}`);
     } else {
-      await setLimit(selectedMonth.value.month, newMonthlyLimit.value);
+      await setLimit(selectedMonth.value!.month, newMonthlyLimit.value);
       await loadUsage();
     }
   } else {
@@ -102,7 +105,7 @@ const saveNewMonthlyLimit = async () => {
         </button>
         <button
           @click="saveNewMonthlyLimit"
-          :disabled="newMonthlyLimit === ''"
+          :disabled="newMonthlyLimit < 0"
           class="bg-blue-700 disabled:opacity-50 text-white p-2 rounded-md"
         >
           Save
