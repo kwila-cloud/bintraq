@@ -65,7 +65,7 @@ async function sendBins() {
       .eq("picker", bin.picker)
       .gte("date", startOfWeek.toISOString())
       .eq("isPending", false);
-    const weekCount = weeklyBins?.length ?? 0 + countAdjustments[bin.picker];
+    const weekCount = (weeklyBins?.length ?? 0) + countAdjustments[bin.picker];
 
     messages.push({
       to: pickerNumbers[bin.picker],
