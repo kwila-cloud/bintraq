@@ -1,74 +1,126 @@
 <script setup lang="ts">
-import { supabase } from '@/lib/supabaseClient'
-import { sendMessages } from '@/lib/smoketreeClient'
-import { ref, onMounted } from 'vue'
-import { settings } from '@/models/settings'
-import type { Bin } from '@/models/bin'
-import BinSetting from '@/components/BinSetting.vue'
-import { getOrganization, getPickers } from '@/lib/utils'
-import { Icon } from '@iconify/vue'
+import { supabase } from "@/lib/supabaseClient";
+import { sendMessages } from "@/lib/smoketreeClient";
+import { ref, onMounted } from "vue";
+import { settings } from "@/models/settings";
+import type { Bin } from "@/models/bin";
+import BinSetting from "@/components/BinSetting.vue";
+import { getOrganization, getPickers } from "@/lib/utils";
+import { Icon } from "@iconify/vue";
 
-const bins = ref<Bin[]>([])
+const bins = ref<Bin[]>([]);
 
 onMounted(() => {
-  loadPendingBins()
-})
+  loadPendingBins();
+});
 
 async function loadPendingBins() {
-  const { data } = await supabase.from('bin').select().eq('isPending', true).order('date')
-  bins.value = data as Bin[]
+  const { data } = await supabase
+    .from("bin")
+    .select()
+    .eq("isPending", true)
+    .order("date");
+  bins.value = data as Bin[];
 }
 
 async function updateBin(bin: Bin) {
-  await supabase.from('bin').update(bin).eq('uuid', bin.uuid).select()
+  await supabase.from("bin").update(bin).eq("uuid", bin.uuid).select();
 }
 
 async function deleteBin(bin: Bin) {
-  await supabase.from('bin').delete().eq('uuid', bin.uuid).select()
-  await loadPendingBins()
+  await supabase.from("bin").delete().eq("uuid", bin.uuid).select();
+  await loadPendingBins();
 }
 
 async function sendBins() {
-  const pickers = await getPickers()
+  const pickers = await getPickers();
   const pickerNumbers = Object.fromEntries(
     pickers.map((picker) => [picker.name, picker.phoneNumber]),
-  )
+  );
 
-  const messages = []
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const startOfWeek = new Date();
+  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+  startOfWeek.setHours(0, 0, 0, 0);
+
+  // Fetch all non-pending daily and weekly bins in bulk
+  const { data: allDailyBins } = await supabase
+    .from("bin")
+    .select("picker", { count: "exact" }) // Only need the picker to count
+    .gte("date", startOfDay.toISOString())
+    .eq("isPending", false);
+
+  const { data: allWeeklyBins } = await supabase
+    .from("bin")
+    .select("picker", { count: "exact" }) // Only need the picker to count
+    .gte("date", startOfWeek.toISOString())
+    .eq("isPending", false);
+
+  const dailyCountsFromDB: Record<string, number> = {};
+  allDailyBins?.forEach((bin: { picker: string }) => {
+    dailyCountsFromDB[bin.picker] = (dailyCountsFromDB[bin.picker] ?? 0) + 1;
+  });
+
+  const weeklyCountsFromDB: Record<string, number> = {};
+  allWeeklyBins?.forEach((bin: { picker: string }) => {
+    weeklyCountsFromDB[bin.picker] = (weeklyCountsFromDB[bin.picker] ?? 0) + 1;
+  });
+
+  const messages = [];
+  // Add the bins that are getting sent now, because they won't be included
+  // in the counts from the DB.
+  const countAdjustments: Record<string, number> = {};
   for (const bin of bins.value) {
-    // TODO: calculate day count
-    const dayCount = 0
-    // TODO: calculate week count
-    const weekCount = 0
+    countAdjustments[bin.picker] ??= 0;
+    countAdjustments[bin.picker] += 1;
+    const dayCount =
+      (dailyCountsFromDB[bin.picker] ?? 0) +
+      (countAdjustments[bin.picker] ?? 0);
+    const weekCount =
+      (weeklyCountsFromDB[bin.picker] ?? 0) +
+      (countAdjustments[bin.picker] ?? 0);
+
     messages.push({
       to: pickerNumbers[bin.picker],
       content: `ID del Caja: ${bin.id}
-Fecha: ${new Date(bin.date).toDateString()}
+Fecha: ${formatDate(new Date(bin.date))}
 Recogedor: ${bin.picker}
 Bloque: ${bin.block}
 Tamaño del Caja: ${bin.size} bushel
 Cantidad Diaria de Cajas: ${dayCount}
 Cantidad Semanal de Cajas: ${weekCount}
 `,
-    })
+    });
   }
-  const results = await sendMessages(messages)
-  let i = 0
+  const results = await sendMessages(messages);
+  let i = 0;
   for (const result of results) {
     await supabase
-      .from('bin')
+      .from("bin")
       .update({ isPending: false, messageUuid: result.uuid })
-      .eq('uuid', bins.value[i].uuid)
-      .select()
-    i += 1
+      .eq("uuid", bins.value[i].uuid)
+      .select();
+    i += 1;
   }
-  bins.value = []
+  bins.value = [];
+}
+
+function formatDate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}/${month}/${day}`;
 }
 </script>
 
 <template>
   <ul v-if="bins.length > 0" class="flex flex-col gap-1 p-2">
-    <li v-for="bin in bins" :key="bin.uuid" class="bin-row flex flex-row gap-1 justify-stretch">
+    <li
+      v-for="bin in bins"
+      :key="bin.uuid"
+      class="bin-row flex flex-row gap-1 justify-stretch"
+    >
       <div v-for="setting in settings" :key="setting.id" class="flex-1">
         <BinSetting
           :setting="setting"
@@ -85,5 +137,7 @@ Cantidad Semanal de Cajas: ${weekCount}
     </li>
     <button @click="sendBins" class="bg-blue-800 rounded-md p-2">Send</button>
   </ul>
-  <div v-else class="size-full flex items-center justify-center text-2xl">No pending bins</div>
+  <div v-else class="size-full flex items-center justify-center text-2xl">
+    No pending bins
+  </div>
 </template>
