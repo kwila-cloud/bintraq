@@ -38,6 +38,35 @@ async function sendBins() {
     pickers.map((picker) => [picker.name, picker.phoneNumber]),
   );
 
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const startOfWeek = new Date();
+  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+  startOfWeek.setHours(0, 0, 0, 0);
+
+  // Fetch all non-pending daily and weekly bins in bulk
+  const { data: allDailyBins } = await supabase
+    .from("bin")
+    .select("picker", { count: "exact" }) // Only need the picker to count
+    .gte("date", startOfDay.toISOString())
+    .eq("isPending", false);
+
+  const { data: allWeeklyBins } = await supabase
+    .from("bin")
+    .select("picker", { count: "exact" }) // Only need the picker to count
+    .gte("date", startOfWeek.toISOString())
+    .eq("isPending", false);
+
+  const dailyCountsFromDB: Record<string, number> = {};
+  allDailyBins?.forEach((bin: { picker: string }) => {
+    dailyCountsFromDB[bin.picker] = (dailyCountsFromDB[bin.picker] ?? 0) + 1;
+  });
+
+  const weeklyCountsFromDB: Record<string, number> = {};
+  allWeeklyBins?.forEach((bin: { picker: string }) => {
+    weeklyCountsFromDB[bin.picker] = (weeklyCountsFromDB[bin.picker] ?? 0) + 1;
+  });
+
   const messages = [];
   // Add the bins that are getting sent now, because they won't be included
   // in the counts from the DB.
@@ -45,27 +74,12 @@ async function sendBins() {
   for (const bin of bins.value) {
     countAdjustments[bin.picker] ??= 0;
     countAdjustments[bin.picker] += 1;
-    const startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
-    const startOfWeek = new Date();
-    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
-
-    const { data: dailyBins } = await supabase
-      .from("bin")
-      .select("*", { count: "exact" })
-      .eq("picker", bin.picker)
-      .gte("date", startOfDay.toISOString())
-      .eq("isPending", false);
-    const dayCount = (dailyBins?.length ?? 0) + countAdjustments[bin.picker];
-
-    const { data: weeklyBins } = await supabase
-      .from("bin")
-      .select("*", { count: "exact" })
-      .eq("picker", bin.picker)
-      .gte("date", startOfWeek.toISOString())
-      .eq("isPending", false);
-    const weekCount = (weeklyBins?.length ?? 0) + countAdjustments[bin.picker];
+    const dayCount =
+      (dailyCountsFromDB[bin.picker] ?? 0) +
+      (countAdjustments[bin.picker] ?? 0);
+    const weekCount =
+      (weeklyCountsFromDB[bin.picker] ?? 0) +
+      (countAdjustments[bin.picker] ?? 0);
 
     messages.push({
       to: pickerNumbers[bin.picker],
