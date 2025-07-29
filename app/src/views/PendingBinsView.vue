@@ -84,7 +84,7 @@ async function sendBins() {
     messages.push({
       to: pickerNumbers[bin.picker],
       content: `ID del Caja: ${bin.id}
-Fecha: ${new Date(bin.date).toDateString()}
+Fecha: ${formatDate(new Date(bin.date))}
 Recogedor: ${bin.picker}
 Bloque: ${bin.block}
 Tamaño del Caja: ${bin.size} bushel
@@ -104,6 +104,13 @@ Cantidad Semanal de Cajas: ${weekCount}
     i += 1;
   }
   bins.value = [];
+}
+
+function formatDate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}/${month}/${day}`;
 }
 </script>
 
