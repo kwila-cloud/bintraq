@@ -4,12 +4,14 @@ import type { MonthlyUsage } from "@/models/monthlyUsage";
 import { getAllUsage, getLimit, setLimit } from "@/lib/smoketreeClient";
 import ActionButton from "@/components/ActionButton.vue";
 
-const monthlyUsage = ref<(MonthlyUsage & { canUpdateLimit: bool })[]>([]);
+const monthlyUsage = ref<(MonthlyUsage & { canUpdateLimit: boolean })[]>([]);
 const selectedMonth = ref<MonthlyUsage | null>(null);
 const newMonthlyLimit = ref(0);
 
 async function loadUsage() {
-  const usage = await getAllUsage();
+  const usage: (MonthlyUsage & { canUpdateLimit: boolean })[] = (
+    await getAllUsage()
+  ).map((d) => ({ ...d, canUpdateLimit: false }));
   usage[0].canUpdateLimit = true;
   // Add next month so the limit can be set ahead of time.
   const nextMonth = getNextMonth();
