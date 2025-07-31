@@ -30,6 +30,10 @@ const saveValue = () => {
   emit("update:modelValue", newValue.value);
   closeDialog();
 };
+
+const selectOption = (option: string) => {
+  newValue.value = option;
+};
 </script>
 
 <template>
@@ -53,18 +57,18 @@ const saveValue = () => {
         <h2 class="text-lg font-bold mb-2">{{ setting.name }}</h2>
 
         <div v-if="setting.type === 'select'">
-          <select
-            v-model="newValue"
-            class="w-full p-2 border rounded-md bg-gray-800"
-          >
-            <option
+          <ul class="space-y-2">
+            <li
               v-for="option in setting.options"
               :key="option"
               :value="option"
+              @click="selectOption(option)"
+              class="p-3 rounded-md bg-gray-700 hover:bg-gray-600 cursor-pointer text-center"
+              :class="{ 'bg-blue-700': newValue === option }"
             >
               {{ option }}
-            </option>
-          </select>
+            </li>
+          </ul>
         </div>
 
         <div v-else-if="setting.type === 'text'">
