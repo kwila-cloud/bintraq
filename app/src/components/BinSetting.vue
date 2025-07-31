@@ -53,7 +53,8 @@ const saveValue = () => {
         <h2 class="text-lg font-bold mb-2">{{ setting.name }}</h2>
 
         <div v-if="setting.type === 'select'">
-          <ul class="space-y-2 max-h-[50vh] overflow-y-scroll">
+          <!-- mobile selector -->
+          <ul class="block lg:hidden space-y-2 max-h-[50vh] overflow-y-scroll">
             <li
               v-for="option in setting.options"
               :key="option"
@@ -61,14 +62,27 @@ const saveValue = () => {
               @click="newValue = option"
               class="p-3 rounded-md cursor-pointer text-center"
               :class="[
-                newValue === option 
-                  ? 'bg-blue-700' 
-                  : 'bg-gray-700 hover:bg-gray-600'
+                newValue === option
+                  ? 'bg-blue-700'
+                  : 'bg-gray-700 hover:bg-gray-600',
               ]"
             >
               {{ option }}
             </li>
           </ul>
+          <!-- desktop selector -->
+          <select
+            v-model="newValue"
+            class="hidden lg:block w-full p-2 border rounded-md bg-gray-800"
+          >
+            <option
+              v-for="option in setting.options"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
         </div>
 
         <div v-else-if="setting.type === 'text'">
