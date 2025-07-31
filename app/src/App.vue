@@ -1,46 +1,46 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { supabase } from '@/lib/supabaseClient'
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { Icon } from '@iconify/vue'
-import MenuModal from '@/components/MenuModal.vue'
+import { RouterLink, RouterView, useRouter } from "vue-router";
+import { supabase } from "@/lib/supabaseClient";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { Icon } from "@iconify/vue";
+import MenuModal from "@/components/MenuModal.vue";
 
-const isLoggedIn = ref(false)
-const showMenuModal = ref(false)
-const router = useRouter()
+const isLoggedIn = ref(false);
+const showMenuModal = ref(false);
+const router = useRouter();
 
 async function checkAuth() {
   const {
     data: { session },
-  } = await supabase.auth.getSession()
-  isLoggedIn.value = !!session
+  } = await supabase.auth.getSession();
+  isLoggedIn.value = !!session;
 }
 
 onMounted(() => {
-  checkAuth()
+  checkAuth();
 
   const {
     data: { subscription },
   } = supabase.auth.onAuthStateChange(() => {
-    checkAuth()
-  })
+    checkAuth();
+  });
 
   onBeforeUnmount(() => {
-    subscription.unsubscribe()
-  })
-})
+    subscription.unsubscribe();
+  });
+});
 
 async function signOut() {
-  await supabase.auth.signOut()
-  router.push('/login')
+  await supabase.auth.signOut();
+  router.push("/login");
 }
 
 function toggleMenu() {
-  showMenuModal.value = !showMenuModal.value
+  showMenuModal.value = !showMenuModal.value;
 }
 
 function refresh() {
-  window.location.reload()
+  window.location.reload();
 }
 </script>
 
@@ -143,19 +143,19 @@ button {
     align-items: center;
     justify-content: center;
     gap: calc(var(--spacing) * 2);
-    font-weight: bold
+    font-weight: bold;
   }
 }
 
 .main-content {
-  min-height: calc(100vh - 188px);
-  max-height: calc(100vh - 188px);
+  min-height: calc(100vh - 196px);
+  max-height: calc(100vh - 196px);
   overflow: auto;
 }
 
 #bottom-nav {
   width: 100%;
-  padding: 16px;
+  padding: 24px;
   padding-top: 8px;
   display: flex;
   justify-content: center;

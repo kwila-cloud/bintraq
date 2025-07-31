@@ -118,6 +118,7 @@ async function handleDeletePicker(pickerUuid: string) {
         />
       </div>
     </div>
+    <p>Be sure to include the country code prefix on each phone number.</p>
     <ul>
       <li
         v-for="(picker, index) in displayPickers"
