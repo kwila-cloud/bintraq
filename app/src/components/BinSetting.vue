@@ -60,7 +60,7 @@ const saveValue = () => {
               :key="option"
               :value="option"
               @click="newValue = option"
-              class="p-3 rounded-md cursor-pointer text-center"
+              class="h-16 rounded-md cursor-pointer flex items-center justify-center text-lg"
               :class="[
                 newValue === option
                   ? 'bg-blue-700'
@@ -89,7 +89,7 @@ const saveValue = () => {
           <input
             type="text"
             v-model="newValue"
-            class="w-full p-2 border rounded-md"
+            class="h-16 p-4 lg:h-12 w-full border rounded-md"
           />
         </div>
 
