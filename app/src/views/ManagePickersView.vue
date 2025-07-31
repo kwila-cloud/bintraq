@@ -103,7 +103,6 @@ async function handleDeletePicker(pickerUuid: string) {
   <div v-else class="flex flex-col md:gap-4 gap-2 p-4">
     <div class="flex justify-between items-center">
       <h2 class="text-2xl font-bold">Pickers</h2>
-      <p>Be sure to include the country code prefix on each phone number.</p>
       <div class="flex gap-2">
         <ActionButton
           text="New Picker"
@@ -119,6 +118,7 @@ async function handleDeletePicker(pickerUuid: string) {
         />
       </div>
     </div>
+    <p>Be sure to include the country code prefix on each phone number.</p>
     <ul>
       <li
         v-for="(picker, index) in displayPickers"
