@@ -59,7 +59,10 @@ const saveValue = () => {
               v-for="option in setting.options"
               :key="option"
               :value="option"
-              @click="newValue = option"
+              @click="
+                newValue = option;
+                saveValue();
+              "
               class="h-16 rounded-md cursor-pointer flex items-center justify-center text-lg"
               :class="[
                 newValue === option
@@ -93,7 +96,14 @@ const saveValue = () => {
           />
         </div>
 
-        <div class="flex justify-end mt-4 gap-2">
+        <!--
+        Hide these buttons for select settings on mobile screens, because
+        the dialog will close automatically when the user selects an option.
+        -->
+        <div
+          class="justify-end mt-4 gap-2"
+          :class="[setting.type === 'select' ? 'hidden lg:flex' : 'flex']"
+        >
           <button @click="closeDialog" class="bg-gray-700 p-2 rounded-md">
             Cancel
           </button>
