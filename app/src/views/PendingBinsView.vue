@@ -123,7 +123,20 @@ function formatDate(date: Date) {
 </script>
 
 <template>
-  <ul v-if="bins.length > 0" class="flex flex-col gap-1 p-2">
+  <div
+    v-if="isSending"
+    class="size-full flex items-center justify-center text-2xl"
+  >
+    <div class="p-2 flex items-center justify-center gap-2">
+      <Icon
+        icon="svg-spinners:90-ring-with-bg"
+        height="36"
+        class="text-white"
+      />
+      <span class="ml-2 text-white">Sending...</span>
+    </div>
+  </div>
+  <ul v-else-if="bins.length > 0" class="flex flex-col gap-1 p-2">
     <li
       v-for="bin in bins"
       :key="bin.uuid"
@@ -143,17 +156,7 @@ function formatDate(date: Date) {
         <Icon icon="system-uicons:trash" height="32" />
       </button>
     </li>
-    <div v-if="isSending" class="p-2 flex items-center justify-center">
-      <Icon
-        icon="svg-spinners:90-ring-with-bg"
-        height="24"
-        class="text-white"
-      />
-      <span class="ml-2 text-white">Sending...</span>
-    </div>
-    <button v-else @click="sendBins" class="bg-blue-800 rounded-md p-2">
-      Send
-    </button>
+    <button @click="sendBins" class="bg-blue-800 rounded-md p-2">Send</button>
   </ul>
   <div v-else class="size-full flex items-center justify-center text-2xl">
     No pending bins
