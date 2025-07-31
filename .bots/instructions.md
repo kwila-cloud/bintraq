@@ -1,0 +1,1 @@
+- Check that the version number app/src/lib/utils.ts is incremented in every pull request.
