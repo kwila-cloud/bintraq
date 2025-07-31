@@ -90,6 +90,11 @@ const validateBinId = (binId: string) => {
     <div v-for="setting in settings" :key="setting.id">
       <BinSetting :setting="setting" v-model="pendingBin[setting.id]" />
     </div>
-    <button @click="addBin" class="bg-blue-800 rounded-md p-2">Add</button>
+    <button
+      @click="addBin"
+      class="bg-blue-800 rounded-md h-16 flex items-center justify-center text-lg"
+    >
+      Add
+    </button>
   </div>
 </template>

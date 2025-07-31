@@ -29,7 +29,7 @@ async function updateBin(bin: Bin) {
 }
 
 async function deleteBin(bin: Bin) {
-  await supabase.from("bin").delete().eq("uuid", bin.uuid).select();
+  await supabase.from("bin").delete().eq("uuid", bin.uuid);
   await loadPendingBins();
 }
 
