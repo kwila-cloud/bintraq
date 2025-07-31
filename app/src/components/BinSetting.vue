@@ -53,7 +53,7 @@ const saveValue = () => {
         <h2 class="text-lg font-bold mb-2">{{ setting.name }}</h2>
 
         <div v-if="setting.type === 'select'">
-          <ul class="space-y-2">
+          <ul class="space-y-2 max-h-[50vh] overflow-y-scroll">
             <li
               v-for="option in setting.options"
               :key="option"
