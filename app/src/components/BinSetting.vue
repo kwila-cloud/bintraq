@@ -59,8 +59,12 @@ const saveValue = () => {
               :key="option"
               :value="option"
               @click="newValue = option"
-              class="p-3 rounded-md bg-gray-700 hover:bg-gray-600 cursor-pointer text-center"
-              :class="{ 'bg-blue-700': newValue === option }"
+              class="p-3 rounded-md cursor-pointer text-center"
+              :class="[
+                newValue === option 
+                  ? 'bg-blue-700' 
+                  : 'bg-gray-700 hover:bg-gray-600'
+              ]"
             >
               {{ option }}
             </li>
