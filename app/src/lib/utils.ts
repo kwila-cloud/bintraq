@@ -1,6 +1,12 @@
 import { supabase } from '@/lib/supabaseClient'
 import type { Picker } from '@/models/picker'
 
+// First number is year
+// Second number is month
+// Third number is day
+// Fourth number is release index for that day (starts at 0)
+export const appVersion = "2025.07.31.1";
+
 export const getUserProfile = async () => {
   const {
     data: { user },
