@@ -9,7 +9,7 @@ import { getOrganization, getPickers } from "@/lib/utils";
 import { Icon } from "@iconify/vue";
 
 const bins = ref<Bin[]>([]);
-const isSending = ref(false);
+const isSending = ref(true);
 
 onMounted(() => {
   loadPendingBins();
@@ -35,7 +35,7 @@ async function deleteBin(bin: Bin) {
 
 async function sendBins() {
   isSending.value = true;
-  
+
   try {
     const pickers = await getPickers();
     const pickerNumbers = Object.fromEntries(
@@ -68,7 +68,8 @@ async function sendBins() {
 
     const weeklyCountsFromDB: Record<string, number> = {};
     allWeeklyBins?.forEach((bin: { picker: string }) => {
-      weeklyCountsFromDB[bin.picker] = (weeklyCountsFromDB[bin.picker] ?? 0) + 1;
+      weeklyCountsFromDB[bin.picker] =
+        (weeklyCountsFromDB[bin.picker] ?? 0) + 1;
     });
 
     const messages = [];
@@ -142,11 +143,17 @@ function formatDate(date: Date) {
         <Icon icon="system-uicons:trash" height="32" />
       </button>
     </li>
-    <div v-if="isSending" class="bg-blue-800 rounded-md p-2 flex items-center justify-center">
-      <Icon icon="svg-spinners:90-ring-with-bg" height="24" class="text-white" />
+    <div v-if="isSending" class="p-2 flex items-center justify-center">
+      <Icon
+        icon="svg-spinners:90-ring-with-bg"
+        height="24"
+        class="text-white"
+      />
       <span class="ml-2 text-white">Sending...</span>
     </div>
-    <button v-else @click="sendBins" class="bg-blue-800 rounded-md p-2">Send</button>
+    <button v-else @click="sendBins" class="bg-blue-800 rounded-md p-2">
+      Send
+    </button>
   </ul>
   <div v-else class="size-full flex items-center justify-center text-2xl">
     No pending bins
