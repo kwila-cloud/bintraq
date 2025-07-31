@@ -9,7 +9,7 @@ import { getOrganization, getPickers } from "@/lib/utils";
 import { Icon } from "@iconify/vue";
 
 const bins = ref<Bin[]>([]);
-const isSending = ref(true);
+const isSending = ref(false);
 
 onMounted(() => {
   loadPendingBins();
