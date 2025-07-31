@@ -30,10 +30,6 @@ const saveValue = () => {
   emit("update:modelValue", newValue.value);
   closeDialog();
 };
-
-const selectOption = (option: string) => {
-  newValue.value = option;
-};
 </script>
 
 <template>
@@ -62,7 +58,7 @@ const selectOption = (option: string) => {
               v-for="option in setting.options"
               :key="option"
               :value="option"
-              @click="selectOption(option)"
+              @click="newValue = option"
               class="p-3 rounded-md bg-gray-700 hover:bg-gray-600 cursor-pointer text-center"
               :class="{ 'bg-blue-700': newValue === option }"
             >
