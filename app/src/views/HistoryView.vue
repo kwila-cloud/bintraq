@@ -74,6 +74,26 @@ const weeklyBins = computed(() => {
   return bins.value.filter((bin) => new Date(bin.date) >= sunday).length;
 });
 
+const dailyBinsArray = computed(() => {
+  const today = new Date();
+  const days = ["S", "M", "T", "W", "T", "F", "S"];
+  const dailyCounts = [];
+
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - today.getDay() + i);
+    date.setHours(0, 0, 0, 0);
+
+    const count = bins.value.filter(
+      (bin) => new Date(bin.date).toDateString() === date.toDateString(),
+    ).length;
+
+    dailyCounts.push({ day: days[i], count });
+  }
+
+  return dailyCounts;
+});
+
 onMounted(() => {
   loadPickers();
   loadCompletedBins();
@@ -108,12 +128,13 @@ onMounted(() => {
         <span class="text-4xl">{{ weeklyBins }}</span>
       </div>
       <div class="flex gap-1">
-        // AI!: add an item to the row for each day of the week, S to S
         <div
+          v-for="dayData in dailyBinsArray"
+          :key="dayData.day"
           class="flex-1 flex flex-col items-center gap-1 bg-gray-700 rounded-lg p-4"
         >
-          <span class="text-xs">Friday</span>
-          <span class="text-3xl">{{ dailyBins }}</span>
+          <span class="text-xs">{{ dayData.day }}</span>
+          <span class="text-3xl">{{ dayData.count }}</span>
         </div>
       </div>
     </div>
