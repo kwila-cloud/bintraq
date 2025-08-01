@@ -97,8 +97,8 @@ Fecha: ${formatDate(new Date(bin.date))}
 Recogedor: ${bin.picker}
 Bloque: ${bin.block}
 Tamaño del Caja: ${bin.size} bushel
-Cantidad Diaria de Cajas: ${dayCount}
-Cantidad Semanal de Cajas: ${weekCount}
+Cajas hoy: ${dayCount}
+Cajas semana: ${weekCount}
 `,
       });
     }
