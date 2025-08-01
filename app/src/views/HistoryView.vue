@@ -1,56 +1,67 @@
 <script setup lang="ts">
-import { supabase } from '@/lib/supabaseClient'
-import { getMessages, getMessage, resendMessage } from '@/lib/smoketreeClient'
-import type { Bin } from '@/models/bin'
-import type { Picker } from '@/models/picker'
-import { getPickers } from '@/lib/utils'
-import { ref, onMounted } from 'vue'
+import { supabase } from "@/lib/supabaseClient";
+import { getMessages, getMessage, resendMessage } from "@/lib/smoketreeClient";
+import type { Bin } from "@/models/bin";
+import type { Picker } from "@/models/picker";
+import { getPickers } from "@/lib/utils";
+import { ref, onMounted } from "vue";
 
-const bins = ref<Bin[]>([])
-const messageStatuses = ref<Record<string, string>>({})
-const pickers = ref<Picker[]>([])
-const selectedPicker = ref<string | null>(null)
+const bins = ref<Bin[]>([]);
+const messageStatuses = ref<Record<string, string>>({});
+const pickers = ref<Picker[]>([]);
+const selectedPicker = ref<string | null>(null);
 
 async function loadCompletedBins() {
   let query = supabase
-    .from('bin')
+    .from("bin")
     .select()
-    .eq('isPending', false)
-    .order('date', { ascending: false })
+    .eq("isPending", false)
+    .order("date", { ascending: false });
 
   if (selectedPicker.value) {
-    query = query.eq('picker', selectedPicker.value)
+    query = query.eq("picker", selectedPicker.value);
   }
 
-  const { data } = await query
-  bins.value = data as Bin[]
+  const { data } = await query;
+  bins.value = data as Bin[];
 }
 
 async function loadMessageStatuses() {
-  const messages = await getMessages()
-  messageStatuses.value = Object.fromEntries(messages.map((m) => [m.uuid, m.currentStatus]))
+  const messages = await getMessages();
+  messageStatuses.value = Object.fromEntries(
+    messages.map((m) => [m.uuid, m.currentStatus]),
+  );
 }
 
 async function refresh(messageUuid: string) {
-  messageStatuses.value = { ...messageStatuses.value, [messageUuid]: 'refreshing' }
-  const message = await getMessage(messageUuid)
-  messageStatuses.value = { ...messageStatuses.value, [messageUuid]: message.currentStatus }
+  messageStatuses.value = {
+    ...messageStatuses.value,
+    [messageUuid]: "refreshing",
+  };
+  const message = await getMessage(messageUuid);
+  messageStatuses.value = {
+    ...messageStatuses.value,
+    [messageUuid]: message.currentStatus,
+  };
 }
 
 async function resend(messageUuid: string) {
-  messageStatuses.value = { ...messageStatuses.value, [messageUuid]: 'pending' }
-  await resendMessage(messageUuid)
+  messageStatuses.value = {
+    ...messageStatuses.value,
+    [messageUuid]: "pending",
+  };
+  await resendMessage(messageUuid);
 }
 
 async function loadPickers() {
-  pickers.value = await getPickers()
+  pickers.value = await getPickers();
 }
 
 onMounted(() => {
-  loadPickers()
-  loadCompletedBins()
-  loadMessageStatuses()
-})
+  loadPickers();
+  loadCompletedBins();
+  loadMessageStatuses();
+});
 </script>
 
 <template>
@@ -63,10 +74,30 @@ onMounted(() => {
         class="p-2 border rounded-md bg-gray-800"
       >
         <option :value="null">All</option>
-        <option v-for="picker in pickers" :key="picker.uuid" :value="picker.name">
+        <option
+          v-for="picker in pickers"
+          :key="picker.uuid"
+          :value="picker.name"
+        >
           {{ picker.name }}
         </option>
       </select>
+    </div>
+    <div class="flex gap-2 w-[300px]">
+      <div
+        class="flex-1 flex flex-col items-center gap-1 bg-gray-700 rounded-lg p-4"
+      >
+        <span>Daily Bins</span>
+        // TODO: count bins from today AI!
+        <span class="text-4xl">10</span>
+      </div>
+      <div
+        class="flex-1 flex flex-col items-center gap-1 bg-gray-700 rounded-lg p-4"
+      >
+        <span>Weekly Bins</span>
+        // TODO: count bins from this week (starting sunday) AI!
+        <span class="text-4xl">10</span>
+      </div>
     </div>
     <ul>
       <li v-for="bin in bins" :key="bin.uuid">
@@ -77,9 +108,16 @@ onMounted(() => {
           <span>Send Status - lost</span>
         </template>
         <template v-else>
-          <span>Send Status - {{ messageStatuses[bin.messageUuid] ?? 'unknown' }}</span>
+          <span
+            >Send Status -
+            {{ messageStatuses[bin.messageUuid] ?? "unknown" }}</span
+          >
           <button
-            v-if="['failed', 'rate_limited'].includes(messageStatuses[bin.messageUuid])"
+            v-if="
+              ['failed', 'rate_limited'].includes(
+                messageStatuses[bin.messageUuid],
+              )
+            "
             @click="resend(bin.messageUuid)"
           >
             Resend
