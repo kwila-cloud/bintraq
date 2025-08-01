@@ -131,10 +131,10 @@ onMounted(() => {
         <div
           v-for="dayData in dailyBinsArray"
           :key="dayData.day"
-          class="flex-1 flex flex-col items-center gap-1 bg-gray-700 rounded-lg p-4"
+          class="flex-1 flex flex-col items-center bg-gray-700 rounded-lg p-1"
         >
           <span class="text-xs">{{ dayData.day }}</span>
-          <span class="text-3xl">{{ dayData.count }}</span>
+          <span class="text-lg">{{ dayData.count }}</span>
         </div>
       </div>
     </div>
