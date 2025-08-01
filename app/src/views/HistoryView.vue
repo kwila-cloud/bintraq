@@ -100,18 +100,21 @@ onMounted(() => {
         </option>
       </select>
     </div>
-    <div class="flex gap-2 w-[300px]">
-      <div
-        class="flex-1 flex flex-col items-center gap-1 bg-gray-700 rounded-lg p-4"
-      >
-        <span>Daily Bins</span>
-        <span class="text-4xl">{{ dailyBins }}</span>
-      </div>
+    <div class="flex flex-col gap-2 w-[300px]">
       <div
         class="flex-1 flex flex-col items-center gap-1 bg-gray-700 rounded-lg p-4"
       >
         <span>Weekly Bins</span>
         <span class="text-4xl">{{ weeklyBins }}</span>
+      </div>
+      <div class="flex gap-1">
+        // AI!: add an item to the row for each day of the week, S to S
+        <div
+          class="flex-1 flex flex-col items-center gap-1 bg-gray-700 rounded-lg p-4"
+        >
+          <span class="text-xs">Friday</span>
+          <span class="text-3xl">{{ dailyBins }}</span>
+        </div>
       </div>
     </div>
     <ul>
