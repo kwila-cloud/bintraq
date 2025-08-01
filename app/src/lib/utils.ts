@@ -53,13 +53,7 @@ export const savePickers = async (pickers: Picker[]) => {
     throw new Error('Picker names must be unique.')
   }
 
-  // normalize the order values
-  pickers.sort((a, b) => a.order - b.order)
-  const pickersWithOrder = pickers.map((picker, index) => ({
-    ...picker,
-    order: index,
-  }))
-  const { error } = await supabase.from('picker').upsert(pickersWithOrder)
+  const { error } = await supabase.from('picker').upsert(pickers)
   if (error) {
     throw error
   }
