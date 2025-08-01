@@ -4,7 +4,7 @@ import { getMessages, getMessage, resendMessage } from "@/lib/smoketreeClient";
 import type { Bin } from "@/models/bin";
 import type { Picker } from "@/models/picker";
 import { getPickers } from "@/lib/utils";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 
 const bins = ref<Bin[]>([]);
 const messageStatuses = ref<Record<string, string>>({});
@@ -57,6 +57,23 @@ async function loadPickers() {
   pickers.value = await getPickers();
 }
 
+const dailyBins = computed(() => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return bins.value.filter((bin) => new Date(bin.date) >= today).length;
+});
+
+const weeklyBins = computed(() => {
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, etc.
+  const diff = dayOfWeek; // Days since Sunday
+  const sunday = new Date(today);
+  sunday.setDate(today.getDate() - diff);
+  sunday.setHours(0, 0, 0, 0);
+
+  return bins.value.filter((bin) => new Date(bin.date) >= sunday).length;
+});
+
 onMounted(() => {
   loadPickers();
   loadCompletedBins();
@@ -88,15 +105,13 @@ onMounted(() => {
         class="flex-1 flex flex-col items-center gap-1 bg-gray-700 rounded-lg p-4"
       >
         <span>Daily Bins</span>
-        // TODO: count bins from today AI!
-        <span class="text-4xl">10</span>
+        <span class="text-4xl">{{ dailyBins }}</span>
       </div>
       <div
         class="flex-1 flex flex-col items-center gap-1 bg-gray-700 rounded-lg p-4"
       >
         <span>Weekly Bins</span>
-        // TODO: count bins from this week (starting sunday) AI!
-        <span class="text-4xl">10</span>
+        <span class="text-4xl">{{ weeklyBins }}</span>
       </div>
     </div>
     <ul>
