@@ -57,12 +57,6 @@ async function loadPickers() {
   pickers.value = await getPickers();
 }
 
-const dailyBins = computed(() => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return bins.value.filter((bin) => new Date(bin.date) >= today).length;
-});
-
 const weeklyBins = computed(() => {
   const today = new Date();
   const dayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, etc.
