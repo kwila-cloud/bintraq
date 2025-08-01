@@ -9,12 +9,10 @@ const pickers = ref<Picker[]>([]);
 const isLoading = ref(true);
 const error = ref(null);
 
-// Sort by name and only include non-deleted
-const displayPickers = computed(() => {
-  return [...pickers.value]
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .filter((p) => !p.isDeleted);
-});
+// Only include non-deleted
+const displayPickers = computed(() =>
+  [...pickers.value].filter((p) => !p.isDeleted),
+);
 
 onMounted(async () => {
   await loadPickers();

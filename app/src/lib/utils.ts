@@ -1,5 +1,5 @@
-import { supabase } from '@/lib/supabaseClient'
-import type { Picker } from '@/models/picker'
+import { supabase } from "@/lib/supabaseClient";
+import type { Picker } from "@/models/picker";
 
 // First number is year
 // Second number is month
@@ -10,51 +10,60 @@ export const appVersion = "2025.07.31.5";
 export const getUserProfile = async () => {
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
   if (user == null) {
-    console.error('No user is signed in!')
-    return
+    console.error("No user is signed in!");
+    return;
   }
-  const { data } = await supabase.from('userProfile').select().eq('id', user.id)
+  const { data } = await supabase
+    .from("userProfile")
+    .select()
+    .eq("id", user.id);
   if (data) {
-    return data[0]
+    return data[0];
   }
-  console.error('No user profile found!')
-  return
-}
+  console.error("No user profile found!");
+  return;
+};
 
 export const getOrganization = async () => {
-  const userProfile = await getUserProfile()
+  const userProfile = await getUserProfile();
   const { data } = await supabase
-    .from('organization')
+    .from("organization")
     .select()
-    .eq('uuid', userProfile.organizationUuid)
+    .eq("uuid", userProfile.organizationUuid);
   if (data) {
-    return data[0]
+    return data[0];
   }
-  console.error('No organization found!')
-  return
-}
+  console.error("No organization found!");
+  return;
+};
 
 export const getPickers = async (includeDeleted = false): Promise<Picker[]> => {
+  let pickers = [];
   if (includeDeleted) {
-    const { data: pickers } = await supabase.from('picker').select()
-    return pickers ?? []
+    const { data } = await supabase.from("picker").select();
+    pickers = data ?? [];
   } else {
-    const { data: pickers } = await supabase.from('picker').select().eq('isDeleted', false)
-    return pickers ?? []
+    const { data } = await supabase
+      .from("picker")
+      .select()
+      .eq("isDeleted", false);
+    pickers = data ?? [];
   }
-}
+  pickers.sort((a, b) => a.name.localeCompare(b.name));
+  return pickers;
+};
 
 export const savePickers = async (pickers: Picker[]) => {
-  const pickerNames = pickers.map((picker) => picker.name)
-  const uniquePickerNames = new Set(pickerNames)
+  const pickerNames = pickers.map((picker) => picker.name);
+  const uniquePickerNames = new Set(pickerNames);
   if (pickerNames.length !== uniquePickerNames.size) {
-    throw new Error('Picker names must be unique.')
+    throw new Error("Picker names must be unique.");
   }
 
-  const { error } = await supabase.from('picker').upsert(pickers)
+  const { error } = await supabase.from("picker").upsert(pickers);
   if (error) {
-    throw error
+    throw error;
   }
-}
+};
