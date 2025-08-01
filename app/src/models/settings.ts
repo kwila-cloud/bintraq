@@ -1,7 +1,11 @@
 import { blockOptions, sizeOptions } from "@/models/bin";
 import type { Picker } from "@/models/picker";
 
-export const getSettings = (pickers) => [
+export type Setting =
+  | { id: string; name: string; type: "text" }
+  | { id: string; name: string; type: "select"; options: (string | number)[] };
+
+export const getSettings = (pickers: Picker[]): Setting[] => [
   {
     id: "picker",
     name: "Picker",

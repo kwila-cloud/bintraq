@@ -3,7 +3,7 @@ import type { Bin } from "@/models/bin";
 import { computed, onMounted, ref } from "vue";
 import BinSetting from "@/components/BinSetting.vue";
 import { supabase } from "@/lib/supabaseClient";
-import { getSettings } from "@/models/settings";
+import { getSettings, type Setting } from "@/models/settings";
 import { getOrganization, getPickers, appVersion } from "@/lib/utils";
 
 const pendingBin = ref<Partial<Bin>>({
@@ -19,7 +19,7 @@ const bins = ref<Bin[]>([]);
 const pendingBins = computed(() =>
   bins.value.filter(({ isPending }) => isPending),
 );
-const settings = ref([]);
+const settings = ref<Setting[]>([]);
 
 async function getOrganizationUuid() {
   const organization = await getOrganization();

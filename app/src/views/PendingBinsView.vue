@@ -2,14 +2,14 @@
 import { supabase } from "@/lib/supabaseClient";
 import { sendMessages } from "@/lib/smoketreeClient";
 import { ref, onMounted } from "vue";
-import { getSettings } from "@/models/settings";
+import { getSettings, type Setting } from "@/models/settings";
 import type { Bin } from "@/models/bin";
 import BinSetting from "@/components/BinSetting.vue";
 import { getOrganization, getPickers } from "@/lib/utils";
 import { Icon } from "@iconify/vue";
 
 const bins = ref<Bin[]>([]);
-const settings = ref([]);
+const settings = ref<Setting[]>([]);
 const isSending = ref(false);
 
 onMounted(() => {

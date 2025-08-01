@@ -45,7 +45,6 @@ async function handleAddPicker() {
     {
       uuid: crypto.randomUUID(),
       organizationUuid: organization.uuid,
-      order: pickers.value.length + 1,
       name,
       phoneNumber,
       createdAt: new Date().toISOString(),
