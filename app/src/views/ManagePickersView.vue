@@ -9,10 +9,10 @@ const pickers = ref<Picker[]>([]);
 const isLoading = ref(true);
 const error = ref(null);
 
-// Sort by order and only include non-deleted
+// Sort by name and only include non-deleted
 const displayPickers = computed(() => {
   return [...pickers.value]
-    .sort((a, b) => a.order - b.order)
+    .sort((a, b) => a.name.localeCompare(b.name))
     .filter((p) => !p.isDeleted);
 });
 
@@ -34,22 +34,26 @@ async function loadPickers() {
 
 async function handleAddPicker() {
   const organization = await getOrganization();
+  const name = (prompt("Picker Name") ?? "").trim();
+  if (name == "") {
+    return;
+  }
+  const phoneNumber = (prompt("Picker Phone Number") ?? "").trim();
+  if (phoneNumber == "") {
+    return;
+  }
   pickers.value = [
     ...pickers.value,
     {
       uuid: crypto.randomUUID(),
       organizationUuid: organization.uuid,
       order: pickers.value.length + 1,
-      name: "New Picker",
-      phoneNumber: "",
+      name,
+      phoneNumber,
       createdAt: new Date().toISOString(),
       isDeleted: false,
     },
   ];
-}
-
-async function handleReorderPickers() {
-  // AI!: open a MenuModal and allow the user to drag-and-drop reorder the pickers. Only show the picker names in the dialog
 }
 
 async function handleSavePickers() {
@@ -61,31 +65,6 @@ async function handleSavePickers() {
     console.error(`Failed to save pickers: ${err.message}`);
     alert(`Failed to save pickers: ${err.message}`);
   }
-}
-
-function handleMovePicker(picker: Picker, delta: -1 | 1) {
-  const currentIndex = displayPickers.value.findIndex(
-    (p) => p.uuid === picker.uuid,
-  );
-  const targetIndex = currentIndex + delta;
-
-  if (targetIndex < 0 || targetIndex >= displayPickers.value.length) {
-    return; // Invalid move
-  }
-
-  const targetPicker = displayPickers.value[targetIndex];
-  const currentOrder = picker.order;
-  const targetOrder = targetPicker.order;
-
-  pickers.value = pickers.value.map((p) => {
-    if (p.uuid === picker.uuid) {
-      return { ...p, order: targetOrder };
-    } else if (p.uuid === targetPicker.uuid) {
-      return { ...p, order: currentOrder };
-    } else {
-      return p;
-    }
-  });
 }
 
 async function handleDeletePicker(pickerUuid: string) {
@@ -121,7 +100,7 @@ async function handleDeletePicker(pickerUuid: string) {
     <p>Be sure to include the country code prefix on each phone number.</p>
     <ul>
       <li
-        v-for="(picker, index) in displayPickers"
+        v-for="picker in displayPickers"
         :key="picker.uuid"
         class="bg-slate-800 p-4 rounded-lg mb-2 flex flex-col gap-2"
       >
@@ -148,20 +127,6 @@ async function handleDeletePicker(pickerUuid: string) {
           />
         </div>
         <div class="flex flex-row gap-1">
-          <ActionButton
-            text="Down"
-            icon="system-uicons:chevron-down"
-            color="blue"
-            :disabled="index == displayPickers.length - 1"
-            @click="handleMovePicker(picker, 1)"
-          />
-          <ActionButton
-            text="Up"
-            icon="system-uicons:chevron-up"
-            color="blue"
-            :disabled="index == 0"
-            @click="handleMovePicker(picker, -1)"
-          />
           <ActionButton
             text="Delete"
             icon="system-uicons:trash"
