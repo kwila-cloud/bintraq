@@ -6,28 +6,37 @@ import ActionButton from "@/components/ActionButton.vue";
 import PageLayout from "@/components/PageLayout.vue";
 
 const monthlyUsage = ref<(MonthlyUsage & { canUpdateLimit: boolean })[]>([]);
+const isLoading = ref(true);
+const error = ref(null);
 const selectedMonth = ref<MonthlyUsage | null>(null);
 const newMonthlyLimit = ref(0);
 
 async function loadUsage() {
-  const usage: (MonthlyUsage & { canUpdateLimit: boolean })[] = (
-    await getAllUsage()
-  ).map((d) => ({
-    ...d,
-    canUpdateLimit: false,
-  }));
-  usage[0].canUpdateLimit = true;
-  // Add next month so the limit can be set ahead of time.
-  const nextMonth = getNextMonth();
-  const segmentLimit = await getLimit(nextMonth);
-  usage.unshift({
-    month: nextMonth,
-    totalMessages: 0,
-    totalSegments: 0,
-    segmentLimit,
-    canUpdateLimit: true,
-  });
-  monthlyUsage.value = usage;
+  try {
+    isLoading.value = true;
+    const usage: (MonthlyUsage & { canUpdateLimit: boolean })[] = (
+      await getAllUsage()
+    ).map((d) => ({
+      ...d,
+      canUpdateLimit: false,
+    }));
+    usage[0].canUpdateLimit = true;
+    // Add next month so the limit can be set ahead of time.
+    const nextMonth = getNextMonth();
+    const segmentLimit = await getLimit(nextMonth);
+    usage.unshift({
+      month: nextMonth,
+      totalMessages: 0,
+      totalSegments: 0,
+      segmentLimit,
+      canUpdateLimit: true,
+    });
+    monthlyUsage.value = usage;
+  } catch (err: any) {
+    error.value = err.message;
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 const getNextMonth = () => {
@@ -73,8 +82,8 @@ const saveNewMonthlyLimit = async () => {
 </script>
 
 <template>
-  <PageLayout title="SMS Usage">
-    <li
+  <PageLayout title="SMS Usage" :is-loading="isLoading" :error="error">
+    <div
       v-for="month in monthlyUsage"
       :key="month.month"
       class="p-2 rounded-lg bg-slate-800 flex flex-col items-center gap-2"
@@ -95,7 +104,7 @@ const saveNewMonthlyLimit = async () => {
         @click="handleUpdateLimit(month)"
         text="Update Segment Limit"
       />
-    </li>
+    </div>
   </PageLayout>
 
   <div

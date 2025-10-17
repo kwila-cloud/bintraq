@@ -1,23 +1,25 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
+import { Icon } from "@iconify/vue";
 
 interface Props {
-  title: string
-  isLoading?: boolean
-  error?: string | null
+  title: string;
+  isLoading?: boolean;
+  error?: string | null;
 }
 
-defineProps<Props>()
+defineProps<Props>();
 
 const slots = defineSlots<{
-  headerActions?: any
-  description?: any
-  default: any
-}>()
+  headerActions?: any;
+  description?: any;
+  default: any;
+}>();
 </script>
 
 <template>
-  <div v-if="isLoading" class="p-4">Loading...</div>
+  <div v-if="isLoading" class="h-full p-4 flex items-center justify-center">
+    <Icon icon="svg-spinners:90-ring-with-bg" height="36" class="text-white" />
+  </div>
   <div v-else-if="error" class="p-4">Error loading: {{ error }}</div>
   <div v-else class="flex flex-col md:gap-4 gap-2 p-4">
     <div class="flex justify-between items-center">
