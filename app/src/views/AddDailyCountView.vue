@@ -44,8 +44,8 @@ async function getDailyCounts() {
   }
 }
 
-onMounted(() => {
-  getOrganizationUuid();
+onMounted(async () => {
+  await getOrganizationUuid();
   getDailyCounts();
   getPickers().then((pickers) => {
     pickerSetting.options = pickers.map((p) => p.name);
