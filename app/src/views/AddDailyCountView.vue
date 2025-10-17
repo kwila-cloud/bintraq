@@ -70,18 +70,16 @@ const addDailyCount = async () => {
         Most Recent Count: {{ mostRecentCount }}
       </div>
     </div>
-    <div v-for="setting in settings" :key="setting.id">
-      <BinSetting 
-        v-if="setting.id === 'picker'" 
-        :setting="setting" 
-        v-model="pendingDailyCount[setting.id]" 
-      />
-      <DailyCountSetting
-        v-else-if="setting.id === 'count'"
-        :setting="{ id: 'count', name: 'Daily Count', type: 'select' }"
-        v-model="pendingDailyCount.count"
-      />
-    </div>
+    <BinSetting 
+      v-for="setting in settings.filter(s => s.id === 'picker')" 
+      :key="setting.id"
+      :setting="setting" 
+      v-model="pendingDailyCount[setting.id]" 
+    />
+    <DailyCountSetting
+      :setting="{ id: 'count', name: 'Daily Count', type: 'select' }"
+      v-model="pendingDailyCount.count"
+    />
     <button
       @click="addDailyCount"
       class="bg-blue-800 rounded-md h-16 flex items-center justify-center text-lg"
