@@ -4,7 +4,7 @@ import { computed, onMounted, ref } from 'vue'
 import DailyCountSetting from '@/components/DailyCountSetting.vue'
 import BinSetting from '@/components/BinSetting.vue'
 import { supabase } from '@/lib/supabaseClient'
-import { getSettings, type Setting } from '@/models/settings'
+import type { Setting } from '@/models/settings'
 import { getOrganization, getPickers, appVersion } from '@/lib/utils'
 
 const pendingDailyCount = ref<Partial<DailyCount>>({
@@ -17,7 +17,7 @@ const pendingDailyCount = ref<Partial<DailyCount>>({
 const dailyCounts = ref<DailyCount[]>([])
 const pendingDailyCounts = computed(() => dailyCounts.value.filter(({ isPending }) => isPending))
 const mostRecentCount = computed(() => dailyCounts.value[0]?.count)
-const settings = ref<Setting[]>([])
+const pickerSetting: Setting = { id: 'picker', name: 'Picker', type: 'select', options: [] }
 
 async function getOrganizationUuid() {
   const organization = await getOrganization()
@@ -36,15 +36,15 @@ async function getDailyCounts() {
 onMounted(() => {
   getOrganizationUuid()
   getDailyCounts()
-  getPickers().then((pickers) => (settings.value = getSettings(pickers)))
+  getPickers().then((pickers) => {
+    pickerSetting.options = pickers.map(p => p.name)
+  })
 })
 
 const addDailyCount = async () => {
-  for (const setting of settings.value) {
-    if (setting.id === 'picker' && !pendingDailyCount.value.picker) {
-      alert(`Please select a ${setting.name}`)
-      return
-    }
+  if (!pendingDailyCount.value.picker) {
+    alert('Please select a picker')
+    return
   }
   if (!pendingDailyCount.value.count || pendingDailyCount.value.count <= 0) {
     alert('Please select a daily count')
@@ -71,10 +71,8 @@ const addDailyCount = async () => {
       </div>
     </div>
     <BinSetting 
-      v-for="setting in settings.filter(s => s.id === 'picker')" 
-      :key="setting.id"
-      :setting="setting" 
-      v-model="pendingDailyCount[setting.id]" 
+      :setting="pickerSetting" 
+      v-model="pendingDailyCount.picker" 
     />
     <DailyCountSetting
       :setting="{ id: 'count', name: 'Daily Count', type: 'select' }"
