@@ -84,24 +84,12 @@ async function sendDailyCounts() {
     startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
 
-    // Fetch all non-pending daily and weekly counts in bulk
-    const { data: allDailyCounts } = await supabase
-      .from("dailyCount")
-      .select("picker, count")
-      .gte("date", startOfDay.toISOString())
-      .eq("isPending", false);
-
+    // Fetch all non-pending weekly counts in bulk
     const { data: allWeeklyCounts } = await supabase
       .from("dailyCount")
       .select("picker, count")
       .gte("date", startOfWeek.toISOString())
       .eq("isPending", false);
-
-    const dailyCountsFromDB: Record<string, number> = {};
-    allDailyCounts?.forEach((count: { picker: string; count: number }) => {
-      dailyCountsFromDB[count.picker] =
-        (dailyCountsFromDB[count.picker] ?? 0) + count.count;
-    });
 
     const weeklyCountsFromDB: Record<string, number> = {};
     allWeeklyCounts?.forEach((count: { picker: string; count: number }) => {
