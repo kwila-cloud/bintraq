@@ -1,7 +1,227 @@
 <script setup lang="ts">
-import ComingSoon from '@/components/ComingSoon.vue'
+import { supabase } from "@/lib/supabaseClient";
+import { sendMessages } from "@/lib/smoketreeClient";
+import { ref, onMounted, computed } from "vue";
+import { getSettings, type Setting } from "@/models/settings";
+import type { DailyCount } from "@/models/dailyCount";
+import { getOrganization, getPickers } from "@/lib/utils";
+import { Icon } from "@iconify/vue";
+
+const dailyCounts = ref<DailyCount[]>([]);
+const settings = ref<Setting[]>([]);
+const isSending = ref(false);
+const editingCount = ref<DailyCount | null>(null);
+const tempCount = ref<number>(0);
+
+const totalCounts = computed(() => 
+  dailyCounts.value.reduce((sum, count) => sum + count.count, 0)
+);
+
+onMounted(() => {
+  loadPendingDailyCounts();
+  getPickers().then((pickers) => (settings.value = getSettings(pickers)));
+});
+
+async function loadPendingDailyCounts() {
+  const { data } = await supabase
+    .from("dailyCount")
+    .select()
+    .eq("isPending", true)
+    .order("date");
+  dailyCounts.value = data as DailyCount[];
+}
+
+async function updateDailyCount(dailyCount: DailyCount) {
+  await supabase.from("dailyCount").update(dailyCount).eq("uuid", dailyCount.uuid).select();
+}
+
+async function deleteDailyCount(dailyCount: DailyCount) {
+  if (confirm(`Are you sure you want to delete daily count for ${dailyCount.picker}?`)) {
+    await supabase.from("dailyCount").delete().eq("uuid", dailyCount.uuid);
+    await loadPendingDailyCounts();
+  }
+}
+
+function openEditDialog(dailyCount: DailyCount) {
+  editingCount.value = dailyCount;
+  tempCount.value = dailyCount.count;
+}
+
+function saveCount() {
+  if (editingCount.value) {
+    editingCount.value.count = tempCount.value;
+    updateDailyCount(editingCount.value);
+    editingCount.value = null;
+  }
+}
+
+function cancelEdit() {
+  editingCount.value = null;
+  tempCount.value = 0;
+}
+
+async function sendDailyCounts() {
+  isSending.value = true;
+
+  try {
+    const pickers = await getPickers();
+    const pickerNumbers = Object.fromEntries(
+      pickers.map((picker) => [picker.name, picker.phoneNumber]),
+    );
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const startOfWeek = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    // Fetch all non-pending daily and weekly counts in bulk
+    const { data: allDailyCounts } = await supabase
+      .from("dailyCount")
+      .select("picker", { count: "exact" })
+      .gte("date", startOfDay.toISOString())
+      .eq("isPending", false);
+
+    const { data: allWeeklyCounts } = await supabase
+      .from("dailyCount")
+      .select("picker", { count: "exact" })
+      .gte("date", startOfWeek.toISOString())
+      .eq("isPending", false);
+
+    const dailyCountsFromDB: Record<string, number> = {};
+    allDailyCounts?.forEach((count: { picker: string }) => {
+      dailyCountsFromDB[count.picker] = (dailyCountsFromDB[count.picker] ?? 0) + 1;
+    });
+
+    const weeklyCountsFromDB: Record<string, number> = {};
+    allWeeklyCounts?.forEach((count: { picker: string }) => {
+      weeklyCountsFromDB[count.picker] =
+        (weeklyCountsFromDB[count.picker] ?? 0) + 1;
+    });
+
+    const messages = [];
+    // Add the counts that are getting sent now, because they won't be included
+    // in the counts from the DB.
+    const countAdjustments: Record<string, number> = {};
+    for (const dailyCount of dailyCounts.value) {
+      countAdjustments[dailyCount.picker] ??= 0;
+      countAdjustments[dailyCount.picker] += dailyCount.count;
+      const dayCount =
+        (dailyCountsFromDB[dailyCount.picker] ?? 0) +
+        (countAdjustments[dailyCount.picker] ?? 0);
+      const weekCount =
+        (weeklyCountsFromDB[dailyCount.picker] ?? 0) +
+        (countAdjustments[dailyCount.picker] ?? 0);
+
+      messages.push({
+        to: pickerNumbers[dailyCount.picker],
+        content: `Fecha: ${formatDate(new Date(dailyCount.date))}
+Recogedor: ${dailyCount.picker}
+Cajas hoy: ${dailyCount.count}
+Cajas semana: ${weekCount}
+`,
+      });
+    }
+    const results = await sendMessages(messages);
+    let i = 0;
+    for (const result of results) {
+      await supabase
+        .from("dailyCount")
+        .update({ isPending: false, messageUuid: result.uuid })
+        .eq("uuid", dailyCounts.value[i].uuid)
+        .select();
+      i += 1;
+    }
+    dailyCounts.value = [];
+  } finally {
+    isSending.value = false;
+  }
+}
+
+function formatDate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}/${month}/${day}`;
+}
 </script>
 
 <template>
-  <ComingSoon />
+  <div
+    v-if="isSending"
+    class="size-full flex items-center justify-center text-2xl"
+  >
+    <div class="p-2 flex items-center justify-center gap-2">
+      <Icon
+        icon="svg-spinners:90-ring-with-bg"
+        height="36"
+        class="text-white"
+      />
+      <span class="ml-2 text-white">Sending...</span>
+    </div>
+  </div>
+  <div v-else-if="dailyCounts.length > 0" class="flex flex-col">
+    <!-- Sticky Header -->
+    <div class="sticky top-0 bg-slate-800 p-4 border-b border-slate-600 z-10">
+      <div class="text-white text-lg font-semibold">
+        Total Bins: {{ totalCounts }}
+      </div>
+    </div>
+    
+    <ul class="flex flex-col gap-1 p-2">
+      <li
+        v-for="dailyCount in dailyCounts"
+        :key="dailyCount.uuid"
+        class="daily-count-row flex flex-row gap-1 justify-stretch items-center"
+      >
+        <div class="flex-1 text-white p-2">{{ dailyCount.picker }}</div>
+        <button
+          @click="openEditDialog(dailyCount)"
+          class="flex-1 bg-slate-700 text-white p-2 rounded-md hover:bg-slate-600"
+        >
+          {{ dailyCount.count }}
+        </button>
+        <button
+          @click="deleteDailyCount(dailyCount)"
+          class="bg-red-700 w-16 md:w-20 flex items-center justify-center rounded-md"
+        >
+          <Icon icon="system-uicons:trash" height="32" />
+        </button>
+      </li>
+      <button @click="sendDailyCounts" class="bg-blue-800 rounded-md p-2">Send</button>
+    </ul>
+  </div>
+  <div v-else class="size-full flex items-center justify-center text-2xl">
+    No pending daily counts
+  </div>
+
+  <!-- Edit Dialog -->
+  <div
+    v-if="editingCount"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-slate-800 p-6 rounded-lg">
+      <h3 class="text-white text-lg mb-4">Edit Count for {{ editingCount.picker }}</h3>
+      <input
+        v-model.number="tempCount"
+        type="number"
+        min="0"
+        class="w-full p-2 bg-slate-700 text-white rounded mb-4"
+      />
+      <div class="flex gap-2">
+        <button
+          @click="saveCount"
+          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Save
+        </button>
+        <button
+          @click="cancelEdit"
+          class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
