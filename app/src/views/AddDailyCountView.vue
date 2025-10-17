@@ -119,11 +119,11 @@ const addDailyCount = async () => {
       </div>
     </div>
     <div>
-      <BinSetting :setting="pickerSetting" v-model="pendingDailyCount.picker" />
+      <BinSetting :setting="pickerSetting" v-model="pendingDailyCount.picker!" />
     </div>
     <DailyCountSetting
       :setting="{ id: 'count', name: 'Daily Count', type: 'select' }"
-      v-model="pendingDailyCount.count"
+      v-model="pendingDailyCount.count!"
     />
     <button
       @click="addDailyCount"
