@@ -2,13 +2,12 @@
 import { ref, onMounted, computed } from "vue";
 import ActionButton from "@/components/ActionButton.vue";
 import PageLayout from "@/components/PageLayout.vue";
-import { getOrganization, getPickers, savePickers } from "@/lib/utils";
-import { Icon } from "@iconify/vue";
+import { getPickers, savePickers, getOrganization } from "@/lib/utils";
 import { type Picker } from "@/models/picker";
 
 const pickers = ref<Picker[]>([]);
 const isLoading = ref(true);
-const error = ref(null);
+const error = ref<string | null>(null);
 
 // Only include non-deleted
 const displayPickers = computed(() =>
@@ -24,8 +23,8 @@ async function loadPickers() {
     isLoading.value = true;
     pickers.value = await getPickers(true);
     isLoading.value = false;
-  } catch (err: any) {
-    error.value = err.message;
+  } catch (err: unknown) {
+    error.value = err instanceof Error ? err.message : "An unknown error occurred";
   } finally {
     isLoading.value = false;
   }
@@ -59,9 +58,10 @@ async function handleSavePickers() {
     await savePickers(pickers.value);
     alert("Pickers saved successfully!");
     await loadPickers();
-  } catch (err: any) {
-    console.error(`Failed to save pickers: ${err.message}`);
-    alert(`Failed to save pickers: ${err.message}`);
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
+    console.error(`Failed to save pickers: ${errorMessage}`);
+    alert(`Failed to save pickers: ${errorMessage}`);
   }
 }
 

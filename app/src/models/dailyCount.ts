@@ -8,7 +8,7 @@ export type DailyCount = {
   isPending: boolean
   messageUuid: string | null
 
-  [key: string]: any
+  [key: string]: string | number | boolean | null
 }
 
 export const countOptions = Array.from({ length: 25 }, (_, i) => i + 1)

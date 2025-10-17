@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const countOptions = Array.from({ length: 25 }, (_, i) => i + 1)
 
-const props = defineProps({
+defineProps({
   setting: {
     type: Object,
     required: true,

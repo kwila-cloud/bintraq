@@ -88,7 +88,7 @@ const validateBinId = (binId: string) => {
       </div>
     </div>
     <div v-for="setting in settings" :key="setting.id">
-      <BinSetting :setting="setting" v-model="pendingBin[setting.id]" />
+      <BinSetting :setting="setting" v-model="pendingBin[setting.id] as string" />
     </div>
     <button
       @click="addBin"
