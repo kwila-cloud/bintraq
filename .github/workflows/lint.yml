@@ -24,7 +24,7 @@ jobs:
           cd app
           npm ci
           
-      - name: Run ESLint
+      - name: Run lint
         run: |
           cd app
           npm run lint

@@ -20,4 +20,4 @@ Enable automated linting on pull requests and fix existing linter errors to ensu
   - [x] `ManagePickersView.vue`: Fix multiple `any` types
   - [x] `SmsUsageView.vue`: Fix `any` type
 - [x] Enable lint workflow in `.github/workflows/lint.yml`
-- [ ] Test workflow on a pull request to ensure it works correctly
+- [x] Test workflow on a pull request to ensure it works correctly
