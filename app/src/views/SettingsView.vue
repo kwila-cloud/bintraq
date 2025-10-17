@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
+import PageLayout from '@/components/PageLayout.vue'
 import SettingItem from '@/components/SettingItem.vue'
 
 const dailyCountUiEnabled = ref(false)
@@ -16,10 +17,7 @@ watch(dailyCountUiEnabled, (newValue) => {
 </script>
 
 <template>
-  <div class="flex flex-col md:gap-4 gap-2 p-4">
-    <div class="flex justify-between items-center">
-      <h2 class="text-2xl font-bold">Settings</h2>
-    </div>
+  <PageLayout title="Settings">
     <ul>
       <SettingItem
         title="Enable Daily Count UI (Experimental)"
@@ -28,5 +26,5 @@ watch(dailyCountUiEnabled, (newValue) => {
         @toggle="dailyCountUiEnabled = !dailyCountUiEnabled"
       />
     </ul>
-  </div>
+  </PageLayout>
 </template>
