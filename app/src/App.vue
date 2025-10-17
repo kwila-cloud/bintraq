@@ -46,7 +46,7 @@ function refresh() {
 
 <template>
   <nav id="top-nav">
-    <RouterLink v-if="isLoggedIn" to="/add-bin">BinTraq</RouterLink>
+    <RouterLink v-if="isLoggedIn" to="/add">BinTraq</RouterLink>
     <RouterLink v-else to="/about">BinTraq</RouterLink>
     <button class="button-as-a" @click="toggleMenu">
       <Icon icon="system-uicons:menu-hamburger" height="32" />
@@ -60,7 +60,7 @@ function refresh() {
   </main>
 
   <nav v-if="isLoggedIn" id="bottom-nav">
-    <RouterLink to="/add-bin" active-class="active-link">
+    <RouterLink to="/add" active-class="active-link">
       <Icon icon="system-uicons:box-add" height="32" />
       <span>Add</span>
     </RouterLink>
