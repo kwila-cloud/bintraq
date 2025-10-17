@@ -173,7 +173,7 @@ function formatDate(date: Date) {
   <div v-else-if="dailyCounts.length > 0" class="flex flex-col">
     <!-- Sticky Header -->
     <div class="sticky p-2 top-0">
-      <div class="bg-slate-800 p-4 rounded-lg z-10">
+      <div class="bg-slate-800 p-4 rounded-lg z-10 shadow-lg">
         <div class="flex justify-between items-center">
           <div class="text-white text-lg font-semibold">
             Total Bins: {{ totalCounts }}
