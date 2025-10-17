@@ -90,7 +90,7 @@ const addDailyCount = async () => {
   }
 
   // Set the date for the new daily count
-  pendingDailyCount.value.date = today.toISOString().split('T')[0];
+  pendingDailyCount.value.date = today.toISOString();
 
   // Add the new daily count
   await supabase.from("dailyCount").insert(pendingDailyCount.value);
