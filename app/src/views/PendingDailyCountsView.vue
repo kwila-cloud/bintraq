@@ -4,7 +4,7 @@ import { sendMessages } from "@/lib/smoketreeClient";
 import { ref, onMounted, computed } from "vue";
 import { getSettings, type Setting } from "@/models/settings";
 import type { DailyCount } from "@/models/dailyCount";
-import { getOrganization, getPickers } from "@/lib/utils";
+import { getPickers } from "@/lib/utils";
 import { Icon } from "@iconify/vue";
 
 const dailyCounts = ref<DailyCount[]>([]);
@@ -56,7 +56,7 @@ function openEditDialog(dailyCount: DailyCount) {
 }
 
 async function updateCount() {
-  if (!editingCount.value) return;
+  if (!editingCount.value) { return; }
   
   editingCount.value.count = tempCount.value;
   await updateDailyCount(editingCount.value);
