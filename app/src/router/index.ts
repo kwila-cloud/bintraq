@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AddBinView from '@/views/AddBinView.vue'
-import PendingBinsView from '@/views/PendingBinsView.vue'
-import BinsHistoryView from '@/views/BinsHistoryView.vue'
+import ComponentSwitcher from '@/components/ComponentSwitcher.vue'
 import ManagePickersView from '@/views/ManagePickersView.vue'
 import AboutView from '@/views/AboutView.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SmsUsageView from '@/views/SmsUsageView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import { supabase } from '@/lib/supabaseClient'
+import { isDailyCountUiEnabled } from '@/lib/utils'
+import { defineAsyncComponent } from 'vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,19 +20,34 @@ const router = createRouter({
     {
       path: '/add',
       name: 'add',
-      component: AddBinView,
+      component: ComponentSwitcher,
+      props: {
+        getComponent: () => isDailyCountUiEnabled() 
+          ? defineAsyncComponent(() => import('@/views/AddDailyCountView.vue'))
+          : defineAsyncComponent(() => import('@/views/AddBinView.vue'))
+      },
       meta: { requiresAuth: true },
     },
     {
       path: '/pending',
       name: 'pending',
-      component: PendingBinsView,
+      component: ComponentSwitcher,
+      props: {
+        getComponent: () => isDailyCountUiEnabled() 
+          ? defineAsyncComponent(() => import('@/views/PendingDailyCountsView.vue'))
+          : defineAsyncComponent(() => import('@/views/PendingBinsView.vue'))
+      },
       meta: { requiresAuth: true },
     },
     {
       path: '/history',
       name: 'history',
-      component: BinsHistoryView,
+      component: ComponentSwitcher,
+      props: {
+        getComponent: () => isDailyCountUiEnabled() 
+          ? defineAsyncComponent(() => import('@/views/DailyCountsHistoryView.vue'))
+          : defineAsyncComponent(() => import('@/views/BinsHistoryView.vue'))
+      },
       meta: { requiresAuth: true },
     },
     {

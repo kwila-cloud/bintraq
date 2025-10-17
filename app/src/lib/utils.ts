@@ -5,7 +5,7 @@ import type { Picker } from '@/models/picker'
 // Second number is month
 // Third number is day
 // Fourth number is release index for that day (starts at 0)
-export const appVersion = '2025.10.17.1'
+export const appVersion = '2025.10.17.2'
 
 export const getUserProfile = async () => {
   const {
@@ -48,6 +48,9 @@ export const getPickers = async (includeDeleted = false): Promise<Picker[]> => {
   pickers.sort((a, b) => a.name.localeCompare(b.name))
   return pickers
 }
+
+export const isDailyCountUiEnabled = (): boolean => 
+  localStorage.getItem('dailyCountUiEnabled') === 'true'
 
 export const savePickers = async (pickers: Picker[]) => {
   const pickerNames = pickers.map((picker) => picker.name)

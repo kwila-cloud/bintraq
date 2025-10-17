@@ -9,6 +9,7 @@
 - **PageLayout**: Reusable layout component for consistent page structure. Handles loading states, error states, title display, header actions, and description content through slots and props.
 - **ToggleSettingItem**: Reusable toggle component with v-model support. Use `v-model:value` for two-way binding.
 - **ActionButton**: Standard button component with icon, text, and color props.
+- **ComponentSwitcher**: Component designed specifically for dynamic routing in Vue Router. Bridges the gap between static router configuration and runtime component selection. Use when you need route-level conditional rendering based on application state (feature flags, user roles, A/B tests, etc.).
 
 ### Styling Conventions
 
@@ -31,8 +32,29 @@
 - Use `onMounted` to load stored values
 - Use `watch` to save changes automatically
 
+### Code Style
+
+- **Arrow Functions**: Prefer simple arrow functions without return keyword when possible
+  - ✅ Good: `() => isEnabled ? EnabledComponent : DisabledComponent`
+  - ✅ Good: `() => props.getComponent()`
+  - ❌ Avoid: `() => { return isEnabled ? EnabledComponent : DisabledComponent }`
+  - Use multi-line arrow functions only when necessary for complex logic
+
 ### Git Workflow
 
 - Feature branches for issues (e.g., `63-new-setting`)
 - Use GitHub CLI for PR creation: `gh pr create`
 - Commit messages follow conventional format: `feat:`, `refactor:`, `chore:`
+
+### Issue Specifications
+
+- **File Naming**: Use format `{issue-number}-{brief-description}.md` in `app/specs/`
+- **Structure**: 
+  - Title with issue link: `# Title\n\nhttps://github.com/kwila-cloud/bintraq/issues/{number}`
+  - Brief plan description
+  - Checklist format using `[ ]` for pending and `[x]` for completed
+- **Style**: 
+  - ✅ Good: Simple, scannable checklist format
+  - ✅ Good: Group related items logically
+  - ❌ Avoid: Verbose descriptions, detailed explanations, multiple sections
+- **Example**: See `app/specs/63-experimental-daily-count-ui.md` for reference

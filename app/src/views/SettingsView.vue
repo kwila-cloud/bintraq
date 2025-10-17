@@ -2,12 +2,12 @@
 import { ref, onMounted, watch } from "vue";
 import PageLayout from "@/components/PageLayout.vue";
 import ToggleSettingItem from "@/components/ToggleSettingItem.vue";
+import { isDailyCountUiEnabled } from "@/lib/utils";
 
 const dailyCountUiEnabled = ref(false);
 
 onMounted(() => {
-  const stored = localStorage.getItem("dailyCountUiEnabled");
-  dailyCountUiEnabled.value = stored === "true";
+  dailyCountUiEnabled.value = isDailyCountUiEnabled();
 });
 
 // Watch for changes to save to localStorage

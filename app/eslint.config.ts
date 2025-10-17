@@ -21,4 +21,12 @@ export default defineConfigWithVueTs(
   vueTsConfigs.recommended,
   ...pluginOxlint.configs['flat/recommended'],
   skipFormatting,
+
+  {
+    name: 'app/arrow-function-style',
+    rules: {
+      'arrow-body-style': ['error', 'as-needed'],
+      'prefer-arrow-callback': 'error',
+    },
+  },
 )
