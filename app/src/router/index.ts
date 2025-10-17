@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AddBinView from '@/views/AddBinView.vue'
 import PendingBinsView from '@/views/PendingBinsView.vue'
-import HistoryView from '@/views/HistoryView.vue'
+import BinsHistoryView from '@/views/BinsHistoryView.vue'
 import ManagePickersView from '@/views/ManagePickersView.vue'
 import AboutView from '@/views/AboutView.vue'
 import LoginPage from '@/views/LoginPage.vue'
@@ -18,8 +18,8 @@ const router = createRouter({
       redirect: '/about',
     },
     {
-      path: '/add-bin',
-      name: 'add-bin',
+      path: '/add',
+      name: 'add',
       component: AddBinView,
       meta: { requiresAuth: true },
     },
@@ -32,7 +32,7 @@ const router = createRouter({
     {
       path: '/history',
       name: 'history',
-      component: HistoryView,
+      component: BinsHistoryView,
       meta: { requiresAuth: true },
     },
     {
