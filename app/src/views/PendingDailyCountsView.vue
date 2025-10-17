@@ -116,9 +116,6 @@ async function sendDailyCounts() {
     for (const dailyCount of dailyCounts.value) {
       countAdjustments[dailyCount.picker] ??= 0;
       countAdjustments[dailyCount.picker] += dailyCount.count;
-      const dayCount =
-        (dailyCountsFromDB[dailyCount.picker] ?? 0) +
-        (countAdjustments[dailyCount.picker] ?? 0);
       const weekCount =
         (weeklyCountsFromDB[dailyCount.picker] ?? 0) +
         (countAdjustments[dailyCount.picker] ?? 0);
