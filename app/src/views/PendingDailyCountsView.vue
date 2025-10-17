@@ -172,7 +172,7 @@ function formatDate(date: Date) {
   </div>
   <div v-else-if="dailyCounts.length > 0" class="flex flex-col">
     <!-- Sticky Header -->
-    <div class="sticky px-4 py-2 top-0">
+    <div class="sticky p-2 top-0">
       <div class="bg-slate-800 p-4 rounded-lg z-10 shadow-lg shadow-black/50">
         <div class="flex justify-between items-center">
           <div class="text-white text-lg font-semibold">
@@ -189,12 +189,12 @@ function formatDate(date: Date) {
       <li
         v-for="dailyCount in dailyCounts"
         :key="dailyCount.uuid"
-        class="daily-count-row flex flex-row gap-1 justify-stretch items-center"
+        class="p-1 px-2 flex flex-row gap-3 justify-stretch items-center"
       >
-        <div class="flex-1 text-white p-1">{{ dailyCount.picker }}</div>
+        <div class="flex-1 text-white">{{ dailyCount.picker }}</div>
         <button
           @click="openEditDialog(dailyCount)"
-          class="flex-1 bg-slate-700 text-white p-3 rounded-md hover:bg-slate-600"
+          class="flex-1 bg-gray-800 p-2 text-2xl rounded-lg flex items-center justify-center"
         >
           {{ dailyCount.count }}
         </button>
