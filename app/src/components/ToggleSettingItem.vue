@@ -1,28 +1,35 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
+import { Icon } from "@iconify/vue";
 
 interface Props {
-  title: string
-  description: string
-  value: boolean
+  title: string;
+  description: string;
+  value: boolean;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  'update:value': [value: boolean]
-}>()
+  "update:value": [value: boolean];
+}>();
 
 function handleClick() {
-  emit('update:value', !props.value)
+  emit("update:value", !props.value);
 }
 </script>
 
 <template>
-  <li class="bg-slate-800 p-4 rounded-lg mb-2 cursor-pointer" @click="handleClick">
+  <button
+    class="bg-slate-800 p-4 rounded-lg mb-2 cursor-pointer text-left"
+    @click="handleClick"
+  >
     <div class="flex items-center gap-4">
       <Icon
-        :icon="value ? 'system-uicons:checkbox-checked' : 'system-uicons:checkbox-empty'"
+        :icon="
+          value
+            ? 'system-uicons:checkbox-checked'
+            : 'system-uicons:checkbox-empty'
+        "
         :class="value ? 'text-blue-500' : 'text-slate-400'"
         height="48"
       />
@@ -31,5 +38,5 @@ function handleClick() {
         <span class="text-slate-300">{{ description }}</span>
       </div>
     </div>
-  </li>
+  </button>
 </template>

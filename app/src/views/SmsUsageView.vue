@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import type { MonthlyUsage } from "@/models/monthlyUsage";
 import { getAllUsage, getLimit, setLimit } from "@/lib/smoketreeClient";
 import ActionButton from "@/components/ActionButton.vue";
+import PageLayout from "@/components/PageLayout.vue";
 
 const monthlyUsage = ref<(MonthlyUsage & { canUpdateLimit: boolean })[]>([]);
 const selectedMonth = ref<MonthlyUsage | null>(null);
@@ -11,7 +12,10 @@ const newMonthlyLimit = ref(0);
 async function loadUsage() {
   const usage: (MonthlyUsage & { canUpdateLimit: boolean })[] = (
     await getAllUsage()
-  ).map((d) => ({ ...d, canUpdateLimit: false }));
+  ).map((d) => ({
+    ...d,
+    canUpdateLimit: false,
+  }));
   usage[0].canUpdateLimit = true;
   // Add next month so the limit can be set ahead of time.
   const nextMonth = getNextMonth();
@@ -42,6 +46,13 @@ const closeDialog = () => {
   selectedMonth.value = null;
 };
 
+const handleUpdateLimit = (
+  month: MonthlyUsage & { canUpdateLimit: boolean },
+) => {
+  selectedMonth.value = month;
+  newMonthlyLimit.value = month.segmentLimit;
+};
+
 const saveNewMonthlyLimit = async () => {
   if (selectedMonth.value == null) {
     return;
@@ -62,7 +73,7 @@ const saveNewMonthlyLimit = async () => {
 </script>
 
 <template>
-  <ul class="p-4 flex flex-col gap-2">
+  <PageLayout title="SMS Usage">
     <li
       v-for="month in monthlyUsage"
       :key="month.month"
@@ -81,14 +92,11 @@ const saveNewMonthlyLimit = async () => {
       </div>
       <ActionButton
         v-if="month.canUpdateLimit"
-        @click="
-          selectedMonth = month;
-          newMonthlyLimit = month.segmentLimit;
-        "
+        @click="handleUpdateLimit(month)"
         text="Update Segment Limit"
       />
     </li>
-  </ul>
+  </PageLayout>
 
   <div
     v-if="selectedMonth"
