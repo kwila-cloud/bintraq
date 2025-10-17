@@ -12,49 +12,72 @@ const pickers = ref<Picker[]>([]);
 const selectedPicker = ref<string | null>(null);
 
 async function loadCompletedDailyCounts() {
-  let query = supabase
-    .from("dailyCount")
-    .select()
-    .eq("isPending", false)
-    .order("date", { ascending: false });
+  try {
+    let query = supabase
+      .from("dailyCount")
+      .select()
+      .eq("isPending", false)
+      .order("date", { ascending: false });
 
-  if (selectedPicker.value) {
-    query = query.eq("picker", selectedPicker.value);
+    if (selectedPicker.value) {
+      query = query.eq("picker", selectedPicker.value);
+    }
+
+    const { data, error } = await query;
+    if (error) {
+      throw error;
+    }
+    dailyCounts.value = data as DailyCount[];
+  } catch (error) {
+    console.error("Failed to load completed daily counts:", error);
   }
-
-  const { data } = await query;
-  dailyCounts.value = data as DailyCount[];
 }
 
 async function loadMessageStatuses() {
-  const messages = await getMessages();
-  messageStatuses.value = Object.fromEntries(
-    messages.map((m) => [m.uuid, m.currentStatus]),
-  );
+  try {
+    const messages = await getMessages();
+    messageStatuses.value = Object.fromEntries(
+      messages.map((m) => [m.uuid, m.currentStatus]),
+    );
+  } catch (error) {
+    console.error("Failed to load message statuses:", error);
+  }
 }
 
 async function refresh(messageUuid: string) {
-  messageStatuses.value = {
-    ...messageStatuses.value,
-    [messageUuid]: "refreshing",
-  };
-  const message = await getMessage(messageUuid);
-  messageStatuses.value = {
-    ...messageStatuses.value,
-    [messageUuid]: message.currentStatus,
-  };
+  try {
+    messageStatuses.value = {
+      ...messageStatuses.value,
+      [messageUuid]: "refreshing",
+    };
+    const message = await getMessage(messageUuid);
+    messageStatuses.value = {
+      ...messageStatuses.value,
+      [messageUuid]: message.currentStatus,
+    };
+  } catch (error) {
+    console.error("Failed to refresh message status:", error);
+  }
 }
 
 async function resend(messageUuid: string) {
-  messageStatuses.value = {
-    ...messageStatuses.value,
-    [messageUuid]: "pending",
-  };
-  await resendMessage(messageUuid);
+  try {
+    messageStatuses.value = {
+      ...messageStatuses.value,
+      [messageUuid]: "pending",
+    };
+    await resendMessage(messageUuid);
+  } catch (error) {
+    console.error("Failed to resend message:", error);
+  }
 }
 
 async function loadPickers() {
-  pickers.value = await getPickers();
+  try {
+    pickers.value = await getPickers();
+  } catch (error) {
+    console.error("Failed to load pickers:", error);
+  }
 }
 
 const weeklyCount = computed(() => {
