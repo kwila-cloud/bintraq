@@ -20,8 +20,8 @@ async function signIn() {
     } else {
       router.push("/");
     }
-  } catch (e: any) {
-    error.value = e.message;
+  } catch (e: unknown) {
+    error.value = e instanceof Error ? e.message : "An unknown error occurred";
   }
 }
 
@@ -37,8 +37,8 @@ async function signUp() {
       // Optionally, redirect or show a success message
       router.push("/");
     }
-  } catch (e: any) {
-    error.value = e.message;
+  } catch (e: unknown) {
+    error.value = e instanceof Error ? e.message : "An unknown error occurred";
   }
 }
 

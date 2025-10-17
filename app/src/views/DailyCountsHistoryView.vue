@@ -177,7 +177,7 @@ onMounted(() => {
         </div>
         <span>{{ new Date(dailyCount.date).toLocaleString() }}</span>
         <template v-if="dailyCount.messageUuid == null">
-          <span>Send Status - lost</span>
+          <span>Send Status - unknown</span>
         </template>
         <template v-else>
           <span

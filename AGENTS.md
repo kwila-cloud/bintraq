@@ -1,6 +1,6 @@
 ## Current Task
 
-- Working on issue #63 - spec: `app/specs/63-experimental-daily-count-ui.md`
+- Working on issue #70 - spec: `app/specs/70-enable-lint-workflow.md`
 
 ## Project Knowledge
 

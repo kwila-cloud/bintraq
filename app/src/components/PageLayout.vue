@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
+import type { VNode } from "vue";
 
 interface Props {
   title: string;
@@ -9,10 +10,10 @@ interface Props {
 
 defineProps<Props>();
 
-const slots = defineSlots<{
-  headerActions?: any;
-  description?: any;
-  default: any;
+defineSlots<{
+  headerActions?: VNode[];
+  description?: VNode[];
+  default: VNode[];
 }>();
 </script>
 

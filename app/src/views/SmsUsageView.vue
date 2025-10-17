@@ -7,7 +7,7 @@ import PageLayout from "@/components/PageLayout.vue";
 
 const monthlyUsage = ref<(MonthlyUsage & { canUpdateLimit: boolean })[]>([]);
 const isLoading = ref(true);
-const error = ref(null);
+const error = ref<string | null>(null);
 const selectedMonth = ref<MonthlyUsage | null>(null);
 const newMonthlyLimit = ref(0);
 
@@ -32,8 +32,8 @@ async function loadUsage() {
       canUpdateLimit: true,
     });
     monthlyUsage.value = usage;
-  } catch (err: any) {
-    error.value = err.message;
+  } catch (err: unknown) {
+    error.value = err instanceof Error ? err.message : "An unknown error occurred";
   } finally {
     isLoading.value = false;
   }

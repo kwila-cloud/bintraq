@@ -5,7 +5,7 @@ import { ref, onMounted } from "vue";
 import { getSettings, type Setting } from "@/models/settings";
 import type { Bin } from "@/models/bin";
 import BinSetting from "@/components/BinSetting.vue";
-import { getOrganization, getPickers } from "@/lib/utils";
+import { getPickers } from "@/lib/utils";
 import { Icon } from "@iconify/vue";
 
 const bins = ref<Bin[]>([]);
@@ -149,7 +149,7 @@ function formatDate(date: Date) {
       <div v-for="setting in settings" :key="setting.id" class="flex-1">
         <BinSetting
           :setting="setting"
-          v-model="bin[setting.id]"
+          v-model="bin[setting.id] as string"
           @update:modelValue="updateBin(bin)"
         />
       </div>
