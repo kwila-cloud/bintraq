@@ -36,9 +36,9 @@ Instead of inputting each individual bin, allow the user to input the daily coun
     - [x] Picker
     - [x] Daily count
     - [x] Weekly count
-- [ ] `DailyCountsHistoryView` should be the same as `BinsHistoryView`, but instead should:
-  - [ ] Display the list of send daily count messages, with:
-    - [ ] Picker
-    - [ ] Count
-    - [ ] Timestamp
-    - [ ] Send status
+- [x] `DailyCountsHistoryView` should be the same as `BinsHistoryView`, but instead should:
+  - [x] Display the list of send daily count messages, with:
+    - [x] Picker
+    - [x] Count
+    - [x] Timestamp
+    - [x] Send status
