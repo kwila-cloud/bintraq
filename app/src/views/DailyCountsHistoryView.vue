@@ -139,10 +139,14 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <ul>
-      <li v-for="dailyCount in dailyCounts" :key="dailyCount.uuid">
-        <div class="flex justify-between items-center pr-1">
-          <h1>{{ dailyCount.picker }}</h1>
+    <ul class="flex flex-col items-center gap-2">
+      <li
+        v-for="dailyCount in dailyCounts"
+        :key="dailyCount.uuid"
+        class="w-[300px] flex flex-col gap-1 p-2 rounded-lg bg-slate-800"
+      >
+        <div class="flex justify-between items-center">
+          <h1 class="text-2xl">{{ dailyCount.picker }}</h1>
           <span
             class="bg-blue-700 text-white font-bold text-lg rounded-lg px-2 py-1"
             >{{ dailyCount.count }}</span
@@ -164,12 +168,14 @@ onMounted(() => {
               )
             "
             @click="resend(dailyCount.messageUuid)"
+            class="bg-blue-900 rounded-lg"
           >
             Resend
           </button>
           <button
             v-else-if="messageStatuses[dailyCount.messageUuid] != 'sent'"
             @click="refresh(dailyCount.messageUuid)"
+            class="bg-blue-900 rounded-lg"
           >
             Refresh
           </button>
@@ -178,30 +184,3 @@ onMounted(() => {
     </ul>
   </div>
 </template>
-
-<style scoped>
-ul {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-li {
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 8px;
-  border-radius: 8px;
-  background-color: var(--color-slate-800);
-
-  h1 {
-    font-size: 2rem;
-  }
-
-  button {
-    background-color: var(--color-blue-900);
-    border-radius: 8px;
-  }
-}
-</style>
