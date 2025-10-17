@@ -233,7 +233,8 @@ function formatDate(date: Date) {
         </button>
         <button
           @click="updateCount"
-          class="bg-blue-700 text-white p-2 rounded-md"
+          :disabled="tempCount < 0 || !Number.isInteger(tempCount)"
+          class="bg-blue-700 disabled:opacity-50 text-white p-2 rounded-md"
         >
           Update
         </button>
