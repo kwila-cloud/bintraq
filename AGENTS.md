@@ -32,6 +32,14 @@
 - Use `onMounted` to load stored values
 - Use `watch` to save changes automatically
 
+### Code Style
+
+- **Arrow Functions**: Prefer simple arrow functions without return keyword when possible
+  - ✅ Good: `() => isEnabled ? EnabledComponent : DisabledComponent`
+  - ✅ Good: `() => props.getComponent()`
+  - ❌ Avoid: `() => { return isEnabled ? EnabledComponent : DisabledComponent }`
+  - Use multi-line arrow functions only when necessary for complex logic
+
 ### Git Workflow
 
 - Feature branches for issues (e.g., `63-new-setting`)

@@ -49,9 +49,8 @@ export const getPickers = async (includeDeleted = false): Promise<Picker[]> => {
   return pickers
 }
 
-export const isDailyCountUiEnabled = (): boolean => {
-  return localStorage.getItem('dailyCountUiEnabled') === 'true'
-}
+export const isDailyCountUiEnabled = (): boolean => 
+  localStorage.getItem('dailyCountUiEnabled') === 'true'
 
 export const savePickers = async (pickers: Picker[]) => {
   const pickerNames = pickers.map((picker) => picker.name)
