@@ -45,3 +45,16 @@
 - Feature branches for issues (e.g., `63-new-setting`)
 - Use GitHub CLI for PR creation: `gh pr create`
 - Commit messages follow conventional format: `feat:`, `refactor:`, `chore:`
+
+### Issue Specifications
+
+- **File Naming**: Use format `{issue-number}-{brief-description}.md` in `app/specs/`
+- **Structure**: 
+  - Title with issue link: `# Title\n\nhttps://github.com/kwila-cloud/bintraq/issues/{number}`
+  - Brief plan description
+  - Checklist format using `[ ]` for pending and `[x]` for completed
+- **Style**: 
+  - ✅ Good: Simple, scannable checklist format
+  - ✅ Good: Group related items logically
+  - ❌ Avoid: Verbose descriptions, detailed explanations, multiple sections
+- **Example**: See `app/specs/63-experimental-daily-count-ui.md` for reference
