@@ -13,7 +13,7 @@ const isSending = ref(false);
 const editingCount = ref<DailyCount | null>(null);
 const tempCount = ref<number>(0);
 
-const totalCounts = computed(() =>
+const totalCount = computed(() =>
   dailyCounts.value.reduce((sum, count) => sum + count.count, 0),
 );
 
@@ -163,7 +163,7 @@ function formatDate(date: Date) {
       <div class="bg-slate-800 p-4 rounded-lg z-10 shadow-lg shadow-black/50">
         <div class="flex justify-between items-center">
           <div class="text-white text-lg font-semibold">
-            Total Bins: {{ totalCounts }}
+            Total Bins: {{ totalCount }}
           </div>
           <button @click="sendDailyCounts" class="bg-blue-800 rounded-md p-2">
             Send
