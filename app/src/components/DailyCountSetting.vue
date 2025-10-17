@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { countOptions } from '@/models/dailyCount'
+const countOptions = Array.from({ length: 25 }, (_, i) => i + 1)
 
 const props = defineProps({
   setting: {
