@@ -13,8 +13,8 @@ const isSending = ref(false);
 const editingCount = ref<DailyCount | null>(null);
 const tempCount = ref<number>(0);
 
-const totalCounts = computed(() => 
-  dailyCounts.value.reduce((sum, count) => sum + count.count, 0)
+const totalCounts = computed(() =>
+  dailyCounts.value.reduce((sum, count) => sum + count.count, 0),
 );
 
 onMounted(() => {
@@ -32,11 +32,19 @@ async function loadPendingDailyCounts() {
 }
 
 async function updateDailyCount(dailyCount: DailyCount) {
-  await supabase.from("dailyCount").update(dailyCount).eq("uuid", dailyCount.uuid).select();
+  await supabase
+    .from("dailyCount")
+    .update(dailyCount)
+    .eq("uuid", dailyCount.uuid)
+    .select();
 }
 
 async function deleteDailyCount(dailyCount: DailyCount) {
-  if (confirm(`Are you sure you want to delete daily count for ${dailyCount.picker}?`)) {
+  if (
+    confirm(
+      `Are you sure you want to delete daily count for ${dailyCount.picker}?`,
+    )
+  ) {
     await supabase.from("dailyCount").delete().eq("uuid", dailyCount.uuid);
     await loadPendingDailyCounts();
   }
@@ -91,7 +99,8 @@ async function sendDailyCounts() {
 
     const dailyCountsFromDB: Record<string, number> = {};
     allDailyCounts?.forEach((count: { picker: string; count: number }) => {
-      dailyCountsFromDB[count.picker] = (dailyCountsFromDB[count.picker] ?? 0) + count.count;
+      dailyCountsFromDB[count.picker] =
+        (dailyCountsFromDB[count.picker] ?? 0) + count.count;
     });
 
     const weeklyCountsFromDB: Record<string, number> = {};
@@ -163,15 +172,17 @@ function formatDate(date: Date) {
   </div>
   <div v-else-if="dailyCounts.length > 0" class="flex flex-col">
     <!-- Sticky Header -->
-    <div class="sticky top-0 bg-slate-800 p-4 rounded-lg z-10 mt-2">
+    <div class="sticky top-2 bg-slate-800 p-4 rounded-lg z-10">
       <div class="flex justify-between items-center">
         <div class="text-white text-lg font-semibold">
           Total Bins: {{ totalCounts }}
         </div>
-        <button @click="sendDailyCounts" class="bg-blue-800 rounded-md p-2">Send</button>
+        <button @click="sendDailyCounts" class="bg-blue-800 rounded-md p-2">
+          Send
+        </button>
       </div>
     </div>
-    
+
     <ul class="flex flex-col gap-1 p-2">
       <li
         v-for="dailyCount in dailyCounts"
@@ -189,7 +200,7 @@ function formatDate(date: Date) {
           @click="deleteDailyCount(dailyCount)"
           class="bg-red-700 w-16 md:w-20 flex items-center justify-center rounded-md"
         >
-          <Icon icon="system-uicons:trash" height="24" />
+          <Icon icon="system-uicons:trash" height="32" />
         </button>
       </li>
     </ul>
@@ -204,7 +215,9 @@ function formatDate(date: Date) {
     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
   >
     <div class="bg-slate-800 p-6 rounded-lg">
-      <h3 class="text-white text-lg mb-4">Edit Count for {{ editingCount.picker }}</h3>
+      <h3 class="text-white text-lg mb-4">
+        Edit Count for {{ editingCount.picker }}
+      </h3>
       <input
         v-model.number="tempCount"
         type="number"
