@@ -225,7 +225,7 @@ function formatDate(date: Date) {
       <input
         v-model.number="tempCount"
         type="number"
-        min="0"
+        min="1"
         class="h-16 p-4 lg:h-12 w-full border rounded-md"
       />
 
@@ -235,7 +235,7 @@ function formatDate(date: Date) {
         </button>
         <button
           @click="updateCount"
-          :disabled="tempCount < 0 || !Number.isInteger(tempCount)"
+          :disabled="tempCount < 1 || !Number.isInteger(tempCount)"
           class="bg-blue-700 disabled:opacity-50 text-white p-2 rounded-md"
         >
           Update
