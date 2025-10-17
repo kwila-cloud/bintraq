@@ -35,6 +35,7 @@ async function getDailyCounts() {
   const { data } = await supabase
     .from("dailyCount")
     .select()
+    .eq("organizationUuid", pendingDailyCount.value.organizationUuid)
     .order("date", { ascending: false });
   dailyCounts.value = data as DailyCount[];
   // Use the most recent picker as default value
@@ -87,6 +88,9 @@ const addDailyCount = async () => {
     );
     return;
   }
+
+  // Set the date for the new daily count
+  pendingDailyCount.value.date = today.toISOString().split('T')[0];
 
   // Add the new daily count
   await supabase.from("dailyCount").insert(pendingDailyCount.value);
