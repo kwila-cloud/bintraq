@@ -78,6 +78,7 @@ const addDailyCount = async () => {
   const { data: existingCount } = await supabase
     .from("dailyCount")
     .select()
+    .eq("organizationUuid", pendingDailyCount.value.organizationUuid)
     .eq("picker", pendingDailyCount.value.picker)
     .gte("date", startOfDay)
     .lt("date", endOfDay);
