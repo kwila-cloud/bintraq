@@ -218,15 +218,17 @@ function formatDate(date: Date) {
     @click.self="cancelEdit"
   >
     <div class="min-w-[300px] p-4 rounded-md bg-gray-800">
-      <h2 class="text-lg font-bold mb-2">Edit Count for {{ editingCount.picker }}</h2>
-      
+      <h2 class="text-lg font-bold mb-2">
+        Edit Count for {{ editingCount.picker }}
+      </h2>
+
       <input
         v-model.number="tempCount"
         type="number"
         min="0"
-        class="h-16 p-4 lg:h-12 w-full border rounded-md bg-gray-800 text-white"
+        class="h-16 p-4 lg:h-12 w-full border rounded-md"
       />
-      
+
       <div class="flex justify-end mt-4 gap-2">
         <button @click="cancelEdit" class="bg-gray-700 p-2 rounded-md">
           Cancel
