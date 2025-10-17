@@ -1,46 +1,46 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { supabase } from '@/lib/supabaseClient'
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { Icon } from '@iconify/vue'
-import MenuModal from '@/components/MenuModal.vue'
+import { RouterLink, RouterView, useRouter } from "vue-router";
+import { supabase } from "@/lib/supabaseClient";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { Icon } from "@iconify/vue";
+import MenuModal from "@/components/MenuModal.vue";
 
-const isLoggedIn = ref(false)
-const showMenuModal = ref(false)
-const router = useRouter()
+const isLoggedIn = ref(false);
+const showMenuModal = ref(false);
+const router = useRouter();
 
 async function checkAuth() {
   const {
     data: { session },
-  } = await supabase.auth.getSession()
-  isLoggedIn.value = !!session
+  } = await supabase.auth.getSession();
+  isLoggedIn.value = !!session;
 }
 
 onMounted(() => {
-  checkAuth()
+  checkAuth();
 
   const {
     data: { subscription },
   } = supabase.auth.onAuthStateChange(() => {
-    checkAuth()
-  })
+    checkAuth();
+  });
 
   onBeforeUnmount(() => {
-    subscription.unsubscribe()
-  })
-})
+    subscription.unsubscribe();
+  });
+});
 
 async function signOut() {
-  await supabase.auth.signOut()
-  router.push('/login')
+  await supabase.auth.signOut();
+  router.push("/login");
 }
 
 function toggleMenu() {
-  showMenuModal.value = !showMenuModal.value
+  showMenuModal.value = !showMenuModal.value;
 }
 
 function refresh() {
-  window.location.reload()
+  window.location.reload();
 }
 </script>
 
@@ -62,7 +62,7 @@ function refresh() {
   <nav v-if="isLoggedIn" id="bottom-nav">
     <RouterLink to="/add-bin" active-class="active-link">
       <Icon icon="system-uicons:box-add" height="32" />
-      <span>Add Bin</span>
+      <span>Add</span>
     </RouterLink>
     <RouterLink to="/pending" active-class="active-link">
       <Icon icon="system-uicons:boxes" height="32" />
