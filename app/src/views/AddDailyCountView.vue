@@ -37,10 +37,9 @@ async function getDailyCounts() {
     .select()
     .order("date", { ascending: false });
   dailyCounts.value = data as DailyCount[];
-  // Use the most recent daily count as default values
+  // Use the most recent picker as default value
   if (dailyCounts.value.length > 0) {
     pendingDailyCount.value.picker = dailyCounts.value[0].picker;
-    pendingDailyCount.value.count = dailyCounts.value[0].count;
   }
 }
 
