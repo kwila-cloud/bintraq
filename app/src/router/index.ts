@@ -1,14 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AddBinView from '@/views/AddBinView.vue'
-import PendingBinsView from '@/views/PendingBinsView.vue'
-import BinsHistoryView from '@/views/BinsHistoryView.vue'
+import AddViewWrapper from '@/views/AddViewWrapper.vue'
+import PendingViewWrapper from '@/views/PendingViewWrapper.vue'
+import HistoryViewWrapper from '@/views/HistoryViewWrapper.vue'
 import ManagePickersView from '@/views/ManagePickersView.vue'
 import AboutView from '@/views/AboutView.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SmsUsageView from '@/views/SmsUsageView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import { supabase } from '@/lib/supabaseClient'
-import { isDailyCountUiEnabled } from '@/lib/utils'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,34 +20,19 @@ const router = createRouter({
     {
       path: '/add',
       name: 'add',
-      component: () => {
-        if (isDailyCountUiEnabled()) {
-          return import('@/views/AddDailyCountView.vue')
-        }
-        return AddBinView
-      },
+      component: AddViewWrapper,
       meta: { requiresAuth: true },
     },
     {
       path: '/pending',
       name: 'pending',
-      component: () => {
-        if (isDailyCountUiEnabled()) {
-          return import('@/views/PendingDailyCountsView.vue')
-        }
-        return PendingBinsView
-      },
+      component: PendingViewWrapper,
       meta: { requiresAuth: true },
     },
     {
       path: '/history',
       name: 'history',
-      component: () => {
-        if (isDailyCountUiEnabled()) {
-          return import('@/views/DailyCountsHistoryView.vue')
-        }
-        return BinsHistoryView
-      },
+      component: HistoryViewWrapper,
       meta: { requiresAuth: true },
     },
     {
