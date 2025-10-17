@@ -27,7 +27,7 @@ async function loadPendingDailyCounts() {
     .from("dailyCount")
     .select()
     .eq("isPending", true)
-    .order("date");
+    .order("picker");
   dailyCounts.value = data as DailyCount[];
 }
 
