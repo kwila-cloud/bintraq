@@ -1,7 +1,8 @@
 - Check that the `appVersion` in `app/src/lib/utils.ts` is incremented in every pull request.
-	- BE SURE to raise a concern if the `appVersion` value isn't changed or `app/src/lib/utils.ts` isn't changed!
+  - BE SURE to raise a concern if the `appVersion` value isn't changed or `app/src/lib/utils.ts` isn't changed!
+  - EXCEPTION: pull requests that have ZERO user-facing changes are NOT required to increment `appVersion`.
 - Make sure that the pull request title follows the conventional commit style.
-	- Alert the developer if the title is in the wrong format.
-	- Example of a correct title: `fix: some bug`.
-	- Example of an incorrect title: `Resolves "#18 - some bug"`.
-	- The scope portion of conventional commit is not required.
+  - Alert the developer if the title is in the wrong format.
+  - Example of a correct title: `fix: some bug`.
+  - Example of an incorrect title: `Resolves "#18 - some bug"`.
+  - The scope portion of conventional commit is not required.

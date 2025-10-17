@@ -20,8 +20,9 @@
 
 ### App Versioning
 
-- Version in `src/lib/utils.ts` follows format: `YYYY.MM.DD.RELEASE_INDEX`
-- Update version when making releases
+- Version in `app/src/lib/utils.ts` follows format: `YYYY.MM.DD.RELEASE_INDEX`
+- Update version for each new pull request.
+  - Exception: pull requests that have ZERO user-facing impact.
 
 ### localStorage Usage
 
