@@ -21,8 +21,9 @@
 ### App Versioning
 
 - Version in `app/src/lib/utils.ts` follows format: `YYYY.MM.DD.RELEASE_INDEX`
-- Update version for each new pull request.
+- **ALWAYS update version for each new pull request.**
   - Exception: pull requests that have ZERO user-facing impact.
+- **MANDATORY: Bump version before creating pull request - this is a critical step that must not be forgotten.**
 
 ### localStorage Usage
 
