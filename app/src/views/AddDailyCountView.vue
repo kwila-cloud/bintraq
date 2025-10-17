@@ -64,9 +64,17 @@ const addDailyCount = async () => {
 
   // Check for uniqueness - ensure picker doesn't already have a daily count for today
   const today = new Date();
-  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
-  const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
-  
+  const startOfDay = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+  ).toISOString();
+  const endOfDay = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() + 1,
+  ).toISOString();
+
   const { data: existingCount } = await supabase
     .from("dailyCount")
     .select()
