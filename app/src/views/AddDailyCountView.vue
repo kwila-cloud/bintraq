@@ -61,20 +61,26 @@ const addDailyCount = async () => {
     alert("Please select a daily count");
     return;
   }
-  
+
   // Check for uniqueness - ensure picker doesn't already have a daily count for today
-  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+  const today = new Date();
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
+  const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
+  
   const { data: existingCount } = await supabase
     .from("dailyCount")
     .select()
     .eq("picker", pendingDailyCount.value.picker)
-    .like("date", `${today}%`);
-  
+    .gte("date", startOfDay)
+    .lt("date", endOfDay);
+
   if (existingCount && existingCount.length > 0) {
-    alert(`${pendingDailyCount.value.picker} already has a daily count for today`);
+    alert(
+      `${pendingDailyCount.value.picker} already has a daily count for today`,
+    );
     return;
   }
-  
+
   // Add the new daily count
   await supabase.from("dailyCount").insert(pendingDailyCount.value);
   // Clear the selected count
@@ -94,7 +100,10 @@ const addDailyCount = async () => {
       >
         Pending Daily Counts: {{ pendingDailyCounts.length }}
       </RouterLink>
-      <div v-if="mostRecentPicker" class="bg-gray-500 !text-white rounded-xl w-fit !px-4 py-1 font-bold">
+      <div
+        v-if="mostRecentPicker"
+        class="bg-gray-500 !text-white rounded-xl w-fit !px-4 py-1 font-bold"
+      >
         Most Recent Picker: {{ mostRecentPicker }}
       </div>
     </div>
