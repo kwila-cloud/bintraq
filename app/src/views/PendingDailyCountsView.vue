@@ -172,14 +172,16 @@ function formatDate(date: Date) {
   </div>
   <div v-else-if="dailyCounts.length > 0" class="flex flex-col">
     <!-- Sticky Header -->
-    <div class="sticky top-2 bg-slate-800 p-4 rounded-lg z-10">
-      <div class="flex justify-between items-center">
-        <div class="text-white text-lg font-semibold">
-          Total Bins: {{ totalCounts }}
+    <div class="sticky p-2 top-0">
+      <div class="bg-slate-800 p-4 rounded-lg z-10">
+        <div class="flex justify-between items-center">
+          <div class="text-white text-lg font-semibold">
+            Total Bins: {{ totalCounts }}
+          </div>
+          <button @click="sendDailyCounts" class="bg-blue-800 rounded-md p-2">
+            Send
+          </button>
         </div>
-        <button @click="sendDailyCounts" class="bg-blue-800 rounded-md p-2">
-          Send
-        </button>
       </div>
     </div>
 
@@ -192,13 +194,13 @@ function formatDate(date: Date) {
         <div class="flex-1 text-white p-2">{{ dailyCount.picker }}</div>
         <button
           @click="openEditDialog(dailyCount)"
-          class="flex-1 bg-slate-700 text-white p-2 rounded-md hover:bg-slate-600"
+          class="flex-1 bg-slate-700 text-white p-3 rounded-md hover:bg-slate-600"
         >
           {{ dailyCount.count }}
         </button>
         <button
           @click="deleteDailyCount(dailyCount)"
-          class="bg-red-700 w-16 md:w-20 flex items-center justify-center rounded-md"
+          class="bg-red-700 w-16 p-2 md:w-20 flex items-center justify-center rounded-md"
         >
           <Icon icon="system-uicons:trash" height="32" />
         </button>
