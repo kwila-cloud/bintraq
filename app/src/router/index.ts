@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AddViewWrapper from '@/views/AddViewWrapper.vue'
-import PendingViewWrapper from '@/views/PendingViewWrapper.vue'
-import HistoryViewWrapper from '@/views/HistoryViewWrapper.vue'
+import ConditionalViewWrapper from '@/views/ConditionalViewWrapper.vue'
 import ManagePickersView from '@/views/ManagePickersView.vue'
 import AboutView from '@/views/AboutView.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SmsUsageView from '@/views/SmsUsageView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import { supabase } from '@/lib/supabaseClient'
+import { isDailyCountUiEnabled } from '@/lib/utils'
+import { defineAsyncComponent } from 'vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,19 +20,40 @@ const router = createRouter({
     {
       path: '/add',
       name: 'add',
-      component: AddViewWrapper,
+      component: ConditionalViewWrapper,
+      props: {
+        getComponentKey: () => isDailyCountUiEnabled() ? 'dailyCount' : 'bin',
+        componentMap: {
+          bin: defineAsyncComponent(() => import('@/views/AddBinView.vue')),
+          dailyCount: defineAsyncComponent(() => import('@/views/AddDailyCountView.vue'))
+        }
+      },
       meta: { requiresAuth: true },
     },
     {
       path: '/pending',
       name: 'pending',
-      component: PendingViewWrapper,
+      component: ConditionalViewWrapper,
+      props: {
+        getComponentKey: () => isDailyCountUiEnabled() ? 'dailyCount' : 'bin',
+        componentMap: {
+          bin: defineAsyncComponent(() => import('@/views/PendingBinsView.vue')),
+          dailyCount: defineAsyncComponent(() => import('@/views/PendingDailyCountsView.vue'))
+        }
+      },
       meta: { requiresAuth: true },
     },
     {
       path: '/history',
       name: 'history',
-      component: HistoryViewWrapper,
+      component: ConditionalViewWrapper,
+      props: {
+        getComponentKey: () => isDailyCountUiEnabled() ? 'dailyCount' : 'bin',
+        componentMap: {
+          bin: defineAsyncComponent(() => import('@/views/BinsHistoryView.vue')),
+          dailyCount: defineAsyncComponent(() => import('@/views/DailyCountsHistoryView.vue'))
+        }
+      },
       meta: { requiresAuth: true },
     },
     {
