@@ -61,6 +61,20 @@ const addDailyCount = async () => {
     alert("Please select a daily count");
     return;
   }
+  
+  // Check for uniqueness - ensure picker doesn't already have a daily count for today
+  const today = new Date().toISOString().split('T')[0];
+  const { data: existingCount } = await supabase
+    .from("dailyCount")
+    .select()
+    .eq("picker", pendingDailyCount.value.picker)
+    .eq("date", today);
+  
+  if (existingCount && existingCount.length > 0) {
+    alert(`${pendingDailyCount.value.picker} already has a daily count for today`);
+    return;
+  }
+  
   // Add the new daily count
   await supabase.from("dailyCount").insert(pendingDailyCount.value);
   // Clear the selected count
