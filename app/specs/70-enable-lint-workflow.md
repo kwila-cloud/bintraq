@@ -8,16 +8,16 @@ Enable automated linting on pull requests and fix existing linter errors to ensu
 
 - [x] Add ESLint rules for arrow function style to `eslint.config.ts`
 - [x] Create GitHub workflow for linting (currently disabled)
-- [ ] Update ESLint configuration to ignore `.vite/deps/` directory
-- [ ] Fix unused imports in component files:
-  - [ ] `MenuModal.vue`: Remove unused 'Icon' import
-  - [ ] `ManagePickersView.vue`: Remove unused 'Icon' and 'getOrganization' imports
-  - [ ] `PendingBinsView.vue`: Remove unused 'getOrganization' import
-- [ ] Replace TypeScript `any` types with proper types:
-  - [ ] `PageLayout.vue`: Fix multiple `any` types in props
-  - [ ] `bin.ts`: Replace `any` type in model
-  - [ ] `LoginPage.vue`: Fix multiple `any` types
-  - [ ] `ManagePickersView.vue`: Fix multiple `any` types
-  - [ ] `SmsUsageView.vue`: Fix `any` type
-- [ ] Enable lint workflow in `.github/workflows/lint.yml`
+- [x] Update ESLint configuration to ignore `.vite/deps/` directory
+- [x] Fix unused imports in component files:
+  - [x] `MenuModal.vue`: Remove unused 'Icon' import
+  - [x] `ManagePickersView.vue`: Remove unused 'Icon' and 'getOrganization' imports
+  - [x] `PendingBinsView.vue`: Remove unused 'getOrganization' import
+- [x] Replace TypeScript `any` types with proper types:
+  - [x] `PageLayout.vue`: Fix multiple `any` types in props
+  - [x] `bin.ts`: Replace `any` type in model
+  - [x] `LoginPage.vue`: Fix multiple `any` types
+  - [x] `ManagePickersView.vue`: Fix multiple `any` types
+  - [x] `SmsUsageView.vue`: Fix `any` type
+- [x] Enable lint workflow in `.github/workflows/lint.yml`
 - [ ] Test workflow on a pull request to ensure it works correctly
