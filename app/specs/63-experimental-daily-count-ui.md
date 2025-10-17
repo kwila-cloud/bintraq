@@ -15,10 +15,10 @@ Instead of inputting each individual bin, allow the user to input the daily coun
   - [x] The value of the "dailyCountUiEnabled" setting should be stored in the client
 - [x] Rename `/add-bin` route to `/add`
 - [x] Rename `HistoryView` to `BinsHistoryView`
-- [ ] When "dailyCountUiEnabled" is true, we should use new components for all of the following routes:
-  - [ ] `/add` should use new `AddDailyCountView`
-  - [ ] `/pending` should use new `PendingDailyCountsView`
-  - [ ] `/history` should use new `DailyCountsHistoryView`
+- [x] When "dailyCountUiEnabled" is true, we should use new components for all of the following routes:
+  - [x] `/add` should use new `AddDailyCountView`
+  - [x] `/pending` should use new `PendingDailyCountsView`
+  - [x] `/history` should use new `DailyCountsHistoryView`
 - [ ] `AddDailyCountView` should be the same as `AddBinView`, but instead should:
   - [ ] Allow the user to input daily count rather than block, size, and bin ID
   - [ ] Display the list of daily count options directly in the view to make the UX more efficient
