@@ -5,7 +5,7 @@ import type { Picker } from '@/models/picker'
 // Second number is month
 // Third number is day
 // Fourth number is release index for that day (starts at 0)
-export const appVersion = '2025.10.17.1'
+export const appVersion = '2025.10.17.2'
 
 export const getUserProfile = async () => {
   const {
