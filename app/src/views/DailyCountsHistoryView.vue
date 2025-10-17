@@ -57,7 +57,7 @@ async function loadPickers() {
   pickers.value = await getPickers();
 }
 
-const weeklyCounts = computed(() => {
+const weeklyCount = computed(() => {
   const today = new Date();
   const dayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, etc.
   const diff = dayOfWeek; // Days since Sunday
@@ -123,16 +123,16 @@ onMounted(() => {
     </div>
     <div class="flex flex-col gap-2 w-[300px]">
       <div
-        class="flex-1 flex flex-col items-center gap-1 bg-gray-700 rounded-lg p-4"
+        class="flex-1 flex flex-col items-center gap-1 bg-blue-900 rounded-lg p-4"
       >
-        <span>Weekly Counts</span>
-        <span class="text-4xl">{{ weeklyCounts }}</span>
+        <span>Weekly Count</span>
+        <span class="text-4xl">{{ weeklyCount }}</span>
       </div>
       <div class="flex gap-1">
         <div
           v-for="dayData in dailyCountsArray"
           :key="dayData.day"
-          class="flex-1 flex flex-col items-center bg-gray-700 rounded-lg p-1"
+          class="flex-1 flex flex-col items-center bg-blue-900 rounded-lg p-1"
         >
           <span class="text-xs">{{ dayData.day }}</span>
           <span class="text-lg">{{ dayData.count }}</span>
