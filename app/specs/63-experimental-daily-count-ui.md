@@ -10,9 +10,9 @@ Instead of inputting each individual bin, allow the user to input the daily coun
   - [x] Remove block, size, and id columns
   - [x] New count column
   - [x] Set up RLS
-- [ ] Experimental toggle in the frontend
-  - [ ] The user can access it from a new "Settings" item at the top of the main menu
-  - [ ] The value of the "dailyCountUiEnabled" setting should be stored in the client
+- [x] Experimental toggle in the frontend
+  - [x] The user can access it from a new "Settings" item at the top of the main menu
+  - [x] The value of the "dailyCountUiEnabled" setting should be stored in the client
 - [ ] Rename `/add-bin` route to `/add`
 - [ ] Rename `HistoryView` to `BinsHistoryView`
 - [ ] When "dailyCountUiEnabled" is true, we should use new components for all of the following routes:
