@@ -187,9 +187,9 @@ function formatDate(date: Date) {
         </button>
         <button
           @click="deleteDailyCount(dailyCount)"
-          class="bg-red-700 w-16 md:w-20 flex items-center justify-center rounded-md p-2"
+          class="bg-red-700 w-16 md:w-20 flex items-center justify-center rounded-md"
         >
-          <Icon icon="system-uicons:trash" height="32" />
+          <Icon icon="system-uicons:trash" height="24" />
         </button>
       </li>
     </ul>
