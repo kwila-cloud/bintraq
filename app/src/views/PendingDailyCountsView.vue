@@ -47,7 +47,7 @@ function openEditDialog(dailyCount: DailyCount) {
   tempCount.value = dailyCount.count;
 }
 
-async function saveCount() {
+async function updateCount() {
   if (editingCount.value) {
     editingCount.value.count = tempCount.value;
     await updateDailyCount(editingCount.value);
@@ -164,8 +164,11 @@ function formatDate(date: Date) {
   <div v-else-if="dailyCounts.length > 0" class="flex flex-col">
     <!-- Sticky Header -->
     <div class="sticky top-0 bg-slate-800 p-4 border-b border-slate-600 z-10">
-      <div class="text-white text-lg font-semibold">
-        Total Bins: {{ totalCounts }}
+      <div class="flex justify-between items-center">
+        <div class="text-white text-lg font-semibold">
+          Total Bins: {{ totalCounts }}
+        </div>
+        <button @click="sendDailyCounts" class="bg-blue-800 rounded-md p-2">Send</button>
       </div>
     </div>
     
@@ -189,7 +192,6 @@ function formatDate(date: Date) {
           <Icon icon="system-uicons:trash" height="32" />
         </button>
       </li>
-      <button @click="sendDailyCounts" class="bg-blue-800 rounded-md p-2">Send</button>
     </ul>
   </div>
   <div v-else class="size-full flex items-center justify-center text-2xl">
@@ -211,10 +213,10 @@ function formatDate(date: Date) {
       />
       <div class="flex gap-2">
         <button
-          @click="saveCount"
+          @click="updateCount"
           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          Save
+          Update
         </button>
         <button
           @click="cancelEdit"
