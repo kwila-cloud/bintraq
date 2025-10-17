@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import PageLayout from '@/components/PageLayout.vue'
-import SettingItem from '@/components/SettingItem.vue'
+import ToggleSettingItem from '@/components/ToggleSettingItem.vue'
 
 const dailyCountUiEnabled = ref(false)
 
@@ -19,11 +19,10 @@ watch(dailyCountUiEnabled, (newValue) => {
 <template>
   <PageLayout title="Settings">
     <ul>
-      <SettingItem
+      <ToggleSettingItem
         title="Enable Daily Count UI (Experimental)"
         description="Use daily count interface instead of individual bin entry"
-        :enabled="dailyCountUiEnabled"
-        @toggle="dailyCountUiEnabled = !dailyCountUiEnabled"
+        v-model:value="dailyCountUiEnabled"
       />
     </ul>
   </PageLayout>

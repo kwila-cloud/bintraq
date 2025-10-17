@@ -4,17 +4,17 @@ import { Icon } from '@iconify/vue'
 interface Props {
   title: string
   description: string
-  enabled: boolean
+  value: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  toggle: []
+  'update:value': [value: boolean]
 }>()
 
 function handleClick() {
-  emit('toggle')
+  emit('update:value', !props.value)
 }
 </script>
 
@@ -22,8 +22,8 @@ function handleClick() {
   <li class="bg-slate-800 p-4 rounded-lg mb-2 cursor-pointer" @click="handleClick">
     <div class="flex items-center gap-4">
       <Icon
-        :icon="enabled ? 'system-uicons:checkbox-checked' : 'system-uicons:checkbox-empty'"
-        :class="enabled ? 'text-blue-500' : 'text-slate-400'"
+        :icon="value ? 'system-uicons:checkbox-checked' : 'system-uicons:checkbox-empty'"
+        :class="value ? 'text-blue-500' : 'text-slate-400'"
         height="48"
       />
       <div class="flex flex-col gap-1">
