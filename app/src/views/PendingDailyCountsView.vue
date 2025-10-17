@@ -84,18 +84,20 @@ async function sendDailyCounts() {
     startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
 
-    // Fetch all non-pending weekly counts in bulk
-    const { data: allWeeklyCounts } = await supabase
+    // Fetch all non-pending counts from this week in bulk
+    const { data: dailyCountsFromThisWeek } = await supabase
       .from("dailyCount")
       .select("picker, count")
       .gte("date", startOfWeek.toISOString())
       .eq("isPending", false);
 
     const weeklyCountsFromDB: Record<string, number> = {};
-    allWeeklyCounts?.forEach((count: { picker: string; count: number }) => {
-      weeklyCountsFromDB[count.picker] =
-        (weeklyCountsFromDB[count.picker] ?? 0) + count.count;
-    });
+    dailyCountsFromThisWeek?.forEach(
+      (count: { picker: string; count: number }) => {
+        weeklyCountsFromDB[count.picker] =
+          (weeklyCountsFromDB[count.picker] ?? 0) + count.count;
+      },
+    );
 
     const messages = [];
     // Add the counts that are getting sent now, because they won't be included
@@ -104,7 +106,7 @@ async function sendDailyCounts() {
     for (const dailyCount of dailyCounts.value) {
       countAdjustments[dailyCount.picker] ??= 0;
       countAdjustments[dailyCount.picker] += dailyCount.count;
-      const weekCount =
+      const weeklyCount =
         (weeklyCountsFromDB[dailyCount.picker] ?? 0) +
         (countAdjustments[dailyCount.picker] ?? 0);
 
@@ -113,7 +115,7 @@ async function sendDailyCounts() {
         content: `Fecha: ${formatDate(new Date(dailyCount.date))}
 Recogedor: ${dailyCount.picker}
 Cajas hoy: ${dailyCount.count}
-Cajas semana: ${weekCount}
+Cajas semana: ${weeklyCount}
 `,
       });
     }
