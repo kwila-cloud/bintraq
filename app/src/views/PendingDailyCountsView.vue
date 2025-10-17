@@ -56,12 +56,12 @@ function openEditDialog(dailyCount: DailyCount) {
 }
 
 async function updateCount() {
-  if (editingCount.value) {
-    editingCount.value.count = tempCount.value;
-    await updateDailyCount(editingCount.value);
-    await loadPendingDailyCounts();
-    editingCount.value = null;
-  }
+  if (!editingCount.value) return;
+  
+  editingCount.value.count = tempCount.value;
+  await updateDailyCount(editingCount.value);
+  await loadPendingDailyCounts();
+  editingCount.value = null;
 }
 
 function cancelEdit() {
