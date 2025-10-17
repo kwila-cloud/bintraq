@@ -79,7 +79,7 @@ const validateBinId = (binId: string) => {
 <template>
   <div class="flex flex-col gap-2 justify-end h-full p-4">
     <p class="!p-0 italic">v{{ appVersion }}</p>
-    <div class="flex flex-row justify-between">
+    <div class="flex flex-row justify-between gap-2">
       <RouterLink to="/pending" class="bg-blue-500 !text-white rounded-xl w-fit !px-4 font-bold">
         Pending Bins: {{ pendingBins.length }}
       </RouterLink>
