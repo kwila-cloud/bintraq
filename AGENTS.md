@@ -39,6 +39,15 @@
   - ✅ Good: `() => props.getComponent()`
   - ❌ Avoid: `() => { return isEnabled ? EnabledComponent : DisabledComponent }`
   - Use multi-line arrow functions only when necessary for complex logic
+- **Variable Usage**: Avoid unnecessary variables and inline when appropriate
+  - ✅ Good: `settings.value = getSettings(await getPickers())`
+  - ❌ Avoid: `const pickers = await getPickers(); settings.value = getSettings(pickers)`
+  - Only create variables when the value is used multiple times or improves readability
+- **Guard Clauses**: Use guard clauses instead of wrapping if blocks when possible
+  - ✅ Good: `if (!condition) { return; }` followed by main logic
+  - ❌ Avoid: `if (condition) { main logic }` when condition is a validation check
+  - Reduces nesting and improves readability for validation/error cases
+  - **IMPORTANT**: Always use braces for if blocks (enforced by ESLint `curly` rule)
 
 ### Git Workflow
 

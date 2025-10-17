@@ -15,7 +15,7 @@ export default defineConfigWithVueTs(
     files: ['**/*.{ts,mts,tsx,vue}'],
   },
 
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/.vite/**']),
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
@@ -27,6 +27,12 @@ export default defineConfigWithVueTs(
     rules: {
       'arrow-body-style': ['error', 'as-needed'],
       'prefer-arrow-callback': 'error',
+    },
+  },
+  {
+    name: 'app/code-style',
+    rules: {
+      'curly': 'error',
     },
   },
 )
