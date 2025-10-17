@@ -8,6 +8,7 @@ import LoginPage from '@/views/LoginPage.vue'
 import SmsUsageView from '@/views/SmsUsageView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import { supabase } from '@/lib/supabaseClient'
+import { isDailyCountUiEnabled } from '@/lib/utils'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,19 +21,34 @@ const router = createRouter({
     {
       path: '/add',
       name: 'add',
-      component: AddBinView,
+      component: () => {
+        if (isDailyCountUiEnabled()) {
+          return import('@/views/AddDailyCountView.vue')
+        }
+        return AddBinView
+      },
       meta: { requiresAuth: true },
     },
     {
       path: '/pending',
       name: 'pending',
-      component: PendingBinsView,
+      component: () => {
+        if (isDailyCountUiEnabled()) {
+          return import('@/views/PendingDailyCountsView.vue')
+        }
+        return PendingBinsView
+      },
       meta: { requiresAuth: true },
     },
     {
       path: '/history',
       name: 'history',
-      component: BinsHistoryView,
+      component: () => {
+        if (isDailyCountUiEnabled()) {
+          return import('@/views/DailyCountsHistoryView.vue')
+        }
+        return BinsHistoryView
+      },
       meta: { requiresAuth: true },
     },
     {

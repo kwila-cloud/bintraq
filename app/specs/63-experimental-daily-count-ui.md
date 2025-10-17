@@ -13,8 +13,8 @@ Instead of inputting each individual bin, allow the user to input the daily coun
 - [x] Experimental toggle in the frontend
   - [x] The user can access it from a new "Settings" item at the top of the main menu
   - [x] The value of the "dailyCountUiEnabled" setting should be stored in the client
-- [ ] Rename `/add-bin` route to `/add`
-- [ ] Rename `HistoryView` to `BinsHistoryView`
+- [x] Rename `/add-bin` route to `/add`
+- [x] Rename `HistoryView` to `BinsHistoryView`
 - [ ] When "dailyCountUiEnabled" is true, we should use new components for all of the following routes:
   - [ ] `/add` should use new `AddDailyCountView`
   - [ ] `/pending` should use new `PendingDailyCountsView`
