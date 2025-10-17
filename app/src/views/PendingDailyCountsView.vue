@@ -19,8 +19,7 @@ const totalCounts = computed(() =>
 
 onMounted(async () => {
   loadPendingDailyCounts();
-  const pickers = await getPickers();
-  settings.value = getSettings(pickers);
+  settings.value = getSettings(await getPickers());
 });
 
 async function loadPendingDailyCounts() {
