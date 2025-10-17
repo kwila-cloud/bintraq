@@ -47,10 +47,11 @@ function openEditDialog(dailyCount: DailyCount) {
   tempCount.value = dailyCount.count;
 }
 
-function saveCount() {
+async function saveCount() {
   if (editingCount.value) {
     editingCount.value.count = tempCount.value;
-    updateDailyCount(editingCount.value);
+    await updateDailyCount(editingCount.value);
+    await loadPendingDailyCounts();
     editingCount.value = null;
   }
 }
@@ -78,25 +79,25 @@ async function sendDailyCounts() {
     // Fetch all non-pending daily and weekly counts in bulk
     const { data: allDailyCounts } = await supabase
       .from("dailyCount")
-      .select("picker", { count: "exact" })
+      .select("picker, count")
       .gte("date", startOfDay.toISOString())
       .eq("isPending", false);
 
     const { data: allWeeklyCounts } = await supabase
       .from("dailyCount")
-      .select("picker", { count: "exact" })
+      .select("picker, count")
       .gte("date", startOfWeek.toISOString())
       .eq("isPending", false);
 
     const dailyCountsFromDB: Record<string, number> = {};
-    allDailyCounts?.forEach((count: { picker: string }) => {
-      dailyCountsFromDB[count.picker] = (dailyCountsFromDB[count.picker] ?? 0) + 1;
+    allDailyCounts?.forEach((count: { picker: string; count: number }) => {
+      dailyCountsFromDB[count.picker] = (dailyCountsFromDB[count.picker] ?? 0) + count.count;
     });
 
     const weeklyCountsFromDB: Record<string, number> = {};
-    allWeeklyCounts?.forEach((count: { picker: string }) => {
+    allWeeklyCounts?.forEach((count: { picker: string; count: number }) => {
       weeklyCountsFromDB[count.picker] =
-        (weeklyCountsFromDB[count.picker] ?? 0) + 1;
+        (weeklyCountsFromDB[count.picker] ?? 0) + count.count;
     });
 
     const messages = [];
