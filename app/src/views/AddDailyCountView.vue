@@ -63,12 +63,12 @@ const addDailyCount = async () => {
   }
   
   // Check for uniqueness - ensure picker doesn't already have a daily count for today
-  const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD format
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
   const { data: existingCount } = await supabase
     .from("dailyCount")
     .select()
     .eq("picker", pendingDailyCount.value.picker)
-    .eq("date", today);
+    .like("date", `${today}%`);
   
   if (existingCount && existingCount.length > 0) {
     alert(`${pendingDailyCount.value.picker} already has a daily count for today`);
