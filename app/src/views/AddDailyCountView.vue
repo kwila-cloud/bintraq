@@ -18,6 +18,7 @@ const dailyCounts = ref<DailyCount[]>([]);
 const pendingDailyCounts = computed(() =>
   dailyCounts.value.filter(({ isPending }) => isPending),
 );
+const mostRecentPicker = computed(() => dailyCounts.value[0]?.picker);
 const pickerSetting: Setting = {
   id: "picker",
   name: "Picker",
@@ -79,6 +80,9 @@ const addDailyCount = async () => {
       >
         Pending Daily Counts: {{ pendingDailyCounts.length }}
       </RouterLink>
+      <div v-if="mostRecentPicker" class="bg-gray-500 !text-white rounded-xl w-fit !px-4 py-1 font-bold">
+        Most Recent Picker: {{ mostRecentPicker }}
+      </div>
     </div>
     <div>
       <BinSetting :setting="pickerSetting" v-model="pendingDailyCount.picker" />
