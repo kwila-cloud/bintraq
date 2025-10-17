@@ -9,6 +9,7 @@
 - **PageLayout**: Reusable layout component for consistent page structure. Handles loading states, error states, title display, header actions, and description content through slots and props.
 - **ToggleSettingItem**: Reusable toggle component with v-model support. Use `v-model:value` for two-way binding.
 - **ActionButton**: Standard button component with icon, text, and color props.
+- **ComponentSwitcher**: Component designed specifically for dynamic routing in Vue Router. Bridges the gap between static router configuration and runtime component selection. Use when you need route-level conditional rendering based on application state (feature flags, user roles, A/B tests, etc.).
 
 ### Styling Conventions
 
