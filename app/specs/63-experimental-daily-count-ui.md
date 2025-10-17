@@ -23,7 +23,7 @@ Instead of inputting each individual bin, allow the user to input the daily coun
   - [x] Allow the user to input daily count rather than block, size, and bin ID
   - [x] Display the list of daily count options directly in the view to make the UX more efficient
     - [x] Use a 5 column grid from 1-25 to display the daily count options
-- [ ] `PendingDailyCountsView` should be the same as `PendingBinsView`, but instaed should:
+- [ ] `PendingDailyCountsView` should be the same as `PendingBinsView`, but instead should:
   - [ ] Display the list of pending daily counts, with:
     - [ ] Picker
     - [ ] Count

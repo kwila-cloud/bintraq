@@ -214,30 +214,28 @@ function formatDate(date: Date) {
   <!-- Edit Dialog -->
   <div
     v-if="editingCount"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    class="fixed top-0 left-0 w-full h-full bg-gray-900/50 flex items-center justify-center z-50"
+    @click.self="cancelEdit"
   >
-    <div class="bg-slate-800 p-6 rounded-lg">
-      <h3 class="text-white text-lg mb-4">
-        Edit Count for {{ editingCount.picker }}
-      </h3>
+    <div class="min-w-[300px] p-4 rounded-md bg-gray-800">
+      <h2 class="text-lg font-bold mb-2">Edit Count for {{ editingCount.picker }}</h2>
+      
       <input
         v-model.number="tempCount"
         type="number"
         min="0"
-        class="w-full p-2 bg-slate-700 text-white rounded mb-4"
+        class="h-16 p-4 lg:h-12 w-full border rounded-md bg-gray-800 text-white"
       />
-      <div class="flex gap-2">
-        <button
-          @click="updateCount"
-          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Update
+      
+      <div class="flex justify-end mt-4 gap-2">
+        <button @click="cancelEdit" class="bg-gray-700 p-2 rounded-md">
+          Cancel
         </button>
         <button
-          @click="cancelEdit"
-          class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+          @click="updateCount"
+          class="bg-blue-700 text-white p-2 rounded-md"
         >
-          Cancel
+          Update
         </button>
       </div>
     </div>
