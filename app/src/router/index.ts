@@ -6,6 +6,7 @@ import ManagePickersView from '@/views/ManagePickersView.vue'
 import AboutView from '@/views/AboutView.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SmsUsageView from '@/views/SmsUsageView.vue'
+import SettingsView from '@/views/SettingsView.vue'
 import { supabase } from '@/lib/supabaseClient'
 
 const router = createRouter({
@@ -44,6 +45,12 @@ const router = createRouter({
       path: '/sms-usage',
       name: 'sms-usage',
       component: SmsUsageView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingsView,
       meta: { requiresAuth: true },
     },
     {

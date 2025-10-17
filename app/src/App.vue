@@ -62,7 +62,7 @@ function refresh() {
   <nav v-if="isLoggedIn" id="bottom-nav">
     <RouterLink to="/add-bin" active-class="active-link">
       <Icon icon="system-uicons:box-add" height="32" />
-      <span>Add Bin</span>
+      <span>Add</span>
     </RouterLink>
     <RouterLink to="/pending" active-class="active-link">
       <Icon icon="system-uicons:boxes" height="32" />
@@ -76,6 +76,10 @@ function refresh() {
 
   <MenuModal v-if="showMenuModal" @close="toggleMenu" id="menu">
     <template v-if="isLoggedIn">
+      <RouterLink to="/settings">
+        <Icon icon="system-uicons:settings" height="24" />
+        Settings
+      </RouterLink>
       <RouterLink to="/pickers">
         <Icon icon="system-uicons:users" height="24" />
         Pickers
